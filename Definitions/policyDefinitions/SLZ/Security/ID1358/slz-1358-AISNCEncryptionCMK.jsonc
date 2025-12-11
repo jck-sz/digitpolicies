@@ -1,0 +1,93 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1358-AISNCEncryptionCMK",
+    "properties": {
+        "displayName": "SLZ - 1358 - Azure AI Services resources should encrypt data at rest with a customer-managed key (CMK) (only SNC resources)",
+        "description": "Using customer-managed keys to encrypt data at rest provides more control over the key lifecycle, including rotation and management. This is particularly relevant for organizations with related compliance requirements. This is not assessed by default and should only be applied when required by compliance or restrictive policy requirements. If not enabled, the data will be encrypted using platform-managed keys. To implement this, update the 'Effect' parameter in the Security Policy for the applicable scope.",
+        "metadata": {
+            "category": "Security",
+            "version": "2.2.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "defaultValue": "Audit",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "The effect determines what happens when the policy rule is evaluated to match"
+                }
+            },
+            "tagName": {
+                "type": "string",
+                "defaultValue": "ec.DataSensitivityLevel",
+                "metadata": {
+                    "displayName": "Inclusion Name Tag",
+                    "description": "Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter."
+                }
+            },
+            "tagValue": {
+                "type": "string",
+                "defaultValue": "SNC",
+                "metadata": {
+                    "displayName": "Inclusion Tag Value",
+                    "description": "Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter."
+                }
+            },
+            "excludedKinds": {
+                "type": "Array",
+                "defaultValue": [
+                    "CognitiveServices",
+                    "ContentSafety",
+                    "ImmersiveReader",
+                    "HealthInsights",
+                    "LUIS.Authoring",
+                    "LUIS",
+                    "QnAMaker",
+                    "QnAMaker.V2",
+                    "AIServices",
+                    "MetricsAdvisor",
+                    "SpeechTranslation",
+                    "Internal.AllInOne",
+                    "ConversationalLanguageUnderstanding",
+                    "knowledge",
+                    "TranscriptionIntelligence",
+                    "HealthDecisionSupport"
+                ],
+                "metadata": {
+                    "displayName": "Excluded Kinds",
+                    "description": "The list of excluded API kinds for customer-managed key, default is the list of API kinds that don't have data stored in Cognitive Services"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.CognitiveServices/accounts"
+                    },
+                    {
+                        "field": "Microsoft.CognitiveServices/accounts/encryption.keySource",
+                        "notEquals": "Microsoft.KeyVault"
+                    },
+                    {
+                        "field": "kind",
+                        "notIn": "[parameters('excludedKinds')]"
+                    },
+                    {
+                        "field": "[concat('tags[',parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

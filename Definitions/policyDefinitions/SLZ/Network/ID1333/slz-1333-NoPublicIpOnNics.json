@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1333-NoPublicIpOnNics",
+  "properties": {
+    "displayName": "SLZ - 1333 - Network Interfaces Should Not Have Public IPs",
+        "description": "This policy ensures network interfaces are not configured with public IP addresses. Public IPs allow inbound and outbound internet access, which should be reviewed by the network security team.",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/networkInterfaces"
+                    },
+                    {
+                        "not": {
+                            "field": "Microsoft.Network/networkInterfaces/ipconfigurations[*].publicIpAddress.id",
+                            "notLike": "*"
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

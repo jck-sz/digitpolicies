@@ -1,0 +1,56 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1327-WAFonFrontDoor",
+  "properties": {
+    "displayName": "SLZ - 1327 - Azure CDN profiles of type Front Door should have a Web Application Firewall configured",
+    "policyType": "Custom",
+    "mode": "All",
+    "description": "This policy audits Azure CDN profiles of type Front Door to ensure they have a Web Application Firewall (WAF) configured for enhanced security.",
+    "metadata": {
+        "version": "1.0.0",
+        "category": "CDN"
+    },
+    "parameters": {
+        "effect": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Effect",
+                "description": "Enable or disable the execution of the policy."
+            },
+            "allowedValues": [
+                "AuditIfNotExists",
+                "Disabled"
+            ],
+            "defaultValue": "AuditIfNotExists"
+        }
+    },
+    "policyRule": {
+        "if": {
+            "allOf": [
+                {
+                    "field": "type",
+                    "equals": "Microsoft.Cdn/profiles"
+                },
+                {
+                    "field": "kind",
+                    "equals": "frontdoor"
+                }
+            ]
+        },
+        "then": {
+            "effect": "[parameters('effect')]",
+            "details": {
+                "type": "Microsoft.Cdn/profiles/securityPolicies",
+                "existenceCondition": {
+                    "allOf": [
+                        {
+                            "field": "Microsoft.Cdn/profiles/securityPolicies/parameters.type",
+                            "equals": "WebApplicationFirewall"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+  }
+}

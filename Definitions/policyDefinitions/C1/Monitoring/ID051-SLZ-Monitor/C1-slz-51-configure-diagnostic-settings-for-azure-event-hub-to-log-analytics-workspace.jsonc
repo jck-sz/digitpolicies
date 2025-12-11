@@ -1,0 +1,156 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "C1-SLZ-51-AzureEventHubDiagSettingsToWS",
+  "properties": {
+    "displayName": "C1 - SLZ - 51 - Configure diagnostic settings for Azure Event Hub to Log Analytics workspace",
+    "mode": "All",
+    "metadata": {
+      "category": "Monitoring",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["AuditIfNotExists", "DeployIfNotExists", "Disabled"],
+        "defaultValue": "DeployIfNotExists",
+        "metadata": {
+          "description": "Enable or Disable the execution of the policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "workspaceId": {
+        "metadata": {
+          "description": "ID of Landing Zone's log analytics workspace",
+          "displayName": "log analytics workspace ID"
+        },
+        "type": "String"
+      },
+      "policyName": {
+        "defaultValue": "setByPolicy",
+        "metadata": {
+          "displayName": "policy name"
+        },
+        "type": "String"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.EventHub/namespaces"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Insights/diagnosticSettings",
+          "existenceCondition": {
+            "allOf": [
+              {
+                "field": "Microsoft.Insights/diagnosticSettings/logs.enabled",
+                "equals": "True"
+              },
+              {
+                "field": "Microsoft.Insights/diagnosticSettings/metrics.enabled",
+                "equals": "True"
+              },
+              {
+                "field": "Microsoft.Insights/diagnosticSettings/workspaceId",
+                "equals": "[parameters('workspaceId')]"
+              }
+            ]
+          },
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+          ],
+          "deployment": {
+            "properties": {
+              "parameters": {
+                "resourceLocation": {
+                  "value": "[field('location')]"
+                },
+                "effect": {
+                  "value": "[parameters('effect')]"
+                },
+                "resourceName": {
+                  "value": "[field('name')]"
+                },
+                "workspaceId": {
+                  "value": "[parameters('workspaceId')]"
+                },
+                "policyName": {
+                  "value": "[parameters('policyName')]"
+                }
+              },
+              "mode": "incremental",
+              "template": {
+                "parameters": {
+                  "resourceLocation": {
+                    "type": "string"
+                  },
+                  "effect": {
+                    "type": "string"
+                  },
+                  "resourceName": {
+                    "type": "string"
+                  },
+                  "workspaceId": {
+                    "type": "string"
+                  },
+                  "policyName": {
+                    "type": "string"
+                  }
+                },
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                  {
+                    "type": "Microsoft.EventHub/namespaces/providers/diagnosticSettings",
+                    "properties": {
+                      "workspaceId": "[parameters('workspaceId')]",
+                      "metrics": [
+                        {
+                          "category": "AllMetrics",
+                          "enabled": "True",
+                          "retentionPolicy": {
+                            "enabled": false,
+                            "days": 0
+                          }
+                        }
+                      ],
+                      "logs": [
+                        {
+                          "enabled": true,
+                          "retentionPolicy": {
+                            "enabled": false,
+                            "days": 0
+                          },
+                          "categoryGroup": "allLogs"
+                        },
+                        {
+                          "enabled": true,
+                          "retentionPolicy": {
+                            "enabled": false,
+                            "days": 0
+                          },
+                          "categoryGroup": "audit"
+                        }
+                      ]
+                    },
+                    "location": "[parameters('resourceLocation')]",
+                    "apiVersion": "2021-05-01-preview",
+                    "name": "[concat(parameters('resourceName'), '/Microsoft.Insights/', parameters('policyName'), '-workspace')]",
+                    "dependsOn": []
+                  }
+                ],
+                "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"
+              }
+            }
+          },
+          "name": "[concat(parameters('policyName'), '-workspace')]"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+/*
+@TargetNode='localhost'
+@GeneratedBy=eric.anllo-muniz
+@GenerationDate=09/18/2025 15:36:02
+@GenerationHost=C11-LFXFXPNOPXA
+*/
+
+instance of MSFT_ScriptResource as $MSFT_ScriptResource1ref
+{
+SetScript = "return $true";
+ ResourceID = "[Script]CheckPSDirect";
+ SourceInfo = "C:\\Users\\eric.anllo-muniz\\OneDrive - Accenture\\Desktop\\DIGIT\\AzureLandingZone\\Definitions\\policyDefinitions\\SLZ\\Guest-Configuration\\ID739\\Audit.ps1::7::5::Script";
+ GetScript = "$svc = Get-CimInstance -ClassName Win32_Service -Filter \"Name='vmicvmsession'\" -ErrorAction SilentlyContinue\nif(-not $svc){ $res = \"NotPresent\" } else { $res = \"State=$($svc.State);StartMode=$($svc.StartMode)\" }\n@{ Result = $res }";
+ ModuleName = "PSDscResources";
+ ModuleVersion = "2.12.0.0";
+ TestScript = "$svc = Get-CimInstance -ClassName Win32_Service -Filter \"Name='vmicvmsession'\" -ErrorAction SilentlyContinue\nif(-not $svc){ return $true }   # No service => PS Direct unavailable => compliant\nreturn ($svc.StartMode -eq \"Disabled\")";
+ ConfigurationName = "Audit_PSDirect_Disabled";
+};
+instance of OMI_ConfigurationDocument
+
+                    {
+ Version="2.0.0";
+
+                        MinimumCompatibleVersion = "1.0.0";
+
+                        CompatibleVersionAdditionalProperties= {"Omi_BaseResource:ConfigurationName"};
+
+                        Author="eric.anllo-muniz";
+
+                        GenerationDate="09/18/2025 15:36:02";
+
+                        GenerationHost="C11-LFXFXPNOPXA";
+
+                        Name="Audit_PSDirect_Disabled";
+
+                    };

@@ -1,0 +1,77 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-158-DefenderCloudPricingForOpenDB",
+  "properties": {
+    "displayName": "SLZ - 158 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for OpenDB (Open-source relational db)",
+    "description": "Azure Defender for open-source relational databases detects anomalous activities indicating unusual and potentially harmful attempts to access or exploit databases. Learn more about the capabilities of Azure Defender for open-source relational databases at https://aka.ms/AzDforOpenSourceDBsDocu. Important: Enabling this plan will result in charges for protecting your open-source relational databases. Learn about the pricing on Security Center's pricing page: https://aka.ms/pricing-security-center",
+    "mode": "All",
+    "metadata": {
+      "category": "Security Center",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["DeployIfNotExists", "Disabled", "AuditIfNotExists"],
+        "defaultValue": "DeployIfNotExists",
+        "metadata": {
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Resources/subscriptions"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Security/pricings",
+          "existenceCondition": {
+            "allOf": [
+              {
+                "field": "Microsoft.Security/pricings/pricingTier",
+                "equals": "Standard"
+              }
+            ]
+          },
+          "roleDefinitionIds": [
+            "/providers/Microsoft.Authorization/roleDefinitions/fb1c8493-542b-48eb-b624-b4c8fea62acd"
+          ],
+          "deployment": {
+            "properties": {
+              "parameters": {},
+              "mode": "incremental",
+              "template": {
+                "parameters": {},
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                  {
+                    "type": "Microsoft.Security/pricings",
+                    "properties": {
+                      "pricingTier": "Standard"
+                    },
+                    "apiVersion": "2024-01-01",
+                    "name": "OpenSourceRelationalDatabases"
+                  }
+                ],
+                "variables": {},
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                "outputs": {}
+              }
+            },
+            "location": "westeurope"
+          },
+          "name": "OpenSourceRelationalDatabases",
+          "existenceScope": "subscription",
+          "deploymentScope": "subscription"
+        }
+      }
+    }
+  }
+}

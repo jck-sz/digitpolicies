@@ -1,0 +1,85 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-238.3-AppServiceProdNoLowTierSku",
+    "properties": {
+        "displayName": "SLZ - 238.3 - Ensure App Service Plan in PROD does not use Free, Shared, or Basic SKUs",
+        "description": "Audits App Service Plans tagged as production (tag ec.EnvironmentType=PROD) that are using Free, Shared, or Basic SKUs (F1, D1, B1–B3). Production workloads must run on Standard, Premium, or Isolated tiers for adequate performance and support.",
+        "mode": "All",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Security"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy."
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "tagName": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Name",
+                    "description": "The tag name that marks production resources."
+                },
+                "defaultValue": "ec.EnvironmentType"
+            },
+            "tagValue": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Value",
+                    "description": "The tag value that represents production."
+                },
+                "defaultValue": "PROD"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Web/serverfarms"
+                    },
+                    {
+                        "field": "[concat('tags[', parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.Web/serverfarms/sku.name",
+                                "equals": "F1"
+                            },
+                            {
+                                "field": "Microsoft.Web/serverfarms/sku.name",
+                                "equals": "D1"
+                            },
+                            {
+                                "field": "Microsoft.Web/serverfarms/sku.name",
+                                "equals": "B1"
+                            },
+                            {
+                                "field": "Microsoft.Web/serverfarms/sku.name",
+                                "equals": "B2"
+                            },
+                            {
+                                "field": "Microsoft.Web/serverfarms/sku.name",
+                                "equals": "B3"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

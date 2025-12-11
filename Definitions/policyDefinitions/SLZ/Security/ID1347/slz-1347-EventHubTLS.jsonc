@@ -1,0 +1,65 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1347-EventHubTLS",
+    "properties": {
+        "displayName": "SLZ - 1347 - Event Hub namespaces should have the specified minimum TLS version",
+        "description": "Configure a minimum TLS version for secure communication between the client application and the Event Hub Namespace. To minimize security risk, the recommended minimum TLS version is the latest released version, which is currently TLS 1.2.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.0.0"
+        },
+        "parameters": {
+            "minimumtlsVersion": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Minimum TLS Version",
+                    "description": "Minimum version of TLS required to access data in the Event Hub Namespace"
+                },
+                "allowedValues": [
+                    "1.0",
+                    "1.1",
+                    "1.2"
+                ],
+                "defaultValue": "1.2"
+            },
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Deny, Audit or Disabled the execution of the Policy"
+                },
+                "allowedValues": [
+                    "Deny",
+                    "Audit",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.EventHub/namespaces"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.EventHub/namespaces/minimumtlsVersion",
+                                "notEquals": "[parameters('minimumtlsVersion')]"
+                            },
+                            {
+                                "field": "Microsoft.EventHub/namespaces/minimumtlsVersion",
+                                "exists": "false"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

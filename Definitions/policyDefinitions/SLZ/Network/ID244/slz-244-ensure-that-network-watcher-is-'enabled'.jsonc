@@ -1,0 +1,71 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-244-NetworkWatcherEnabled",
+  "properties": {
+    "displayName": "SLZ - 244 - Ensure that Network Watcher is 'Enabled'",
+    "description": "This policy creates a network watcher resource in regions with virtual networks. You need to ensure existence of a resource group named networkWatcherRG, which will be used to deploy network watcher instances.",
+    "mode": "All",
+    "metadata": {
+      "category": "Network",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["DeployIfNotExists", "AuditIfNotExists", "Disabled"],
+        "defaultValue": "DeployIfNotExists",
+        "metadata": {
+          "description": "DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "field": "type",
+        "equals": "Microsoft.Network/virtualNetworks"
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Network/networkWatchers",
+          "existenceCondition": {
+            "field": "location",
+            "equals": "[field('location')]"
+          },
+          "roleDefinitionIds": [
+            "/providers/Microsoft.Authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7"
+          ],
+          "deployment": {
+            "properties": {
+              "parameters": {
+                "location": {
+                  "value": "[field('location')]"
+                }
+              },
+              "mode": "incremental",
+              "template": {
+                "parameters": {
+                  "location": {
+                    "type": "string"
+                  }
+                },
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                  {
+                    "type": "Microsoft.Network/networkWatchers",
+                    "location": "[parameters('location')]",
+                    "apiVersion": "2016-09-01",
+                    "name": "[concat('networkWacher_', parameters('location'))]"
+                  }
+                ],
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json"
+              }
+            }
+          },
+          "resourceGroupName": "networkWatcherRG"
+        }
+      }
+    }
+  }
+}

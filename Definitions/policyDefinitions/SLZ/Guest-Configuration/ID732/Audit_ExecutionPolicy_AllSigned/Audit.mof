@@ -1,0 +1,36 @@
+/*
+@TargetNode='localhost'
+@GeneratedBy=eric.anllo-muniz
+@GenerationDate=09/18/2025 15:35:56
+@GenerationHost=C11-LFXFXPNOPXA
+*/
+
+instance of MSFT_ScriptResource as $MSFT_ScriptResource1ref
+{
+SetScript = "return $true";
+ ResourceID = "[Script]ExecPolicyCheck";
+ SourceInfo = "C:\\Users\\eric.anllo-muniz\\OneDrive - Accenture\\Desktop\\DIGIT\\AzureLandingZone\\Definitions\\policyDefinitions\\SLZ\\Guest-Configuration\\ID732\\Audit.ps1::5::5::Script";
+ GetScript = "$p = \"HKLM:\\SOFTWARE\\Microsoft\\PowerShell\\1\\ShellIds\\Microsoft.PowerShell\"\n$val = (Get-ItemProperty -Path $p -Name ExecutionPolicy -ErrorAction SilentlyContinue).ExecutionPolicy\n@{ Result = $val }";
+ ModuleName = "PSDscResources";
+ ModuleVersion = "2.12.0.0";
+ TestScript = "$p = \"HKLM:\\SOFTWARE\\Microsoft\\PowerShell\\1\\ShellIds\\Microsoft.PowerShell\"\n$val = (Get-ItemProperty -Path $p -Name ExecutionPolicy -ErrorAction SilentlyContinue).ExecutionPolicy\nreturn [string]::Equals($val, \"AllSigned\", [System.StringComparison]::OrdinalIgnoreCase)";
+ ConfigurationName = "Audit_ExecutionPolicy_AllSigned";
+};
+instance of OMI_ConfigurationDocument
+
+                    {
+ Version="2.0.0";
+
+                        MinimumCompatibleVersion = "1.0.0";
+
+                        CompatibleVersionAdditionalProperties= {"Omi_BaseResource:ConfigurationName"};
+
+                        Author="eric.anllo-muniz";
+
+                        GenerationDate="09/18/2025 15:35:56";
+
+                        GenerationHost="C11-LFXFXPNOPXA";
+
+                        Name="Audit_ExecutionPolicy_AllSigned";
+
+                    };

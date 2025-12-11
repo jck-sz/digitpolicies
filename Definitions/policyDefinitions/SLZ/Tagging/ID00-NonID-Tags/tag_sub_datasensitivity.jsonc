@@ -1,0 +1,57 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-604-CheckDataSensitivityTagsOnSubscriptions",
+    "properties": {
+        "displayName": "SLZ - 604 - Check ec.DataSensitivityLevel Tag on Subscription",
+        "description": "Ensure the ec.DataSensitivityLevel tag exists on the subscription and is within allowed values.",
+        "mode": "All",
+        "parameters": {
+          "tag-TagName2": {
+            "type": "String",
+            "defaultValue": "ec.DataSensitivityLevel",
+            "metadata": {
+              "displayName": "Tag Name",
+              "description": "ec.DataSensitivityLevel tag"
+            }
+          },
+          "effect": {
+            "type": "string",
+            "allowedValues": [
+              "Audit",
+              "Deny",
+              "Disabled"
+            ],
+            "defaultValue": "Audit",
+            "metadata": {
+              "displayName": "Effect",
+              "description": "Effect of the policy"
+            }
+          }
+        },
+        "policyRule": {
+          "if": {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Resources/subscriptions"
+              },
+              {
+                "field": "[concat('tags[', parameters('tag-TagName2'), ']')]",
+                "exists": "false"
+              },
+              {
+                "field": "[concat('tags[', parameters('tag-TagName2'), ']')]",
+                "notIn": [
+                  "PA",
+                  "CU",
+                  "SNC"
+                ]
+              }
+            ]
+          },
+          "then": {
+            "effect": "[parameters('effect')]"
+          }
+        }
+      }
+}

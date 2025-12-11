@@ -1,0 +1,451 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "landingZoneName": {
+      "defaultValue": "lzslz",
+      "type": "string"
+    },
+    "enableAutomation": {
+      "defaultValue": false,
+      "type": "bool"
+    },
+    "enableEventHub": {
+      "defaultValue": false,
+      "type": "bool"
+    },
+    "enableSentinel": {
+      "defaultValue": false,
+      "type": "bool"
+    },
+    "storageName": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "eventHubName": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "workspaceName": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "sentinelSku": {
+      "type": "object",
+      "defaultValue": { "name": "pergb2018" }
+    }
+  },
+  "variables": {
+    "landingZoneIdentityName": "[concat(parameters('landingZoneName'), 'Identity', uniqueString(subscription().id))]",
+    "landingZoneResourceGroupName": "[concat(parameters('landingZoneName'), '-rg')]",
+    "landingZoneAutomationAccountName": "[concat(parameters('landingZoneName'), 'Automation', uniqueString(subscription().id))]",
+    "landingZoneEventHubNamespaceName": "[if(empty(parameters('eventHubName')), concat(parameters('landingZoneName'), 'Hub', uniqueString(subscription().id)), parameters('eventHubName'))]",
+    "landingZoneEventHubAuthorizationRule": "lzEventHubAuthorizationRule",
+    "landingZoneWorkspaceName": "[if(empty(parameters('workspaceName')), concat(parameters('landingZoneName'), 'Workspace', uniqueString(subscription().id)), parameters('workspaceName'))]",
+    "landingZoneStorageAccountName": "[if(empty(parameters('storageName')), concat(parameters('landingZoneName'), 'sa', uniqueString(subscription().id)), parameters('storageName'))]",
+    "landingZoneDataCollectionRuleLinux": "lzDataCollectionRuleLinux",
+    "landingZoneDataCollectionRuleWindows": "lzDataCollectionRuleWindows"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2023-01-31",
+      "name": "[variables('landingZoneIdentityName')]",
+      "location": "[resourceGroup().location]"
+    },
+    {
+      "condition": "[parameters('enableAutomation')]",
+      "type": "Microsoft.Automation/automationAccounts",
+      "apiVersion": "2022-08-08",
+      "name": "[variables('landingZoneAutomationAccountName')]",
+      "location": "[resourceGroup().location]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "disableLocalAuth": false,
+        "sku": {
+          "name": "Basic"
+        },
+        "encryption": {
+          "keySource": "Microsoft.Automation",
+          "identity": {}
+        }
+      }
+    },
+    {
+      "condition": "[parameters('enableEventHub')]",
+      "type": "Microsoft.EventHub/namespaces",
+      "apiVersion": "2022-10-01-preview",
+      "name": "[variables('landingZoneEventHubNamespaceName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard",
+        "tier": "Standard",
+        "capacity": 1
+      },
+      "properties": {
+        "minimumTlsVersion": "1.2",
+        "publicNetworkAccess": "Enabled",
+        "disableLocalAuth": false,
+        "zoneRedundant": false,
+        "isAutoInflateEnabled": false,
+        "maximumThroughputUnits": 0,
+        "kafkaEnabled": true
+      }
+    },
+    {
+      "condition": "[parameters('enableEventHub')]",
+      "type": "Microsoft.EventHub/namespaces/eventhubs",
+      "apiVersion": "2022-10-01-preview",
+      "name": "[concat(variables('landingZoneEventHubNamespaceName'), '/insights-operational-logs')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.EventHub/namespaces', variables('landingZoneEventHubNamespaceName'))]"
+      ],
+      "properties": {
+        "retentionDescription": {
+          "cleanupPolicy": "Delete",
+          "retentionTimeInHours": 168
+        },
+        "messageRetentionInDays": 7,
+        "partitionCount": 4,
+        "status": "Active"
+      }
+    },
+    {
+      "condition": "[parameters('enableEventHub')]",
+      "type": "Microsoft.EventHub/namespaces/authorizationRules",
+      "apiVersion": "2022-10-01-preview",
+      "name": "[concat(variables('landingZoneEventHubNamespaceName'), '/', variables('landingZoneEventHubAuthorizationRule'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.EventHub/namespaces', variables('landingZoneEventHubNamespaceName'))]"
+      ],
+      "properties": {
+        "rights": [ "Send", "Listen", "Manage" ]
+      }
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2021-12-01-preview",
+      "name": "[variables('landingZoneWorkspaceName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "sku": "[parameters('sentinelSku')]",
+        "retentionInDays": 30,
+        "features": {
+          "enableLogAccessUsingOnlyResourcePermissions": true,
+          "enableDataExport": true
+        },
+        "workspaceCapping": {
+          "dailyQuotaGb": -1
+        },
+        "publicNetworkAccessForIngestion": "Enabled",
+        "publicNetworkAccessForQuery": "Enabled"
+      }
+    },
+    {
+      "condition": "[parameters('enableSentinel')]",
+      "type": "Microsoft.OperationalInsights/workspaces/providers/onboardingStates",
+      "apiVersion": "2021-03-01-preview",
+      "name": "[concat(variables('landingZoneWorkspaceName'),'/Microsoft.SecurityInsights/default')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+      ],
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.OperationsManagement/solutions",
+      "apiVersion": "2015-11-01-preview",
+      "name": "[concat('ChangeTracking(', variables('landingZoneWorkspaceName'), ')')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+      ],
+      "plan": {
+        "name": "[concat('ChangeTracking(', variables('landingZoneWorkspaceName'), ')')]",
+        "promotionCode": "",
+        "product": "OMSGallery/ChangeTracking",
+        "publisher": "Microsoft"
+      },
+      "properties": {
+        "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+      }
+    },
+    {
+      "type": "Microsoft.OperationsManagement/solutions",
+      "apiVersion": "2015-11-01-preview",
+      "name": "[concat('SQLAdvancedThreatProtection(', variables('landingZoneWorkspaceName'), ')')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+      ],
+      "plan": {
+        "name": "[concat('SQLAdvancedThreatProtection(', variables('landingZoneWorkspaceName'), ')')]",
+        "promotionCode": "",
+        "product": "OMSGallery/SQLAdvancedThreatProtection",
+        "publisher": "Microsoft"
+      },
+      "properties": {
+        "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+      }
+    },
+    {
+      "type": "Microsoft.OperationsManagement/solutions",
+      "apiVersion": "2015-11-01-preview",
+      "name": "[concat('SQLVulnerabilityAssessment(', variables('landingZoneWorkspaceName'), ')')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+      ],
+      "plan": {
+        "name": "[concat('SQLVulnerabilityAssessment(', variables('landingZoneWorkspaceName'), ')')]",
+        "promotionCode": "",
+        "product": "OMSGallery/SQLVulnerabilityAssessment",
+        "publisher": "Microsoft"
+      },
+      "properties": {
+        "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+      }
+    },
+    {
+      "condition": "[parameters('enableAutomation')]",
+      "type": "Microsoft.OperationalInsights/workspaces/linkedservices",
+      "apiVersion": "2020-08-01",
+      "name": "[concat(variables('landingZoneWorkspaceName'), '/Automation')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]",
+        "[resourceId('Microsoft.Automation/automationAccounts', variables('landingZoneAutomationAccountName'))]"
+      ],
+      "properties": {
+        "resourceId": "[resourceId('Microsoft.Automation/automationAccounts', variables('landingZoneAutomationAccountName'))]",
+        "provisioningState": "Succeeded"
+      }
+    },
+    {
+      "condition": "[equals(variables('landingZoneStorageAccountName'), 'lzslz8365863466sa')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2025-01-01",
+      "name": "[variables('landingZoneStorageAccountName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "minimumTlsVersion": "TLS1_2",
+        "allowBlobPublicAccess": false,
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Deny"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+          "services": {
+            "file": {
+              "keyType": "Account",
+              "enabled": true
+            },
+            "blob": {
+              "keyType": "Account",
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Hot"
+      }
+    },
+    {
+      "condition": "[not(equals(variables('landingZoneStorageAccountName'), 'lzslz8365863466sa'))]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2025-01-01",
+      "name": "[variables('landingZoneStorageAccountName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "minimumTlsVersion": "TLS1_2",
+        "allowBlobPublicAccess": false,
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Deny"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+          "services": {
+            "file": {
+              "keyType": "Account",
+              "enabled": true
+            },
+            "blob": {
+              "keyType": "Account",
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage",
+          "requireInfrastructureEncryption": true
+        },
+        "accessTier": "Hot"
+      }
+    },
+    {
+      "type": "Microsoft.Insights/dataCollectionRules",
+      "apiVersion": "2022-06-01",
+      "name": "[variables('landingZoneDataCollectionRuleLinux')]",
+      "location": "[resourceGroup().location]",
+      "kind": "Linux",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+      ],
+      "properties": {
+        "dataSources": {
+          "syslog": [
+            {
+              "streams": [ "Microsoft-Syslog" ],
+              "facilityNames": [
+                "auth",
+                "authpriv",
+                "cron",
+                "daemon",
+                "mark",
+                "kern",
+                "local0",
+                "local1",
+                "local2",
+                "local3",
+                "local4",
+                "local5",
+                "local6",
+                "local7",
+                "lpr",
+                "mail",
+                "news",
+                "syslog",
+                "user",
+                "uucp"
+              ],
+              "logLevels": [
+                "Debug",
+                "Info",
+                "Notice",
+                "Warning",
+                "Error",
+                "Critical",
+                "Alert",
+                "Emergency"
+              ],
+              "name": "sysLogsDataSource-1688419672"
+            }
+          ]
+        },
+        "destinations": {
+          "logAnalytics": [
+            {
+              "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]",
+              "name": "la--1005005107"
+            }
+          ]
+        },
+        "dataFlows": [
+          {
+            "streams": [
+              "Microsoft-Perf",
+              "Microsoft-Event",
+              "Microsoft-Syslog"
+            ],
+            "destinations": [ "la--1005005107" ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Insights/dataCollectionRules",
+      "apiVersion": "2023-03-11",
+      "name": "[variables('landingZoneDataCollectionRuleWindows')]",
+      "location": "[resourceGroup().location]",
+      "kind": "Windows",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+      ],
+      "properties": {
+        "dataSources": {
+          "windowsEventLogs": [
+            {
+              "streams": [
+                  "Microsoft-SecurityEvent"
+              ],
+              "xPathQueries": [
+                  "Security!*",
+                  "Microsoft-Windows-AppLocker/EXE and DLL!*",
+                  "Microsoft-Windows-AppLocker/MSI and Script!*"
+              ],
+              "name": "eventLogsDataSource"
+            }
+          ]
+        },
+        "destinations": {
+          "logAnalytics": [
+            {
+              "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]",
+              "name": "la--1005005107"
+            }
+          ]
+        },
+        "dataFlows": [
+          {
+            "streams": [ "Microsoft-SecurityEvent" ],
+            "destinations": [ "la--1005005107" ]
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+    "identity": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', variables('landingZoneIdentityName'))]"
+    },
+    "workspace": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('landingZoneWorkspaceName'))]"
+    },
+    "workspaceName": {
+      "type": "string",
+      "value": "[variables('landingZoneWorkspaceName')]"
+    },
+    "eventHub": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.EventHub/namespaces', variables('landingZoneEventHubNamespaceName'))]"
+    },
+    "eventHubAuthorizationRuleId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.EventHub/namespaces/authorizationRules', variables('landingZoneEventHubNamespaceName'), variables('landingZoneEventHubAuthorizationRule'))]"
+    },
+    "storage": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('landingZoneStorageAccountName'))]"
+    },
+    "storageName": {
+      "type": "string",
+      "value": "[variables('landingZoneStorageAccountName')]"
+    },
+    "linuxDCR": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Insights/dataCollectionRules', variables('landingZoneDataCollectionRuleLinux'))]"
+    },
+    "windowsDCR": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Insights/dataCollectionRules', variables('landingZoneDataCollectionRuleWindows'))]"
+    }
+  }
+}

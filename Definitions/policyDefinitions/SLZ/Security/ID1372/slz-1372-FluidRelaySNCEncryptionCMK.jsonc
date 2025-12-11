@@ -1,0 +1,63 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1372-FluidRelaySNCEncryptionCMK",
+    "properties": {
+        "displayName": "SLZ - 1372 - Fluid Relay should use customer-managed keys to encrypt data at rest (only SNC resources)",
+        "description": "Use customer-managed keys to manage the encryption at rest of your Fluid Relay server. By default, customer data is encrypted with service-managed keys, but CMKs are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you, with full control and responsibility, including rotation and management. Learn more at https://docs.microsoft.com/azure/azure-fluid-relay/concepts/customer-managed-keys.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.0.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "tagName": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Name Tag",
+                    "description": "Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter."
+                },
+                "defaultValue": "ec.DataSensitivityLevel"
+            },
+            "tagValue": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Tag Value",
+                    "description": "Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter."
+                },
+                "defaultValue": "SNC"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.FluidRelay/fluidRelayServers"
+                    },
+                    {
+                        "field": "Microsoft.FluidRelay/fluidRelayServers/encryption.customerManagedKeyEncryption",
+                        "exists": "false"
+                    },
+                    {
+                        "field": "[concat('tags[',parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

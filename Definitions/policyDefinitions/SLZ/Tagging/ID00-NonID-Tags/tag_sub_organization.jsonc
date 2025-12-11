@@ -1,0 +1,49 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-CheckOrganizationTagOnSubscription",
+  "properties": {
+    "displayName": "SLZ - XXX - Check Organization Tag on Subscription",
+    "description": "Ensure the Organization tag exists on the subscription.",
+    "mode": "All",
+    "parameters": {
+      "tag-TagName4": {
+        "type": "String",
+        "defaultValue": "ec.SystemOwner",
+        "metadata": {
+          "displayName": "Tag Name",
+          "description": "Organization tag"
+        }
+      },
+      "effect": {
+        "type": "string",
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Audit",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Effect of the policy"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Resources/subscriptions"
+          },
+          {
+            "field": "[concat('tags[', parameters('tag-TagName4'), ']')]",
+            "exists": "false"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

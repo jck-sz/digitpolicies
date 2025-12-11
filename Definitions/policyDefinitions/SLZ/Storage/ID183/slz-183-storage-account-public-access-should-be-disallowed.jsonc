@@ -1,0 +1,66 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-183-StorageAccountsPublicAccess",
+  "properties": {
+    "displayName": "SLZ - 183 - Storage account public access should be disallowed",
+    "description": "Anonymous public read access to containers and blobs in Azure Storage is a convenient way to share data but might present security risks. To prevent data breaches caused by undesired anonymous access, Microsoft recommends preventing public access to a storage account unless your scenario requires it.",
+    "mode": "Indexed",
+    "metadata": {
+      "category": "Storage",
+      "version": "3.1.0-preview",
+      "preview": true
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["Audit", "Deny", "Disabled"],
+        "defaultValue": "Deny",
+        "metadata": {
+          "description": "The effect determines what happens when the policy rule is evaluated to match",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Storage/storageAccounts"
+          },
+          {
+            "not": {
+              "allOf": [
+                {
+                  "field": "id",
+                  "contains": "/resourceGroups/aro-"
+                },
+                {
+                  "anyOf": [
+                    {
+                      "field": "name",
+                      "like": "cluster*"
+                    },
+                    {
+                      "field": "name",
+                      "like": "imageregistry*"
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "not": {
+              "field": "Microsoft.Storage/storageAccounts/allowBlobPublicAccess",
+              "equals": "false"
+            }
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

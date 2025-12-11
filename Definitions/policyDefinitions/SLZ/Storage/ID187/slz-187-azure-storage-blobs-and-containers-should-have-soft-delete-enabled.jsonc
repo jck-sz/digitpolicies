@@ -1,0 +1,64 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-187-StorageBlobsAndContainerSoftDelete",
+  "properties": {
+    "displayName": "SLZ - 187 - Azure Storage Blobs and Containers should have Soft Delete enabled (Minimum 30 days)",
+    "description": "Protect your Storage Blobs or Containers from accidental or malicious deletions by enabling Soft Delete (Minimum 30 days)",
+    "mode": "All",
+    "metadata": {
+      "category": "Storage",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["Modify", "Deny", "Audit", "Disabled"],
+        "defaultValue": "Deny",
+        "metadata": {
+          "description": "Modify, Deny, Audit or Disabled the execution of the Policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "retentionInDays": {
+        "metadata": {
+          "description": "How long should deleted resources be retained for (minimum 30 days).",
+          "displayName": "Retention in Days"
+        },
+        "type": "Integer"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Storage/storageAccounts/blobServices"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.Storage/storageAccounts/blobServices/deleteRetentionPolicy.enabled",
+                "equals": false
+              },
+              {
+                "field": "Microsoft.Storage/storageAccounts/blobServices/containerDeleteRetentionPolicy.enabled",
+                "equals": false
+              },
+              {
+                "field": "Microsoft.Storage/storageAccounts/blobServices/deleteRetentionPolicy.days",
+                "less": "[parameters('retentionInDays')]"
+              },
+              {
+                "field": "Microsoft.Storage/storageAccounts/blobServices/containerDeleteRetentionPolicy.days",
+                "less": "[parameters('retentionInDays')]"
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

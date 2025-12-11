@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1325-WAFonAPGT",
+  "properties": {
+    "displayName": "SLZ - 1325 - Web Application Firewall (WAF) Must Be Enabled on Application Gateways",
+        "description": "This policy ensures that Web Application Firewall (WAF) is enabled for Azure Application Gateways either through the built-in WAF configuration or a linked firewall policy.",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy.",
+                    "allowedValues": [
+                        "Audit",
+                        "Deny",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Audit"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/applicationGateways"
+                    },
+                    {
+                        "field": "Microsoft.Network/applicationGateways/webApplicationFirewallConfiguration",
+                        "exists": "false"
+                    },
+                    {
+                        "field": "Microsoft.Network/applicationGateways/firewallPolicy",
+                        "exists": "false"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

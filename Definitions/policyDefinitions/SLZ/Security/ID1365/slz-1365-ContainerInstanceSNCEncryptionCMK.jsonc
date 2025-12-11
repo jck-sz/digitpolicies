@@ -1,0 +1,72 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1365-ContainerInstanceSNCEncryptionCMK",
+    "properties": {
+        "displayName": "SLZ - 1365 - Azure Container Instance container group should use customer-managed key for encryption (only SNC resources)",
+        "description": "Secure your containers with greater flexibility using customer-managed keys. When you specify a customer-managed key, that key is used to protect and control access to the key that encrypts your data. Using customer-managed keys provides additional capabilities to control rotation of the key encryption key or cryptographically erase data.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.0.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Disabled",
+                    "Deny"
+                ],
+                "defaultValue": "Audit"
+            },
+            "tagName": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Name Tag",
+                    "description": "Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter."
+                },
+                "defaultValue": "ec.DataSensitivityLevel"
+            },
+            "tagValue": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Tag Value",
+                    "description": "Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter."
+                },
+                "defaultValue": "SNC"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.ContainerInstance/containerGroups"
+                    },
+                    {
+                        "field": "[concat('tags[',parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.ContainerInstance/containerGroups/encryptionProperties.vaultBaseUrl",
+                                "exists": false
+                            },
+                            {
+                                "field": "Microsoft.ContainerInstance/containerGroups/encryptionProperties.keyName",
+                                "exists": false
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

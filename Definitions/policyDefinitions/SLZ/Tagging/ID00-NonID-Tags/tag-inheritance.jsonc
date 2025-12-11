@@ -1,0 +1,136 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-TagInheritanceFromSub",
+    "properties": {
+      "displayName": "Tag Inheritance",
+      "description": "Tag inheritance from subscription for all types of resources (including Resource Groups).",
+      "mode": "All",
+      "parameters": {
+        "tag-TagName1": {
+          "type": "String",
+          "defaultValue": "ec.EnvironmentType",
+          "metadata": {
+            "displayName": "Tag Name",
+            "description": "Environment tag"
+          }
+        },
+        "tag-TagName2": {
+          "type": "String",
+          "defaultValue": "ec.DataSensitivityLevel",
+          "metadata": {
+            "displayName": "Tag Name",
+            "description": "DataSensitivity tag"
+          }
+        },
+        "tag-TagName3": {
+          "type": "String",
+          "defaultValue": "ec.GovIS2SeqNum",
+          "metadata": {
+            "displayName": "Tag Name",
+            "description": "Project tag"
+          }
+        },
+        "tag-TagName4": {
+          "type": "String",
+          "defaultValue": "ec.SystemOwner",
+          "metadata": {
+            "displayName": "Tag Name",
+            "description": "Organization tag"
+          }
+        },
+        "effect": {
+          "type": "string",
+          "allowedValues": [
+            "Audit",
+            "Modify",
+            "Disabled"
+          ],
+          "defaultValue": "Audit",
+          "metadata": {
+            "displayName": "Effect",
+            "description": "Effect of policy"
+          }
+        }
+      },
+      "policyRule": {
+        "if": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "field": "[concat('tags[', parameters('tag-TagName1'), ']')]",
+                  "notEquals": "[subscription().tags[parameters('tag-TagName1')]]"
+                },
+                {
+                  "field": "[concat('tags[', parameters('tag-TagName1'), ']')]",
+                  "notIn": [
+                    "Sandbox",
+                    "Devops",
+                    "Dev",
+                    "Test",
+                    "Uat",
+                    "Prod"
+                  ]
+                }
+              ]
+            },
+            {
+              "allOf": [
+                {
+                  "field": "[concat('tags[', parameters('tag-TagName2'), ']')]",
+                  "notEquals": "[subscription().tags[parameters('tag-TagName2')]]"
+                },
+                {
+                  "field": "[concat('tags[', parameters('tag-TagName2'), ']')]",
+                  "notIn": [
+                    "PA",
+                    "CU",
+                    "SNC"
+                  ]
+                }
+              ]
+            },
+            {
+              "field": "[concat('tags[', parameters('tag-TagName3'), ']')]",
+              "notEquals": "[subscription().tags[parameters('tag-TagName3')]]"
+            },
+            {
+              "field": "[concat('tags[', parameters('tag-TagName4'), ']')]",
+              "notEquals": "[subscription().tags[parameters('tag-TagName4')]]"
+            }
+          ]
+        },
+        "then": {
+          "effect": "[parameters('effect')]",
+          "details": {
+            "roleDefinitionIds": [
+              "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+            ],
+            "operations": [
+              {
+                "operation": "add",
+                "field": "[concat('tags[', parameters('tag-TagName1'), ']')]",
+                "value": "[subscription().tags[parameters('tag-TagName1')]]"
+              },
+              {
+                "operation": "add",
+                "field": "[concat('tags[', parameters('tag-TagName2'), ']')]",
+                "value": "[subscription().tags[parameters('tag-TagName2')]]"
+              },
+              {
+                "operation": "add",
+                "field": "[concat('tags[', parameters('tag-TagName3'), ']')]",
+                "value": "[subscription().tags[parameters('tag-TagName3')]]"
+              },
+              {
+                "operation": "add",
+                "field": "[concat('tags[', parameters('tag-TagName4'), ']')]",
+                "value": "[subscription().tags[parameters('tag-TagName4')]]"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+  

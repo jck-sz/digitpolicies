@@ -1,0 +1,181 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "C1-SLZ-51-AppServiceDiagSettingsToWS",
+  "properties": {
+    "displayName": "C1 - SLZ - 51 - Configure diagnostic settings for Azure App service to Log Analytics workspace",
+    "mode": "Indexed",
+    "metadata": {
+      "category": "Monitoring",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or Disable the execution of the policy"
+        },
+        "allowedValues": [
+          "AuditIfNotExists",
+          "DeployIfNotExists",
+          "Disabled"
+        ],
+        "defaultValue": "DeployIfNotExists"
+      },
+      "workspaceId": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Log Analytics workspace ID",
+          "description": "Resource ID of the Log Analytics workspace",
+          "strongType": "omsWorkspace",
+          "assignPermissions": true
+        }
+      },
+      "policyName": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Policy name",
+          "description": null
+        },
+        "defaultValue": "setByPolicy"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Web/sites"
+          },
+          {
+            "field": "kind",
+            "contains": "app"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Insights/diagnosticSettings",
+          "existenceCondition": {
+            "allOf": [
+              {
+                "field": "Microsoft.Insights/diagnosticSettings/logs.enabled",
+                "equals": true
+              },
+              {
+                "field": "Microsoft.Insights/diagnosticSettings/metrics.enabled",
+                "equals": true
+              },
+              {
+                "field": "Microsoft.Insights/diagnosticSettings/workspaceId",
+                "equals": "[parameters('workspaceId')]"
+              }
+            ]
+          },
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+          ],
+          "deployment": {
+            "properties": {
+              "mode": "incremental",
+              "parameters": {
+                "resourceLocation": {
+                  "value": "[field('location')]"
+                },
+                "resourceName": {
+                  "value": "[field('name')]"
+                },
+                "workspaceId": {
+                  "value": "[parameters('workspaceId')]"
+                },
+                "policyName": {
+                  "value": "[parameters('policyName')]"
+                }
+              },
+              "template": {
+                "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                  "resourceLocation": {
+                    "type": "string"
+                  },
+                  "resourceName": {
+                    "type": "string"
+                  },
+                  "workspaceId": {
+                    "type": "string"
+                  },
+                  "policyName": {
+                    "type": "string"
+                  }
+                },
+                "resources": [
+                  {
+                    "type": "Microsoft.Web/sites/providers/diagnosticSettings",
+                    "apiVersion": "2021-05-01-preview",
+                    "name": "[concat(parameters('resourceName'), '/Microsoft.Insights/', parameters('policyName'), '-workspace')]",
+                    "location": "[parameters('resourceLocation')]",
+                    "dependsOn": [],
+                    "properties": {
+                      "workspaceId": "[parameters('workspaceId')]",
+                      "metrics": [
+                        {
+                          "category": "AllMetrics",
+                          "enabled": true,
+                          "retentionPolicy": {
+                            "enabled": false,
+                            "days": 0
+                          }
+                        }
+                      ],
+                      "logs": [
+                        {
+                          "category": "AppServiceHTTPLogs",
+                          "enabled": true
+                        },
+                        {
+                          "category": "AppServiceConsoleLogs",
+                          "enabled": true
+                        },
+                        {
+                          "category": "AppServiceAppLogs",
+                          "enabled": true
+                        },
+                        {
+                          "category": "AppServiceAuditLogs",
+                          "enabled": true
+                        },
+                        {
+                          "category": "AppServiceIPSecAuditLogs",
+                          "enabled": true
+                        },
+                        {
+                          "category": "AppServicePlatformLogs",
+                          "enabled": true
+                        },
+                        {
+                          "category": "AppServiceAntivirusScanAuditLogs",
+                          "enabled": true
+                        },
+                        {
+                          "category": "AppServiceFileAuditLogs",
+                          "enabled": true
+                        },
+                        {
+                          "category": "AppServiceAuthenticationLogs",
+                          "enabled": true
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "name": "[concat(parameters('policyName'), '-workspace')]"
+        }
+      }
+    }
+  }
+}

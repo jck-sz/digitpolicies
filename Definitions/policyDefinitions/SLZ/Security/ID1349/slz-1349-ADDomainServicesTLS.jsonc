@@ -1,0 +1,44 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1349-ADDomainServicesTLS",
+    "properties": {
+        "displayName": "SLZ - 1349 - Azure Active Directory Domain Services managed domains should use tls 1.2 only mode",
+        "description": "Use tls 1.2 only mode for your managed domains. By default, Azure AD Domain Services enables the use of ciphers such as NTLM v1 and tls v1. These ciphers may be required for some legacy applications, but are considered weak and can be disabled if you don't need them. When tls 1.2 only mode is enabled, any client making a request that is not using tls 1.2 will fail. Learn more at https://docs.microsoft.com/azure/active-directory-domain-services/secure-your-domain.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.1.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.AAD/domainServices"
+                    },
+                    {
+                        "field": "Microsoft.AAD/domainServices/domainSecuritySettings.tlsV1",
+                        "notEquals": "Disabled"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

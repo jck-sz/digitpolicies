@@ -1,0 +1,46 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1330-PrivateEndpointAPI",
+    "properties": {
+        "displayName": "SLZ - 1330 - Ensure Private Endpoint for Azure API Management Services",
+        "description": "This policy ensures that Azure API Management Services have at least one approved private endpoint connection for enhanced network security.",
+        "policyType": "Custom",
+        "mode": "All",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "AuditIfNotExists",
+                    "Disabled"
+                ],
+                "defaultValue": "AuditIfNotExists",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Audit non-compliant resources or disable the policy."
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "field": "type",
+                "equals": "Microsoft.ApiManagement/service"
+            },
+            "then": {
+                "effect": "[parameters('effect')]",
+                "details": {
+                    "type": "Microsoft.ApiManagement/service",
+                    "existenceCondition": {
+                        "count": {
+                            "field": "Microsoft.ApiManagement/service/privateEndpointConnections[*]",
+                            "where": {
+                                "field": "Microsoft.ApiManagement/service/privateEndpointConnections[*].privateLinkServiceConnectionState.status",
+                                "equals": "Approved"
+                            }
+                        },
+                        "greaterOrEquals": 1
+                    }
+                }
+            }
+        }
+    }
+}

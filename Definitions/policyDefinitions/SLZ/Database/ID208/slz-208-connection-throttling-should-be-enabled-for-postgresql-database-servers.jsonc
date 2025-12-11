@@ -1,0 +1,74 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-208-PostgresSQLServerConnectionThrottling",
+  "properties": {
+    "displayName": "SLZ - 208 - Connection throttling should be enabled for PostgreSQL database servers",
+    "description": " This policy helps audit any PostgreSQL databases in your environment without Connection throttling enabled. This setting enables temporary connection throttling per IP for too many invalid password login failures.",
+    "mode": "All",
+    "metadata": {
+      "category": "SQL",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["DeployIfNotExists", "AuditIfNotExists", "Disabled"],
+        "defaultValue": "DeployIfNotExists",
+        "metadata": {
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "field": "type",
+        "equals": "Microsoft.DBforPostgreSQL/servers"
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.DBforPostgreSQL/servers/configurations",
+          "existenceCondition": {
+            "field": "Microsoft.DBforPostgreSQL/servers/configurations/value",
+            "equals": "on"
+          },
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+          ],
+          "deployment": {
+            "properties": {
+              "parameters": {
+                "serverName": {
+                  "value": "[field('name')]"
+                }
+              },
+              "mode": "incremental",
+              "template": {
+                "parameters": {
+                  "serverName": {
+                    "type": "string"
+                  }
+                },
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                  {
+                    "type": "Microsoft.DBforPostgreSQL/servers/configurations",
+                    "properties": {
+                      "value": "on",
+                      "source": "user-override"
+                    },
+                    "apiVersion": "2017-12-01",
+                    "name": "[concat(parameters('serverName'), '/connection_throttle')]"
+                  }
+                ],
+                "variables": {},
+                "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#"
+              }
+            }
+          },
+          "name": "connection_throttle"
+        }
+      }
+    }
+  }
+}

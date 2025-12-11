@@ -1,0 +1,65 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-238.6-DisksProdNoStandardHDD",
+    "properties": {
+        "displayName": "SLZ - 238.6 - Ensure Disks in PROD are not using Standard HDD (Standard_LRS)",
+        "description": "Audits managed disks tagged as production (tag ec.EnvironmentType=PROD) that are using Standard HDD (Standard_LRS) SKU. This tier is not recommended for production workloads due to limited performance and SLA.",
+        "mode": "All",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Security"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy."
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "tagName": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Name",
+                    "description": "The tag name that marks production resources."
+                },
+                "defaultValue": "ec.EnvironmentType"
+            },
+            "tagValue": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Value",
+                    "description": "The tag value that represents production."
+                },
+                "defaultValue": "PROD"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Compute/disks"
+                    },
+                    {
+                        "field": "[concat('tags[', parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    },
+                    {
+                        "field": "Microsoft.Compute/disks/sku.name",
+                        "equals": "Standard_LRS"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

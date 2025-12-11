@@ -1,0 +1,65 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-238.7-ACRProdNoBasicSku",
+    "properties": {
+        "displayName": "SLZ - 238.7 - Ensure ACR in PROD does not use Basic SKU",
+        "description": "Audits Azure Container Registries tagged as production (tag ec.EnvironmentType=PROD) that are using the Basic SKU. Production registries must use Standard or Premium SKU for reliability, scale, and support.",
+        "mode": "All",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Security"
+        },
+        "parameters": {
+            "effect": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy."
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "tagName": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Name",
+                    "description": "The tag name that marks production resources."
+                },
+                "defaultValue": "ec.EnvironmentType"
+            },
+            "tagValue": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Value",
+                    "description": "The tag value that represents production."
+                },
+                "defaultValue": "PROD"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.ContainerRegistry/registries"
+                    },
+                    {
+                        "field": "[concat('tags[', parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    },
+                    {
+                        "field": "Microsoft.ContainerRegistry/registries/sku.name",
+                        "equals": "Basic"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

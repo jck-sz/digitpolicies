@@ -1,0 +1,129 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1334-KubernetesInternalLB",
+  "properties": {
+    "displayName": "SLZ - 1334 - Kubernetes Clusters Should Use Internal Load Balancers",
+        "description": "This policy ensures Kubernetes clusters use internal load balancers to restrict access to applications within the same virtual network. Learn more at: https://aka.ms/kubepolicydoc.",
+        "policyType": "Custom",
+        "mode": "Microsoft.Kubernetes.Data",
+        "parameters": {
+            "source": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Source",
+                    "description": "The source k8s object for constraint evaluation. 'Original' means evaluate only the GroupVersionKind specified. 'Generated' means evaluate only Gatekeeper ExpansionTemplates. 'All' evaluates both."
+                },
+                "allowedValues": [
+                    "All",
+                    "Generated",
+                    "Original"
+                ],
+                "defaultValue": "Original"
+            },
+            "warn": {
+                "type": "Boolean",
+                "metadata": {
+                    "displayName": "Warn",
+                    "description": "Whether or not to return warnings back to the user in the kubectl CLI."
+                },
+                "defaultValue": false
+            },
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Controls how policy violations are handled. 'Audit' flags non-compliant resources. 'Deny' blocks them. 'Disabled' turns off the policy.",
+                    "portalReview": true
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "excludedNamespaces": {
+                "type": "Array",
+                "metadata": {
+                    "displayName": "Namespace Exclusions",
+                    "description": "List of namespaces to exclude from policy evaluation. System namespaces 'kube-system', 'gatekeeper-system', and 'azure-arc' are always excluded by design."
+                },
+                "defaultValue": [
+                    "kube-system",
+                    "gatekeeper-system",
+                    "azure-arc",
+                    "azure-extensions-usage-system"
+                ]
+            },
+            "namespaces": {
+                "type": "Array",
+                "metadata": {
+                    "displayName": "Namespace Inclusions",
+                    "description": "List of namespaces to include in the policy evaluation. An empty list means all namespaces are included."
+                },
+                "defaultValue": []
+            },
+            "labelSelector": {
+                "type": "Object",
+                "metadata": {
+                    "displayName": "Label Selector",
+                    "description": "Label query to select Kubernetes resources for policy evaluation. An empty selector matches all resources."
+                },
+                "defaultValue": {},
+                "schema": {
+                    "description": "A label selector is a query over a set of resources.",
+                    "type": "object",
+                    "properties": {
+                        "matchLabels": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            },
+                            "minProperties": 1
+                        },
+                        "matchExpressions": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "key": { "type": "string" },
+                                    "operator": { "type": "string", "enum": ["In", "NotIn", "Exists", "DoesNotExist"] },
+                                    "values": {
+                                        "type": "array",
+                                        "items": { "type": "string" }
+                                    }
+                                },
+                                "required": ["key", "operator"]
+                            },
+                            "minItems": 1
+                        }
+                    }
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "field": "type",
+                "in": [
+                    "Microsoft.ContainerService/managedClusters"
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]",
+                "details": {
+                    "source": "[parameters('source')]",
+                    "warn": "[parameters('warn')]",
+                    "templateInfo": {
+                        "sourceType": "PublicURL",
+                        "url": "https://store.policy.core.windows.net/kubernetes/load-balancer-no-public-ips/v1/template.yaml"
+                    },
+                    "apiGroups": [""],
+                    "kinds": ["Service"],
+                    "excludedNamespaces": "[parameters('excludedNamespaces')]",
+                    "namespaces": "[parameters('namespaces')]",
+                    "labelSelector": "[parameters('labelSelector')]"
+                }
+            }
+        }
+    }
+}

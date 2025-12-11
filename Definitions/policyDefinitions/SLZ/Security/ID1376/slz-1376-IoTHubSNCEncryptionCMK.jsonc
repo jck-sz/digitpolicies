@@ -1,0 +1,78 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1376-IoTHubSNCEncryptionCMK",
+    "properties": {
+        "displayName": "SLZ - 1376 - Azure IoT Hub should use customer-managed key to encrypt data at rest (only SNC resources)",
+        "description": "Encryption of data at rest in IoT Hub with customer-managed key adds a second layer of encryption on top of the default service-managed keys, enables customer control of keys, custom rotation policies, and ability to manage access to data through key access control. Customer-managed keys must be configured during creation of IoT Hub. For more information on how to configure customer-managed keys, see https://aka.ms/iotcmk.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.0.0-preview"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "The desired effect of the policy."
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "tagName": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Name Tag",
+                    "description": "Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter."
+                },
+                "defaultValue": "ec.DataSensitivityLevel"
+            },
+            "tagValue": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Tag Value",
+                    "description": "Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter."
+                },
+                "defaultValue": "SNC"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Devices/IotHubs"
+                    },
+                    {
+                        "count": {
+                            "field": "Microsoft.Devices/IotHubs/encryption.keyVaultProperties[*]",
+                            "where": {
+                                "allOf": [
+                                    {
+                                        "field": "Microsoft.Devices/IotHubs/encryption.keyVaultProperties[*].keyIdentifier",
+                                        "exists": "true"
+                                    },
+                                    {
+                                        "field": "Microsoft.Devices/IotHubs/encryption.keyVaultProperties[*].keyIdentifier",
+                                        "notequals": ""
+                                    }
+                                ]
+                            }
+                        },
+                        "lessOrEquals": 0
+                    },
+                    {
+                        "field": "[concat('tags[',parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

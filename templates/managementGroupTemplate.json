@@ -1,0 +1,71 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "landingZoneLocation": {
+      "defaultValue": "westeurope",
+      "type": "string"
+    },
+    "landingZoneName": {
+      "type": "string"
+    },
+    "landingZoneManagementGroupName": {
+      "type": "string"
+    },
+    "landingZoneSubscriptionId": {
+      "type": "string"
+    },
+    "landingZoneIdentity": {
+      "type": "string"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "name": "[guid(concat('resourcepolicycontributor', parameters('landingZoneIdentity')))]",
+      "properties": {
+        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', '36243c78-bf99-498c-9df9-86d9f8d28608')]",
+        "principalId": "[reference(parameters('landingZoneIdentity'), '2023-01-31').principalId]",
+        "scope": "[resourceId('Microsoft.Management/managementGroups', parameters('landingZoneManagementGroupName'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "name": "[guid(concat('contributor', parameters('landingZoneIdentity')))]",
+      "properties": {
+        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+        "principalId": "[reference(parameters('landingZoneIdentity'), '2023-01-31').principalId]",
+        "scope": "[resourceId('Microsoft.Management/managementGroups', parameters('landingZoneManagementGroupName'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "name": "[guid(concat('securityadmin', parameters('landingZoneIdentity')))]",
+      "properties": {
+        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', 'fb1c8493-542b-48eb-b624-b4c8fea62acd')]",
+        "principalId": "[reference(parameters('landingZoneIdentity'), '2023-01-31').principalId]",
+        "scope": "[resourceId('Microsoft.Management/managementGroups', parameters('landingZoneManagementGroupName'))]"
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2022-04-01",
+      "name": "[guid(concat('loganalyticscontributor', parameters('landingZoneIdentity')))]",
+      "properties": {
+        "roleDefinitionId": "[resourceId('Microsoft.Authorization/roleDefinitions', '92aaf0da-9dab-42b6-94a3-d43ce8d16293')]",
+        "principalId": "[reference(parameters('landingZoneIdentity'), '2023-01-31').principalId]",
+        "scope": "[resourceId('Microsoft.Management/managementGroups', parameters('landingZoneManagementGroupName'))]"
+      }
+    }
+  ],
+  "outputs": {
+    "scope": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Management/managementGroups', parameters('landingZoneManagementGroupName'))]"
+    }
+  }
+}

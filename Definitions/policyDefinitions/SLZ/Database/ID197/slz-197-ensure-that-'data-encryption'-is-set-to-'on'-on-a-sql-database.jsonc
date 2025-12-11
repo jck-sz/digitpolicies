@@ -1,0 +1,88 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-197-SQLDatabaseDataEncryption",
+  "properties": {
+    "displayName": "SLZ - 197 - Ensure that 'Data encryption' is set to 'On' on a SQL Database",
+    "description": "Transparent data encryption should be enabled to protect data-at-rest and meet compliance requirements",
+    "mode": "All",
+    "metadata": {
+      "category": "SQL",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["DeployIfNotExists", "AuditIfNotExists", "Disabled"],
+        "defaultValue": "DeployIfNotExists",
+        "metadata": {
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Sql/servers/databases"
+          },
+          {
+            "field": "name",
+            "notEquals": "master"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+          "existenceCondition": {
+            "anyOf": [
+              {
+                "field": "Microsoft.Sql/transparentDataEncryption.status",
+                "equals": "enabled"
+              },
+              {
+                "field": "Microsoft.Sql/servers/databases/transparentDataEncryption/state",
+                "equals": "enabled"
+              }
+            ]
+          },
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/9b7fa17d-e63e-47b0-bb0a-15c516ac86ec"
+          ],
+          "deployment": {
+            "properties": {
+              "parameters": {
+                "fullDbName": {
+                  "value": "[field('fullName')]"
+                }
+              },
+              "mode": "incremental",
+              "template": {
+                "parameters": {
+                  "fullDbName": {
+                    "type": "string"
+                  }
+                },
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                  {
+                    "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+                    "properties": {
+                      "state": "Enabled"
+                    },
+                    "apiVersion": "2022-05-01-preview",
+                    "name": "[concat(parameters('fullDbName'), '/current')]"
+                  }
+                ],
+                "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"
+              }
+            }
+          },
+          "name": "current"
+        }
+      }
+    }
+  }
+}

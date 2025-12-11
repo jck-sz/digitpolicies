@@ -1,0 +1,91 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-216-AzureCosmosDBFWLimitsForSelectedNetwork",
+  "properties": {
+    "displayName": "SLZ - 216 - Ensure That 'Firewalls & Networks' Is Limited to use selected Networks Instead of All Networks",
+    "description": "Firewall rules should be defined on your Azure Cosmos DB accounts to prevent traffic from unauthorized sources. Accounts that have at least one IP rule defined with the virtual network filter enabled are deemed compliant. Accounts disabling public access are also deemed compliant.",
+    "mode": "Indexed",
+    "metadata": {
+      "category": "Storage",
+      "version": "2.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["Audit", "Deny", "Disabled"],
+        "defaultValue": "Deny",
+        "metadata": {
+          "description": "The desired effect of the policy.",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.DocumentDB/databaseAccounts"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.DocumentDB/databaseAccounts/publicNetworkAccess",
+                "exists": "false"
+              },
+              {
+                "field": "Microsoft.DocumentDB/databaseAccounts/publicNetworkAccess",
+                "equals": "Enabled"
+              }
+            ]
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.DocumentDB/databaseAccounts/isVirtualNetworkFilterEnabled",
+                "exists": "false"
+              },
+              {
+                "field": "Microsoft.DocumentDB/databaseAccounts/isVirtualNetworkFilterEnabled",
+                "equals": "false"
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "anyOf": [
+                  {
+                    "field": "Microsoft.DocumentDB/databaseAccounts/ipRules",
+                    "exists": "false"
+                  },
+                  {
+                    "equals": 0,
+                    "count": {
+                      "field": "Microsoft.DocumentDB/databaseAccounts/ipRules[*]"
+                    }
+                  }
+                ]
+              },
+              {
+                "anyOf": [
+                  {
+                    "field": "Microsoft.DocumentDB/databaseAccounts/ipRangeFilter",
+                    "exists": "false"
+                  },
+                  {
+                    "field": "Microsoft.DocumentDB/databaseAccounts/ipRangeFilter",
+                    "equals": ""
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

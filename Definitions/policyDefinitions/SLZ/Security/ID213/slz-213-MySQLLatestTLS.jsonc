@@ -1,0 +1,127 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-213-MySQLLatestTLS",
+    "properties": {
+        "displayName": "SLZ - 213 - Ensure 'TLS Version' is set to 'TLSV1.2' for MySQL flexible Database",
+        "description": "Ensure 'TLS Version' is set to 'TLSV1.2' for MySQL flexible Database",
+        "metadata": {
+            "category": "Security",
+            "version": "1.1.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "defaultValue": "AuditIfNotExists",
+                "allowedValues": [
+                    "AuditIfNotExists",
+                    "DeployIfNotExists",
+                    "Deny"
+                ],
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                }
+            },
+            "minimaltlsVersion": {
+                "type": "String",
+                "defaultValue": "tls1_2",
+                "allowedValues": [
+                    "tls1_2",
+                    "tls1_3"
+                ],
+                "metadata": {
+                    "displayName": "Select version minimum tls for MySQL server",
+                    "description": "Select version minimum tls version Azure Database for MySQL server to enforce"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.DBforMySQL/servers"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.DBforMySQL/servers/sslEnforcement",
+                                "notEquals": "Enabled"
+                            },
+                            {
+                                "field": "Microsoft.DBforMySQL/servers/minimalTlsVersion",
+                                "less": "[parameters('minimalTlsVersion')]"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]",
+                "details": {
+                    "type": "Microsoft.DBforMySQL/servers",
+                    "existenceCondition": {
+                        "allOf": [
+                            {
+                                "field": "Microsoft.DBforMySQL/servers/sslEnforcement",
+                                "equals": "Enabled"
+                            },
+                            {
+                                "field": "Microsoft.DBforMySQL/servers/minimalTlsVersion",
+                                "equals": "[parameters('minimalTlsVersion')]"
+                            }
+                        ]
+                    },
+                    "roleDefinitionIds": [
+                        "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+                    ],
+                    "deployment": {
+                        "properties": {
+                            "mode": "Incremental",
+                            "template": {
+                                "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                                "contentVersion": "1.0.0.0",
+                                "parameters": {
+                                    "resourceName": {
+                                        "type": "String"
+                                    },
+                                    "minimalTlsVersion": {
+                                        "type": "String"
+                                    },
+                                    "location": {
+                                        "type": "String"
+                                    }
+                                },
+                                "variables": {},
+                                "resources": [
+                                    {
+                                        "type": "Microsoft.DBforMySQL/servers",
+                                        "apiVersion": "2017-12-01",
+                                        "name": "[concat(parameters('resourceName'))]",
+                                        "location": "[parameters('location')]",
+                                        "properties": {
+                                            "sslEnforcement": "[if(equals(parameters('minimalTlsVersion'), 'TLSEnforcementDisabled'),'Disabled', 'Enabled')]",
+                                            "minimalTlsVersion": "[parameters('minimalTlsVersion')]"
+                                        }
+                                    }
+                                ],
+                                "outputs": {}
+                            },
+                            "parameters": {
+                                "resourceName": {
+                                    "value": "[field('name')]"
+                                },
+                                "minimalTlsVersion": {
+                                    "value": "[parameters('minimalTlsVersion')]"
+                                },
+                                "location": {
+                                    "value": "[field('location')]"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

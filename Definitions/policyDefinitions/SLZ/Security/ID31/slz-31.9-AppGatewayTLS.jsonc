@@ -1,0 +1,44 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-31.9-AppGatewayTLS",
+    "properties": {
+        "displayName": "SLZ - 31.9 - Application Gateway should be deployed with predefined Microsoft policy that is using latest tls version",
+        "description": "This policy enables you to restrict that Application Gateways is always deployed with predefined Microsoft policy that is using latest tls version",
+        "metadata": {
+            "category": "Security",
+            "version": "1.0.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/applicationGateways"
+                    },
+                    {
+                        "field": "Microsoft.Network/applicationGateways/sslPolicy.minProtocolVersion",
+                        "equals": "TLSv1_3"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

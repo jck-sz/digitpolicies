@@ -1,0 +1,65 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-238.4-ADXProdNoDeveloperTier",
+    "properties": {
+        "displayName": "SLZ - 238.4 - Ensure Azure Data Explorer in PROD does not use Developer Tier",
+        "description": "Audits Azure Data Explorer clusters tagged as production (tag ec.EnvironmentType=PROD) that are using the Developer SKU tier. Developer tier is not suitable for production workloads due to lack of SLA and limited capacity.",
+        "mode": "All",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Security"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy."
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "tagName": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Name",
+                    "description": "The tag name that marks production resources."
+                },
+                "defaultValue": "ec.EnvironmentType"
+            },
+            "tagValue": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Value",
+                    "description": "The tag value that represents production."
+                },
+                "defaultValue": "PROD"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Kusto/clusters"
+                    },
+                    {
+                        "field": "[concat('tags[', parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    },
+                    {
+                        "field": "Microsoft.Kusto/clusters/sku.tier",
+                        "equals": "Developer"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

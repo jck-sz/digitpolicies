@@ -1,0 +1,42 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1326-WAFSkuV2",
+  "properties": {
+    "displayName": "SLZ - 1326 - Application Gateway Must Use WAF_v2 SKU",
+        "description": "This policy ensures that Azure Application Gateways are configured with the WAF_v2 SKU, enhancing security by enabling Web Application Firewall (WAF) protection.",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy.",
+                    "allowedValues": [
+                        "Audit",
+                        "Deny",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Audit"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Network/applicationGateways"
+                    },
+                    {
+                        "field": "Microsoft.Network/applicationGateways/sku.name",
+                        "notEquals": "WAF_v2"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

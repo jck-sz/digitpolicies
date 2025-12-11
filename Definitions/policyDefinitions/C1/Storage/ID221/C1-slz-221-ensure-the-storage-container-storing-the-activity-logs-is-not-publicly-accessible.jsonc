@@ -1,0 +1,89 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible",
+  "properties": {
+    "displayName": "C1 - SLZ - 221 - Ensure Activity Log Storage and LAW are not Publicly Accessible",
+    "description": "Ensures that the storage account for activity logs and the Log Analytics workspace do not allow public access.",
+    "mode": "All",
+    "metadata": {
+      "category": "Monitoring",
+      "version": "1.3.0"
+    },
+    "parameters": {
+      "effect": {
+        "type": "string",
+        "allowedValues": ["Audit", "Deny", "Disabled"],
+        "defaultValue": "Deny",
+        "metadata": {
+          "description": "The effect determines what happens when the policy rule is evaluated to match",
+          "displayName": "Effect"
+        }
+      },
+      "targetStorageAccountName": {
+        "type": "String",
+        "metadata": {
+          "description": "Name of the storage account that should not allow public access",
+          "displayName": "Target Storage Account Name"
+        }
+      },
+      "targetLogAnalyticsWorkspaceName": {
+        "type": "String",
+        "metadata": {
+          "description": "Name of the Log Analytics workspace that should not allow public network access for ingestion and query",
+          "displayName": "Target Log Analytics Workspace Name"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "anyOf": [
+          {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.Storage/storageAccounts"
+              },
+              {
+                "field": "name",
+                "equals": "[parameters('targetStorageAccountName')]"
+              },
+              {
+                "not": {
+                  "field": "Microsoft.Storage/storageAccounts/allowBlobPublicAccess",
+                  "equals": "false"
+                }
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "field": "type",
+                "equals": "Microsoft.OperationalInsights/workspaces"
+              },
+              {
+                "field": "name",
+                "equals": "[parameters('targetLogAnalyticsWorkspaceName')]"
+              },
+              {
+                "anyOf": [
+                  {
+                    "field": "Microsoft.OperationalInsights/workspaces/publicNetworkAccessForIngestion",
+                    "notEquals": "Disabled"
+                  },
+                  {
+                    "field": "Microsoft.OperationalInsights/workspaces/publicNetworkAccessForQuery",
+                    "notEquals": "Disabled"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

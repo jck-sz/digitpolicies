@@ -1,0 +1,48 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1331.2-DisablePublicAccessAPIPE",
+    "properties": {
+        "displayName": "SLZ - 1331.2 - Ensure Public network access must be Disabled for API management with Private Endpoints",
+        "description": "This policy ensures that Azure API Management Services have public network access disabled for API management with Private Endpoints",
+        "policyType": "Custom",
+        "mode": "All",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy.",
+                    "allowedValues": [
+                        "Audit",
+                        "Disabled",
+                        "Deny"
+                    ],
+                    "defaultValue": "Audit"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.ApiManagement/service"
+                    },
+                    {
+                        "count": {
+                            "field": "Microsoft.ApiManagement/service/privateEndpointConnections[*]"
+                        },
+                        "greaterOrEquals": 1
+                    },
+                    {
+                        "field": "Microsoft.ApiManagement/service/publicNetworkAccess",
+                        "notEquals": "Disabled"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

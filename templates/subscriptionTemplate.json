@@ -1,0 +1,35 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "landingZoneLocation": {
+      "defaultValue": "westeurope",
+      "type": "string"
+    },
+    "landingZoneName": {
+      "defaultValue": "lzslz",
+      "type": "string"
+    }
+  },
+  "variables": {
+    "landingZoneResourceGroupName": "[concat(parameters('landingZoneName'), '_rg')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/resourceGroups",
+      "apiVersion": "2022-09-01",
+      "name": "[variables('landingZoneResourceGroupName')]",
+      "location": "[parameters('landingZoneLocation')]"
+    }
+  ],
+  "outputs": {
+    "resourceGroupId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Resources/resourceGroups', variables('landingZoneResourceGroupName'))]"
+    },
+    "resourceGroupName": {
+      "type": "string",
+      "value": "[variables('landingZoneResourceGroupName')]"
+    }
+  }
+}

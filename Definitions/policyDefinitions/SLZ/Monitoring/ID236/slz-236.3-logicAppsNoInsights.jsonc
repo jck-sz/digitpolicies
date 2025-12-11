@@ -1,0 +1,47 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-236.3-logicAppsNoInsights",
+    "properties": {
+        "displayName": "SLZ - 236.3 - Audit Logic Apps without Application Insights",
+        "description": "Audit Logic Apps that are not linked to an Application Insights resource.",
+        "mode": "Indexed",
+        "metadata": {
+            "category": "Monitoring",
+            "version": "1.0.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Logic/workflows"
+                    },
+                    {
+                        "not": {
+                            "field": "tags['hidden-link: /app-insights-resource-id']",
+                            "exists": "true"
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

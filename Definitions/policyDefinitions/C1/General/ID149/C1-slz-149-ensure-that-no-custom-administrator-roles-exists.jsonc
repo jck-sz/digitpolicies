@@ -1,0 +1,55 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "C1-SLZ-149-NoCustomAdministratorRoles",
+  "properties": {
+    "displayName": "C1 - SLZ - 149 - Ensure That No Custom Administrator Roles Exists",
+    "description": "That policy will check that no custom roles are assigned based on custom roles names.",
+    "mode": "All",
+    "metadata": {
+      "category": "General",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "defaultValue": "Audit",
+        "allowedValues": ["Audit", "Deny", "Disabled"],
+        "metadata": {
+          "description": "Choose the effect type: 'Audit', 'Deny', or 'Disabled'",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "allowedCustomRolesNames": {
+        "defaultValue": ["EC_DIGIT_S2_AXIOM_SNAPSHOT","STEE-exempt-action", "DIGIT_S2_copy_snapshot_to_CISRC_evidance_storage","DIGIT_S2_XSOAR_INTEGRATION", "DIGIT.C1-STEE exempt/action", "DIGIT.S2", "Security Admin - DIGIT.S2", "Security Assessment Contributor - DIGIT.S2", "Security Reader - DIGIT.S2","DIGIT.S2.CSIRC", "DIGIT.S2.SOC"],
+        "metadata": {
+          "description": "List of allowed custom roles (role ids) for subscription administrators",
+          "displayName": "allowedCustomRolesNames"
+        },
+        "type": "Array"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Authorization/roleDefinitions"
+          },
+          {
+            "field": "Microsoft.Authorization/roleDefinitions/type",
+            "equals": "CustomRole"
+          },
+          {
+            "not": {
+              "field": "Microsoft.Authorization/roleDefinitions/roleName",
+              "in": "[parameters('allowedCustomRolesNames')]"
+            }
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

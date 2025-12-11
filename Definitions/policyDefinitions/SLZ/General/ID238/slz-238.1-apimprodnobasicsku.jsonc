@@ -1,0 +1,73 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-238.1-ApimProdNoBasicSku",
+  "properties": {
+    "displayName": "SLZ - 238.1 - Ensure API Management in PROD does not use Basic or Consumption SKU",
+    "description": "Audits API Management services tagged as production (tag ec.EnvironmentType=PROD) that are running on the Basic or Consumption SKU. Production workloads must use Developer, Standard or Premium SKU for adequate performance and support.",
+    "mode": "All",
+    "metadata": {
+      "version": "1.0.0",
+      "category": "Security"
+    },
+    "parameters": {
+      "effect": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy."
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Audit"
+      },
+      "tagName": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Environment Tag Name",
+          "description": "The tag name that marks production resources."
+        },
+        "defaultValue": "ec.EnvironmentType"
+      },
+      "tagValue": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Environment Tag Value",
+          "description": "The tag value that represents production."
+        },
+        "defaultValue": "PROD"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.ApiManagement/service"
+          },
+          {
+            "field": "[concat('tags[', parameters('tagName'), ']')]",
+            "equals": "[parameters('tagValue')]"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.ApiManagement/service/sku.name",
+                "equals": "Basic"
+              },
+              {
+                "field": "Microsoft.ApiManagement/service/sku.name",
+                "equals": "Consumption"
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

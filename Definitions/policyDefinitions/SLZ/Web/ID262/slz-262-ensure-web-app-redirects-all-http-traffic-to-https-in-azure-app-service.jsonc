@@ -1,0 +1,67 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-262-AppServiceHTTPtoHTTPSRedirection",
+  "properties": {
+    "displayName": "SLZ - 262 - Ensure Web App Redirects All HTTP traffic to HTTPS in Azure App Service",
+    "description": "Policy will audit does HTTP is redirected for App Service, if not, it allows to redirect HTTP to HTTPS only for App Service.",
+    "mode": "Indexed",
+    "metadata": {
+      "category": "App Service",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["Audit", "Modify", "Disabled"],
+        "defaultValue": "Audit",
+        "metadata": {
+          "description": "Enable or disable the execution of the policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "kind",
+            "notContains": "functionapp"
+          },
+          {
+            "field": "type",
+            "equals": "Microsoft.Web/sites"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.Web/sites/httpsOnly",
+                "exists": "false"
+              },
+              {
+                "field": "Microsoft.Web/sites/httpsOnly",
+                "equals": "false"
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/de139f84-1756-47ae-9be6-808fbbe84772"
+          ],
+          "operations": [
+            {
+              "field": "Microsoft.Web/sites/httpsOnly",
+              "value": true,
+              "operation": "addOrReplace",
+              "condition": "[greaterOrEquals(requestContext().apiVersion, '2019-08-01')]"
+            }
+          ],
+          "conflictEffect": "audit"
+        }
+      }
+    }
+  }
+}

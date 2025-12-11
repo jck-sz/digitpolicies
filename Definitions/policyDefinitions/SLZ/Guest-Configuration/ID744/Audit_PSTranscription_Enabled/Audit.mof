@@ -1,0 +1,36 @@
+/*
+@TargetNode='localhost'
+@GeneratedBy=eric.anllo-muniz
+@GenerationDate=09/18/2025 15:36:07
+@GenerationHost=C11-LFXFXPNOPXA
+*/
+
+instance of MSFT_ScriptResource as $MSFT_ScriptResource1ref
+{
+SetScript = "return $true";
+ ResourceID = "[Script]CheckTranscription";
+ SourceInfo = "C:\\Users\\eric.anllo-muniz\\OneDrive - Accenture\\Desktop\\DIGIT\\AzureLandingZone\\Definitions\\policyDefinitions\\SLZ\\Guest-Configuration\\ID744\\Audit.ps1::5::9::Script";
+ GetScript = "$path = \"HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\Transcription\"\n$props = Get-ItemProperty -Path $path -ErrorAction SilentlyContinue\n$enabled = $props.EnableTranscripting\n@{ Result = (\"Enabled={0}\" -f $enabled) }";
+ ModuleName = "PSDscResources";
+ ModuleVersion = "2.12.0.0";
+ TestScript = "$path = \"HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\Transcription\"\ntry {\n    $val = (Get-ItemProperty -Path $path -Name EnableTranscripting -ErrorAction SilentlyContinue).EnableTranscripting\n    if ($null -eq $val) { return $false }\n    return ([int]$val -eq 1)\n} catch {\n    return $false\n}";
+ ConfigurationName = "Audit_PSTranscription_Enabled";
+};
+instance of OMI_ConfigurationDocument
+
+                    {
+ Version="2.0.0";
+
+                        MinimumCompatibleVersion = "1.0.0";
+
+                        CompatibleVersionAdditionalProperties= {"Omi_BaseResource:ConfigurationName"};
+
+                        Author="eric.anllo-muniz";
+
+                        GenerationDate="09/18/2025 15:36:07";
+
+                        GenerationHost="C11-LFXFXPNOPXA";
+
+                        Name="Audit_PSTranscription_Enabled";
+
+                    };

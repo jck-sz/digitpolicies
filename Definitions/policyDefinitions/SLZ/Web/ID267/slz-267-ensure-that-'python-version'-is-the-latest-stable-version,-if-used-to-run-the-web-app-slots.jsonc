@@ -1,0 +1,92 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-267-AppServiceSlotsLatestPythonVersion",
+  "properties": {
+    "displayName": "SLZ - 267 - Ensure that 'Python version' is the Latest Stable Version, if Used to Run the Web App Slots",
+    "description": "Ensure that 'Python version' is in expected, if Used to Run the Web App Slots",
+    "mode": "Indexed",
+    "metadata": {
+      "category": "App Service",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": [
+          "AuditIfNotExists",
+          "Disabled"
+        ],
+        "defaultValue": "AuditIfNotExists",
+        "metadata": {
+          "description": "Enable or disable the execution of the policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "pythonVersion": {
+        "defaultValue": "",
+        "metadata": {
+          "description": "Specify a supported Python version for App Service",
+          "displayName": "Python version"
+        },
+        "type": "string"
+      },
+      "pythonVersion2": {
+        "defaultValue": "",
+        "metadata": {
+          "description": "Specify a supported Python version for App Service",
+          "displayName": "Python version"
+        },
+        "type": "string"
+      },
+      "pythonPrefix": {
+        "defaultValue": "PYTHON|",
+        "metadata": {
+          "description": "Specify a supported Python prefix for App Service",
+          "displayName": "Python prefix"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Web/sites/slots"
+          },
+          {
+            "field": "kind",
+            "notContains": "functionapp"
+          },
+          {
+            "field": "kind",
+            "contains": "linux"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Web/sites/slots/config",
+          "existenceCondition": {
+            "anyOf": [
+              {
+                "field": "Microsoft.Web/sites/slots/config/web.linuxFxVersion",
+                "notContains": "PYTHON"
+              },
+              {
+                "field": "Microsoft.Web/sites/slots/config/web.linuxFxVersion",
+                "equals": "[concat(parameters('pythonPrefix'), parameters('pythonVersion'))]"
+              },
+              {
+                "field": "Microsoft.Web/sites/slots/config/web.linuxFxVersion",
+                "equals": "[concat(parameters('pythonPrefix'), parameters('pythonVersion2'))]"
+              }
+            ]
+          },
+          "name": "web"
+        }
+      }
+    }
+  }
+}

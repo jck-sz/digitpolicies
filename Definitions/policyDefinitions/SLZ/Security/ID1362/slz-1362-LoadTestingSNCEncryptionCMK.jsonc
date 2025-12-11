@@ -1,0 +1,64 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1362-LoadTestingSNCEncryptionCMK",
+    "properties": {
+        "displayName": "SLZ - 1362 - Azure load testing resource should use customer-managed keys to encrypt data at rest (only SNC resources)",
+        "description": "Use customer-managed keys(CMK) to manage the encryption at rest for your Azure Load Testing resource. By default the encryption is done using Service managed keys, customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://docs.microsoft.com/azure/load-testing/how-to-configure-customer-managed-keys?tabs=portal.",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Security"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy."
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "tagName": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Name Tag",
+                    "description": "Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter."
+                },
+                "defaultValue": "ec.DataSensitivityLevel"
+            },
+            "tagValue": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Tag Value",
+                    "description": "Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter."
+                },
+                "defaultValue": "SNC"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.LoadTestService/loadtests"
+                    },
+                    {
+                        "field": "Microsoft.LoadTestService/loadTests/encryption.keyUrl",
+                        "exists": false
+                    },
+                    {
+                        "field": "[concat('tags[',parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

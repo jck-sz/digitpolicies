@@ -1,0 +1,49 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-617-OnlyAllowedGeoLocations",
+  "properties": {
+    "displayName": "SLZ - 617 - Only allowed geo locations",
+    "description": "Cloud regions that must not be used must be \"locked out\" using technical policies or other technical controls to prevent data storage",
+    "mode": "All",
+    "metadata": {
+      "category": "General",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "defaultValue": "Audit",
+        "allowedValues": ["Audit", "Deny"],
+        "metadata": {
+          "description": "Choose between 'Audit' or 'Deny' effects.",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "listOfAllowedLocations": {
+        "defaultValue": ["global","Europe","northeurope","westeurope","france","francecentral","francesouth","germany","germanynorth","germanywestcentral","swedencentral","italynorth","spaincentral","polandcentral"],
+        "metadata": {
+          "description": "The list of locations that can be specified when deploying resources.",
+          "displayName": "Allowed locations"
+        },
+        "type": "Array"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "location",
+            "notIn": "[parameters('listOfAllowedLocations')]"
+          },
+          {
+            "field": "type",
+            "notEquals": "Microsoft.Authorization/policyExemptions"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-250-OnlyApprovedExtensions",
+  "properties": {
+    "displayName": "SLZ - 250 - Ensure that Only Approved Extensions Are Installed",
+    "description": "This policy governs the virtual machine extensions that are not approved.",
+    "mode": "All",
+    "metadata": {
+      "category": "Guest Configuration",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["Audit", "Deny", "Disabled"],
+        "defaultValue": "Audit",
+        "metadata": {
+          "description": "The effect determines what happens when the policy rule is evaluated to match",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "approvedExtensions": {
+        "defaultValue": [
+          "AzureDiskEncryption",
+          "AzureDiskEncryptionForLinux",
+          "DependencyAgentWindows",
+          "DependencyAgentLinux",
+          "IaaSAntimalware",
+          "IaaSDiagnostics",
+          "LinuxDiagnostic",
+          "MicrosoftMonitoringAgent",
+          "NetworkWatcherAgentLinux",
+          "NetworkWatcherAgentWindows",
+          "VMSnapshot",
+          "VMSnapshotLinux",
+          "Microsoft.Compute.JsonADDomainExtension",
+          "Microsoft.Azure.AzureDefenderForServers.MDE.Windows",
+          "Microsoft.Powershell.DSC",
+          "ConfigurationforLinux",
+          "ConfigurationforWindows",
+          "ApplicationHealthLinux",
+          "MDE.Linux",
+          "MDE.Windows",
+          "AzureSecurityLinuxAgent",
+          "AzureSecurityWindowsAgent",
+          "aadsshloginforlinux",
+          "azuremonitorlinuxagent",
+          "azuremonitorwindowsagent",
+          "azureperformancediagnosticslinux",
+          "changetracking-windows",
+          "joindomain",
+          "VMAccessAgent",
+          "linuxagent.azuresecuritycenter",
+          "microsoft.powershell.dsc",
+          "microsoft.azure.azuredefenderforsql.vulnerabilityassessment.windows",
+          "nvidiagpudriverlinux",
+          "sqliaasextension",
+          "windowsagent.azuresecuritycenter",
+          "VMAccessForLinux"
+        ],
+        "metadata": {
+          "description": "The list of approved extension types that can be installed. Example: AzureDiskEncryption",
+          "displayName": "Approved extensions"
+        },
+        "type": "Array"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Compute/virtualMachines/extensions"
+          },
+          {
+            "field": "Microsoft.Compute/virtualMachines/extensions/type",
+            "notIn": "[parameters('approvedExtensions')]"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

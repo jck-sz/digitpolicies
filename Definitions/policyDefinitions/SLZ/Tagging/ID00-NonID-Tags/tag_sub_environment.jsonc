@@ -1,0 +1,60 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-CheckEnvironmentTagOnSubscription",
+  "properties": {
+    "displayName": "SLZ - XXX - Check Environment Tag on Subscription",
+    "description": "Ensure the Environment tag exists on the subscription and is within allowed values.",
+    "mode": "All",
+    "parameters": {
+      "tag-TagName1": {
+        "type": "String",
+        "defaultValue": "ec.EnvironmentType",
+        "metadata": {
+          "displayName": "Tag Name",
+          "description": "Environment tag"
+        }
+      },
+      "effect": {
+        "type": "string",
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Audit",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Effect of the policy"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Resources/subscriptions"
+          },
+          {
+            "field": "[concat('tags[', parameters('tag-TagName1'), ']')]",
+            "exists": "false"
+          },
+          {
+            "field": "[concat('tags[', parameters('tag-TagName1'), ']')]",
+            "notIn": [
+              "Sandbox",
+              "Devops",
+              "Dev",
+              "Test",
+              "Uat",
+              "Prod"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

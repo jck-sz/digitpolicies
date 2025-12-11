@@ -1,0 +1,63 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-249-UnattachedDisksCMKEncryption",
+    "properties": {
+        "displayName": "SLZ - 249 - Ensure that 'Unattached disks' are encrypted with 'Customer Managed Key' (CMK) for SNC data",
+        "policyType": "Custom",
+        "mode": "All",
+        "description": "Policy checks each UNATTACHED disk does it is related to diskEncryptionSet, if its not, it acts that disk as Not-Compliant for resources with the SNC tag",
+        "version": "1.0.0",
+        "parameters": {
+            "tagName": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Name Tag",
+                    "description": "Name of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Value parameter."
+                },
+                "defaultValue": "ec.DataSensitivityLevel"
+            },
+            "tagValue": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inlcusion Tag Value",
+                    "description": "Value of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Name parameter."
+                },
+                "defaultValue": "SNC"
+            },
+            "effect": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "Microsoft.Compute/disks/diskState",
+                        "equals": "Unattached"
+                    },
+                    {
+                        "field": "[concat('tags[',parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    },
+                    {
+                        "field": "Microsoft.Compute/disks/encryption.diskEncryptionSetId",
+                        "exists": "false"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

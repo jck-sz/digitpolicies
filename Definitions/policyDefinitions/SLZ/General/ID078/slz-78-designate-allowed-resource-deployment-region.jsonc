@@ -1,0 +1,68 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-78-AllowedDeploymentRegions",
+  "properties": {
+    "displayName": "SLZ - 78 - Designate allowed resource deployment region",
+    "description": "This policy maintains a set of best available regions where your subscription can deploy resources. The objective of this policy is to ensure that your subscription has full access to Azure services with optimal performance. Should you need additional or different regions, contact support.",
+    "mode": "All",
+    "metadata": {
+      "version": "1.0.0",
+      "category": "General"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Deny",
+        "metadata": {
+          "description": "Enable or disable the execution of the policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "listOfAllowedLocations": {
+        "allowedValues": [
+          "global",
+          "europe",
+          "northeurope",
+          "westeurope",
+          "francecentral",
+          "germanywestcentral",
+          "norwayeast",
+          "polandcentral",
+          "switzerlandnorth",
+          "swedencentral",
+          "italynorth",
+          "uksouth",
+          "ukwest",
+          "spaincentral"
+        ],
+        "metadata": {
+          "description": "The list of locations that can be specified when deploying resources.",
+          "displayName": "Allowed locations"
+        },
+        "type": "Array"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "location",
+            "notIn": "[parameters('listOfAllowedLocations')]"
+          },
+          {
+            "field": "type",
+            "notEquals": "Microsoft.Authorization/policyExemptions"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

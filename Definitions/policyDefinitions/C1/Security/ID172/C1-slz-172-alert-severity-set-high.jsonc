@@ -1,0 +1,66 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "C1-SLZ-172-AlertsNotifySetToHigh",
+  "properties": {
+    "displayName": "C1 - SLZ - 172 - Ensure That 'Notify about alerts with the following severity' is Set to 'High'",
+    "description": "Notify about alerts with the severity Set to 'High' in Cloud Security Contacts",
+    "policyType": "Custom",
+    "mode": "All",
+    "metadata": {
+            "version": "1.2.0",
+            "category": "Security Center"
+        },
+    "parameters": {
+        "effect": {
+            "type": "string",
+            "metadata": {
+                "displayName": "Effect",
+                "description": "Enable or disable the execution of the policy"
+            },
+            "allowedValues": [
+                "AuditIfNotExists",
+                "Disabled"
+            ],
+            "defaultValue": "AuditIfNotExists"
+        }
+    },
+    "policyRule": {
+        "if": {
+            "field": "type",
+            "equals": "Microsoft.Resources/subscriptions"
+        },
+        "then": {
+            "effect": "[parameters('effect')]",
+            "details": {
+                "type": "Microsoft.Security/securityContacts",
+                "existenceCondition": {
+                    "anyOf": [
+                        {
+                            "field": "Microsoft.Security/securityContacts/alertNotifications",
+                            "equals": "On"
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "field": "Microsoft.Security/securityContacts/isEnabled",
+                                    "equals": true
+                                },
+                                {
+                                    "count": {
+                                        "field": "Microsoft.Security/securityContacts/notificationsSources[*]",
+                                        "where": {
+                                            "field": "Microsoft.Security/securityContacts/notificationsSources[*].sourceType",
+                                            "equals": "Alert"
+                                        }
+                                    },
+                                    "greater": 0
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    }
+  }  
+}

@@ -1,0 +1,341 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-set-definition-schema.json",
+  "name": "C1-ManagedPolicies",
+  "properties": {
+    "displayName": "C1 Managed Policies",
+    "description": "Azure Policies managed by DIGIT C1",
+    "metadata": {
+      "category": "Monitoring",
+      "version": "1.0.0"
+    },
+    "policyDefinitionGroups": [
+      {
+        "name": "Activity Logs"
+      },
+      {
+        "name": "General"
+      },
+      {
+        "name": "Security"
+      },
+      {
+        "name": "Storage"
+      }
+    ],
+    "parameters": {
+      // GENERAL
+      "effect-C1-SLZ-220": {
+        "allowedValues": [
+          "AuditIfNotExists",
+          "Disabled"
+        ],
+        "defaultValue": "AuditIfNotExists",
+        "type": "string"
+      },
+      "operationNameAdministrative-C1-SLZ-220": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Operation Name",
+          "description": "Administrative Operation name for which activity log alert should be configured"
+        },
+        "allowedValues": [
+          "Microsoft.Sql/servers/firewallRules/write",
+          "Microsoft.Sql/servers/firewallRules/delete",
+          "Microsoft.Network/networkSecurityGroups/write",
+          "Microsoft.Network/networkSecurityGroups/delete",
+          "Microsoft.ClassicNetwork/networkSecurityGroups/write",
+          "Microsoft.ClassicNetwork/networkSecurityGroups/delete",
+          "Microsoft.Network/networkSecurityGroups/securityRules/write",
+          "Microsoft.Network/networkSecurityGroups/securityRules/delete",
+          "Microsoft.ClassicNetwork/networkSecurityGroups/securityRules/write",
+          "Microsoft.ClassicNetwork/networkSecurityGroups/securityRules/delete"
+        ]
+      },
+      "operationNamePolicy-C1-SLZ-220": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Operation Name",
+          "description": "Policy Operation name for which activity log alert should exist"
+        },
+        "allowedValues": [
+          "Microsoft.Authorization/policyAssignments/write",
+          "Microsoft.Authorization/policyAssignments/delete"
+        ]
+      },
+      "operationNameSecurity-C1-SLZ-220": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Operation Name",
+          "description": "Security Operation name for which activity log alert should exist"
+        },
+        "allowedValues": [
+          "Microsoft.Security/policies/write",
+          "Microsoft.Security/securitySolutions/write",
+          "Microsoft.Security/securitySolutions/delete"
+        ]
+      },
+      "effect-C1-SLZ-149-NoCustomAdministratorRoles": {
+        "type": "string",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "The effect to enforce for this policy. Possible values are Audit, Deny, or Disable."
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disable"
+        ],
+        "defaultValue": "Audit"
+      },
+      "allowedCustomRolesNames-C1-SLZ-149-NoCustomAdministratorRoles": {
+        "defaultValue": [
+          "STEE-exempt-action",
+          "DIGIT_S2_copy_snapshot_to_CISRC_evidance_storage",
+          "DIGIT_S2_XSOAR_INTEGRATION",
+          "DIGIT.C1-STEE exempt/action",
+          "DIGIT.S2",
+          "Security Admin - DIGIT.S2",
+          "Security Assessment Contributor - DIGIT.S2",
+          "Security Reader - DIGIT.S2",
+          "DIGIT.S2.CSIRC",
+          "DIGIT.S2.SOC"
+        ],
+        "metadata": {
+          "description": "List of allowed custom roles (role ids) for subscription administrators",
+          "displayName": "allowedCustomRolesNames"
+        },
+        "type": "Array"
+      },
+      "effect-C1-SLZ-198-AuditingRetentionGreater90days": {
+        "allowedValues": [
+          "AuditIfNotExists",
+          "DeployIfNotExists",
+          "Disabled"
+        ],
+        "defaultValue": "DeployIfNotExists",
+        "metadata": {
+          "description": "Enable or disable the execution of the policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "retentionDays-C1-SLZ-198-AuditingRetentionGreater90days": {
+        "defaultValue": "90",
+        "metadata": {
+          "description": "The value in days of the retention period (0 indicates unlimited retention)",
+          "displayName": "Retention days (optional, 90 days if unspecified)"
+        },
+        "type": "string"
+      },
+      "storageAccountsResourceGroup-C1-SLZ-198-AuditingRetentionGreater90days": {
+        "metadata": {
+          "description": "Auditing writes database events to an audit log in your Azure Storage account (a storage account will be created in each region where a SQL Server is created that will be shared by all servers in that region). Important - for proper operation of Auditing do not delete or rename the resource group or the storage accounts.",
+          "displayName": "Resource group name for storage accounts",
+          "strongType": "existingResourceGroups"
+        },
+        "type": "string"
+      },
+      "emailSecurityContact-C1-SLZ-171-SecurityContactEmailAdditionalAddress": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Security contacts email address",
+          "description": "Provide email addresses (semi-colon separated) for Defender for Cloud contact details"
+        },
+        "defaultValue": "ec-digit-csirc@ec.europa.eu"
+      },
+      "effect-C1-SLZ-171-SecurityContactEmailAdditionalAddress": {
+        "type": "String",
+        "defaultValue": "DeployIfNotExists",
+        "allowedValues": [
+          "DeployIfNotExists",
+          "Disabled",
+          "AuditIfNotExists"
+        ],
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy"
+        }
+      },
+      "minimalSeverity-C1-SLZ-171-SecurityContactEmailAdditionalAddress": {
+        "type": "String",
+        "defaultValue": "High",
+        "allowedValues": [
+          "High",
+          "Medium",
+          "Low"
+        ],
+        "metadata": {
+          "displayName": "Minimal severity",
+          "description": "Defines the minimal alert severity which will be sent as email notifications"
+        }
+      },
+      "effect-C1-SLZ-172-AlertsNotifySetToHigh": {
+        "type": "string",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy"
+        },
+        "allowedValues": [
+          "AuditIfNotExists",
+          "Disabled"
+        ],
+        "defaultValue": "AuditIfNotExists"
+      },
+      "effect-C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible": {
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Deny",
+        "metadata": {
+          "description": "The effect determines what happens when the policy rule is evaluated to match",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "targetStorageAccountName-C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible": {
+        "type": "String",
+        "metadata": {
+          "description": "Name of the storage account that should not allow public access",
+          "displayName": "Target Storage Account Name"
+        }
+      },
+      "targetLogAnalyticsWorkspaceName-C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible": {
+        "type": "String",
+        "metadata": {
+          "description": "Name of the Log Analytics workspace that should not allow public network access for ingestion and query",
+          "displayName": "Target Log Analytics Workspace Name"
+        }
+      }
+    },
+    "policyDefinitions": [
+      {
+        "policyDefinitionReferenceId": "C1-SLZ-149-NoCustomAdministratorRoles",
+        "policyDefinitionName": "C1-SLZ-149-NoCustomAdministratorRoles",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('effect-C1-SLZ-149-NoCustomAdministratorRoles')]"
+          },
+          "allowedCustomRolesNames": {
+            "value": "[parameters('allowedCustomRolesNames-C1-SLZ-149-NoCustomAdministratorRoles')]"
+          }
+        },
+        "groupNames": [
+          "General"
+        ]
+      },
+      {
+        "policyDefinitionReferenceId": "C1-SLZ-198-AuditingRetentionGreater90days",
+        "policyDefinitionName": "C1-SLZ-198-AuditingRetentionGreater90days",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('effect-C1-SLZ-198-AuditingRetentionGreater90days')]"
+          },
+          "retentionDays": {
+            "value": "[parameters('retentionDays-C1-SLZ-198-AuditingRetentionGreater90days')]"
+          },
+          "storageAccountsResourceGroup": {
+            "value": "[parameters('storageAccountsResourceGroup-C1-SLZ-198-AuditingRetentionGreater90days')]"
+          }
+        },
+        "groupNames": [
+          "General"
+        ]
+      },
+      {
+        "policyDefinitionReferenceId": "C1-SLZ-171-SecurityContactEmailAdditionalAddress",
+        "policyDefinitionName": "C1-SLZ-171-SecurityContactEmailAdditionalAddress",
+        "parameters": {
+          "emailSecurityContact": {
+            "value": "[parameters('emailSecurityContact-C1-SLZ-171-SecurityContactEmailAdditionalAddress')]"
+          },
+          "effect": {
+            "value": "[parameters('effect-C1-SLZ-171-SecurityContactEmailAdditionalAddress')]"
+          },
+          "minimalSeverity": {
+            "value": "[parameters('minimalSeverity-C1-SLZ-171-SecurityContactEmailAdditionalAddress')]"
+          }
+        },
+        "groupNames": [
+          "Security"
+        ]
+      },
+      {
+        "policyDefinitionReferenceId": "C1-SLZ-172-AlertsNotifySetToHigh",
+        "policyDefinitionName": "C1-SLZ-172-AlertsNotifySetToHigh",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('effect-C1-SLZ-172-AlertsNotifySetToHigh')]"
+          }
+        },
+        "groupNames": [
+          "Security"
+        ]
+      },
+      {
+        "policyDefinitionReferenceId": "C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible",
+        "policyDefinitionName": "C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('effect-C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible')]"
+          },
+          "targetStorageAccountName": {
+            "value": "[parameters('targetStorageAccountName-C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible')]"
+          },
+          "targetLogAnalyticsWorkspaceName": {
+            "value": "[parameters('targetLogAnalyticsWorkspaceName-C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible')]"
+          }
+        },
+        "groupNames": [
+          "Storage"
+        ]
+      },
+      {
+        "policyDefinitionReferenceId": "C1-SLZ-220-AdministrativeActivityLogAlert",
+        "policyDefinitionName": "C1-SLZ-220-AdministrativeActivityLogAlert",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('effect-C1-SLZ-220')]"
+          },
+          "operationNameAdministrative": {
+            "value": "[parameters('operationNameAdministrative-C1-SLZ-220')]"
+          }
+        },
+        "groupNames": [
+          "Activity Logs"
+        ]
+      },
+      {
+        "policyDefinitionReferenceId": "C1-SLZ-220-PolicyActivityLogAlert",
+        "policyDefinitionName": "C1-SLZ-220-PolicyActivityLogAlert",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('effect-C1-SLZ-220')]"
+          },
+          "operationNamePolicy": {
+            "value": "[parameters('operationNamePolicy-C1-SLZ-220')]"
+          }
+        },
+        "groupNames": [
+          "Activity Logs"
+        ]
+      },
+      {
+        "policyDefinitionReferenceId": "C1-SLZ-220-SecurityActivityLogAlert",
+        "policyDefinitionName": "C1-SLZ-220-SecurityActivityLogAlert",
+        "parameters": {
+          "effect": {
+            "value": "[parameters('effect-C1-SLZ-220')]"
+          },
+          "operationNameSecurity": {
+            "value": "[parameters('operationNameSecurity-C1-SLZ-220')]"
+          }
+        },
+        "groupNames": [
+          "Activity Logs"
+        ]
+      }
+    ]
+  }
+}

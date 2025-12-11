@@ -1,0 +1,73 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-238.5-DatabricksProdNoStandardOrTrialSku",
+    "properties": {
+        "displayName": "SLZ - 238.5 - Ensure Azure Databricks in PROD does not use Standard or Trial SKU",
+        "description": "Audits Azure Databricks workspaces tagged as production (tag ec.EnvironmentType=PROD) that are using the Standard or Trial SKUs. Production workloads must use the Premium SKU for required enterprise features and support.",
+        "mode": "All",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Security"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy."
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "tagName": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Name",
+                    "description": "The tag name that marks production resources."
+                },
+                "defaultValue": "ec.EnvironmentType"
+            },
+            "tagValue": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Environment Tag Value",
+                    "description": "The tag value that represents production."
+                },
+                "defaultValue": "PROD"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Databricks/workspaces"
+                    },
+                    {
+                        "field": "[concat('tags[', parameters('tagName'), ']')]",
+                        "equals": "[parameters('tagValue')]"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.Databricks/workspaces/sku.name",
+                                "equals": "standard"
+                            },
+                            {
+                                "field": "Microsoft.Databricks/workspaces/sku.name",
+                                "equals": "trial"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

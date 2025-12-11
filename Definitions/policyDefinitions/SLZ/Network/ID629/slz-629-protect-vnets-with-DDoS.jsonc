@@ -1,0 +1,136 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-629-VirtualNetworksDDOSProtection",
+  "properties": {
+    "displayName": "SLZ - 629 - Enforce DDoS Protection",
+    "policyType": "BuiltIn",
+    "mode": "Indexed",
+    "description": "Protect your virtual networks against volumetric and protocol attacks with Azure DDoS Protection. For more information, visit https://aka.ms/ddosprotectiondocs.",
+    "metadata": {
+      "version": "1.0.1",
+      "category": "Network"
+    },
+    "version": "1.0.1",
+    "parameters": {
+      "effect": {
+        "type": "String",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Enable or disable the execution of the policy"
+        },
+        "allowedValues": [
+          "auditIfNotExists",
+          "DeployIfNotExists",
+          "Disabled"
+        ],
+        "defaultValue": "DeployIfNotExists"
+      },
+      "planId": {
+        "type": "String",
+        "metadata": {
+          "displayName": "DDoS Protection Plan",
+          "description": "DDoS Protection Plan resource to be associated to the virtual networks"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Network/virtualNetworks"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Network/virtualNetworks",
+          "name": "[field('name')]",
+          "existenceCondition": {
+            "allOf": [
+              {
+                "field": "Microsoft.Network/virtualNetworks/enableDdosProtection",
+                "equals": "true"
+              },
+              {
+                "field": "Microsoft.Network/virtualNetworks/ddosProtectionPlan",
+                "notEquals": ""
+              }
+            ]
+          },
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7"
+          ],
+          "deployment": {
+            "properties": {
+              "mode": "incremental",
+              "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "parameters": {
+                  "vnetName": {
+                    "type": "string"
+                  },
+                  "planId": {
+                    "type": "string"
+                  },
+                  "vnetLocation": {
+                    "type": "string"
+                  }
+                },
+                "resources": [
+                  {
+                    "apiVersion": "2017-08-01",
+                    "name": "ApplyDDoS",
+                    "type": "Microsoft.Resources/deployments",
+                    "resourceGroup": "[resourceGroup().name]",
+                    "properties": {
+                      "mode": "Incremental",
+                      "template": {
+                        "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                        "contentVersion": "1.0.0.0",
+                        "resources": [
+                          {
+                            "type": "Microsoft.Network/virtualNetworks",
+                            "apiVersion": "2019-11-01",
+                            "name": "[parameters('vnetName')]",
+                            "tags": "[if(equals(json('null'), reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').tags), json('{}'), reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').tags)]",
+                            "location": "[parameters('vnetLocation')]",
+                            "properties": {
+                              "addressSpace": "[reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties.addressSpace]",
+                              "subnets": "[reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties.subnets]",
+                              "dhcpOptions": "[if(equals(json('null'), reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties.dhcpOptions), json('{}'), reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties.dhcpOptions)]",
+                              "enableVmProtection": "[if(contains(reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties, 'enableVmProtection'), reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties.enableVmProtection, json('null'))]",
+                              "flowTimeoutInMinutes": "[if(contains(reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties, 'flowTimeoutInMinutes'), reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties.flowTimeoutInMinutes, json('null'))]",
+                              "bgpCommunities": "[if(contains(reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties, 'bgpCommunities'), reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2020-07-01', 'Full').properties.bgpCommunities, json('null'))]",
+                              "enableDdosProtection": true,
+                              "ddosProtectionPlan": {
+                                "id": "[parameters('planId')]"
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "parameters": {
+                "vnetName": {
+                  "value": "[field('name')]"
+                },
+                "planId": {
+                  "value": "[parameters('planId')]"
+                },
+                "vnetLocation": {
+                  "value": "[field('location')]"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

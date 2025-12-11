@@ -1,0 +1,55 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-258-KeyVaultRBAC",
+  "properties": {
+    "displayName": "SLZ - 258 - Enable Role Based Access Control for Azure Key Vault",
+    "description": "Enable RBAC permission model across Key Vaults.",
+    "mode": "All",
+    "metadata": {
+      "category": "Key Vault",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["Audit", "Deny", "Disabled"],
+        "defaultValue": "Deny",
+        "metadata": {
+          "description": "Enable or disable the execution of the policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.KeyVault/vaults"
+          },
+          {
+            "not": {
+              "field": "Microsoft.KeyVault/vaults/createMode",
+              "equals": "recover"
+            }
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.KeyVault/vaults/enableRbacAuthorization",
+                "exists": "false"
+              },
+              {
+                "field": "Microsoft.KeyVault/vaults/enableRbacAuthorization",
+                "equals": "false"
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+/*
+@TargetNode='localhost'
+@GeneratedBy=eric.anllo-muniz
+@GenerationDate=09/18/2025 15:35:50
+@GenerationHost=C11-LFXFXPNOPXA
+*/
+
+instance of MSFT_ScriptResource as $MSFT_ScriptResource1ref
+{
+SetScript = "return $true";
+ ResourceID = "[Script]CheckPSv2";
+ SourceInfo = "C:\\Users\\eric.anllo-muniz\\OneDrive - Accenture\\Desktop\\DIGIT\\AzureLandingZone\\Definitions\\policyDefinitions\\SLZ\\Guest-Configuration\\ID728\\Audit.ps1::5::9::Script";
+ GetScript = "$feature = \"MicrosoftWindowsPowerShellV2\"\n$g = Get-WindowsOptionalFeature -Online -FeatureName $feature -ErrorAction SilentlyContinue\n$res = if ($g) { \"State=$($g.State)\" } else { \"NotPresent\" }\n@{ Result = $res }";
+ ModuleName = "PSDscResources";
+ ModuleVersion = "2.12.0.0";
+ TestScript = "$g = Get-WindowsOptionalFeature -Online -FeatureName \"MicrosoftWindowsPowerShellV2\" -ErrorAction SilentlyContinue\n$state = if ($g) { $g.State.Trim().ToLower() } else { \"notpresent\" }\nreturn ($state -ne \"enabled\" -and $state -ne \"enablepending\")";
+ ConfigurationName = "AuditPSv2_Disabled";
+};
+instance of OMI_ConfigurationDocument
+
+                    {
+ Version="2.0.0";
+
+                        MinimumCompatibleVersion = "1.0.0";
+
+                        CompatibleVersionAdditionalProperties= {"Omi_BaseResource:ConfigurationName"};
+
+                        Author="eric.anllo-muniz";
+
+                        GenerationDate="09/18/2025 15:35:50";
+
+                        GenerationHost="C11-LFXFXPNOPXA";
+
+                        Name="AuditPSv2_Disabled";
+
+                    };

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-257-KeyVaultRecoverable",
+  "properties": {
+    "displayName": "SLZ - 257 - Ensure the Key Vault is Recoverable",
+    "description": "Malicious deletion of a key vault can lead to permanent data loss. You can prevent permanent data loss by enabling purge protection and soft delete. Purge protection protects you from insider attacks by enforcing a mandatory retention period for soft deleted key vaults. No one inside your organization or Microsoft will be able to purge your key vaults during the soft delete retention period. Keep in mind that key vaults created after September 1st 2019 have soft-delete enabled by default.",
+    "mode": "All",
+    "metadata": {
+      "category": "Key Vault",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["Audit", "Deny", "Disabled"],
+        "defaultValue": "Deny",
+        "metadata": {
+          "description": "Enable or disable the execution of the policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.KeyVault/vaults"
+          },
+          {
+            "field": "Microsoft.KeyVault/vaults/createMode",
+            "notEquals": "recover"
+          },
+          {
+            "anyOf": [
+              {
+                "allOf": [
+                  {
+                    "value": "[requestContext().apiVersion]",
+                    "less": "2019-09-01"
+                  },
+                  {
+                    "anyOf": [
+                      {
+                        "field": "Microsoft.KeyVault/vaults/enableSoftDelete",
+                        "equals": "false"
+                      },
+                      {
+                        "field": "Microsoft.KeyVault/vaults/enableSoftDelete",
+                        "exists": "false"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "allOf": [
+                  {
+                    "value": "[requestContext().apiVersion]",
+                    "greaterOrEquals": "2019-09-01"
+                  },
+                  {
+                    "field": "Microsoft.KeyVault/vaults/enableSoftDelete",
+                    "equals": "false"
+                  }
+                ]
+              },
+              {
+                "field": "Microsoft.KeyVault/vaults/enablePurgeProtection",
+                "exists": "false"
+              },
+              {
+                "field": "Microsoft.KeyVault/vaults/enablePurgeProtection",
+                "equals": "false"
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

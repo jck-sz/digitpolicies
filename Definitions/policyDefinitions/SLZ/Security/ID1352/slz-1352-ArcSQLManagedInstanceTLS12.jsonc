@@ -1,0 +1,52 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1352-ArcSQLManagedInstanceTLS12",
+    "properties": {
+        "displayName": "SLZ - 1352 - tls protocol 1.2 must be used for Arc SQL managed instances.",
+        "description": "As a part of network settings, Microsoft recommends allowing only tls 1.2 for tls protocols in SQL Servers. Learn more on network settings for SQL Server at https://aka.ms/tlsSettingsSQLServer.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.0.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.AzureArcData/sqlmanagedinstances"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.AzureArcData/sqlManagedInstances/k8sRaw.spec.settings.network.tlsprotocols",
+                                "contains": "1.0"
+                            },
+                            {
+                                "field": "Microsoft.AzureArcData/sqlManagedInstances/k8sRaw.spec.settings.network.tlsprotocols",
+                                "contains": "1.1"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

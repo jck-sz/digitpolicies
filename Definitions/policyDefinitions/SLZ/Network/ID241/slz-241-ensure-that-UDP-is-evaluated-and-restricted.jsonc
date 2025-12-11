@@ -1,0 +1,48 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-241-UDPAccessFromInternetEvalutatedAndRestricted",
+  "properties": {
+    "displayName": "SLZ - 241 - Ensure that UDP access from the Internet is evaluated and restricted",
+    "description": "Policy ensures that network security rule exists for INTERNET address prefix for UDP ports.",
+    "mode": "All",
+    "metadata": {
+      "category": "Network",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": [
+          "Audit",
+          "Deny"
+        ],
+        "defaultValue": "Audit",
+        "metadata": {
+          "description": "Enable or disable the execution of the policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Network/networkSecurityGroups/securityRules"
+          },
+          {
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/sourceAddressPrefix",
+            "equals": "Internet"
+          },
+          {
+            "field": "Microsoft.Network/networkSecurityGroups/securityRules/protocol",
+            "equals": "UDP"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

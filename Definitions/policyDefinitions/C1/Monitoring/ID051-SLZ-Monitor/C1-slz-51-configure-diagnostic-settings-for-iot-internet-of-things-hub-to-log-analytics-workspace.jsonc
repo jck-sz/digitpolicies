@@ -1,0 +1,156 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "C1-SLZ-51-IoTDiagSettingsToWS",
+  "properties": {
+    "displayName": "C1 - SLZ - 51 - Configure diagnostic settings for IoT (Internet of Things) Hub to Log Analytics workspace",
+    "mode": "All",
+    "metadata": {
+      "category": "Monitoring",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["AuditIfNotExists", "DeployIfNotExists", "Disabled"],
+        "defaultValue": "DeployIfNotExists",
+        "metadata": {
+          "description": "Enable or Disable the execution of the policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "policyName": {
+        "defaultValue": "setByPolicy",
+        "metadata": {
+          "displayName": "policy name"
+        },
+        "type": "String"
+      },
+      "workspaceId": {
+        "defaultValue": "setByPolicy",
+        "metadata": {
+          "displayName": "workspace id"
+        },
+        "type": "String"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Devices/IotHubs"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Insights/diagnosticSettings",
+          "existenceCondition": {
+            "allOf": [
+              {
+                "field": "Microsoft.Insights/diagnosticSettings/logs.enabled",
+                "equals": "True"
+              },
+              {
+                "field": "Microsoft.Insights/diagnosticSettings/metrics.enabled",
+                "equals": "True"
+              },
+              {
+                "field": "Microsoft.Insights/diagnosticSettings/workspaceId",
+                "equals": "[parameters('workspaceId')]"
+              }
+            ]
+          },
+          "roleDefinitionIds": [
+            "/providers/microsoft.authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+          ],
+          "deployment": {
+            "properties": {
+              "parameters": {
+                "resourceLocation": {
+                  "value": "[field('location')]"
+                },
+                "effect": {
+                  "value": "[parameters('effect')]"
+                },
+                "resourceName": {
+                  "value": "[field('name')]"
+                },
+                "policyName": {
+                  "value": "[parameters('policyName')]"
+                },
+                "workspaceId": {
+                  "value": "[parameters('workspaceId')]"
+                }
+              },
+              "mode": "incremental",
+              "template": {
+                "parameters": {
+                  "resourceLocation": {
+                    "type": "string"
+                  },
+                  "effect": {
+                    "type": "string"
+                  },
+                  "resourceName": {
+                    "type": "string"
+                  },
+                  "policyName": {
+                    "type": "string"
+                  },
+                  "workspaceId": {
+                    "type": "string"
+                  }
+                },
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                  {
+                    "type": "Microsoft.Devices/IotHubs/providers/diagnosticSettings",
+                    "properties": {
+                      "workspaceId": "[parameters('workspaceId')]",
+                      "metrics": [
+                        {
+                          "category": "AllMetrics",
+                          "enabled": "True",
+                          "retentionPolicy": {
+                            "enabled": false,
+                            "days": 0
+                          }
+                        }
+                      ],
+                      "logs": [
+                        {
+                          "enabled": true,
+                          "retentionPolicy": {
+                            "enabled": false,
+                            "days": 0
+                          },
+                          "categoryGroup": "allLogs"
+                        },
+                        {
+                          "enabled": true,
+                          "retentionPolicy": {
+                            "enabled": false,
+                            "days": 0
+                          },
+                          "categoryGroup": "audit"
+                        }
+                      ]
+                    },
+                    "location": "[parameters('resourceLocation')]",
+                    "apiVersion": "2021-05-01-preview",
+                    "name": "[concat(parameters('resourceName'), '/Microsoft.Insights/', parameters('policyName'), '-workspace')]",
+                    "dependsOn": []
+                  }
+                ],
+                "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"
+              }
+            }
+          },
+          "name": "[concat(parameters('policyName'), '-workspace')]"
+        }
+      }
+    }
+  }
+}

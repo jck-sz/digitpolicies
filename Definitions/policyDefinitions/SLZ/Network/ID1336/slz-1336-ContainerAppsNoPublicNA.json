@@ -1,0 +1,54 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1336-ContainerAppsNoPublicNA",
+  "properties": {
+    "displayName": "SLZ - 1336 - Container Apps Environment Should Disable Public Network Access",
+        "description": "This policy ensures that public network access is disabled for Container Apps environments by requiring the use of an internal load balancer. This improves security by removing the need for a public IP address and preventing direct internet access to all container apps within the environment.",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy",
+                    "allowedValues": [
+                        "Audit",
+                        "Deny",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Audit"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.App/managedEnvironments"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.App/managedEnvironments/vnetConfiguration",
+                                "exists": false
+                            },
+                            {
+                                "field": "Microsoft.App/managedEnvironments/vnetConfiguration.internal",
+                                "exists": false
+                            },
+                            {
+                                "field": "Microsoft.App/managedEnvironments/vnetConfiguration.internal",
+                                "equals": false
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

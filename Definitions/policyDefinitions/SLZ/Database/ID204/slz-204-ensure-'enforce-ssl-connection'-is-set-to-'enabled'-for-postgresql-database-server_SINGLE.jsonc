@@ -1,0 +1,44 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-204-PostgresSQLServerSSLConnection",
+  "properties": {
+    "displayName": "SLZ - 204 - Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server SINGLE",
+    "description": "Azure Database for PostgreSQL supports connecting your Azure Database for PostgreSQL server to client applications using Secure Sockets Layer (SSL).",
+    "mode": "All",
+    "metadata": {
+      "category": "SQL",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["Audit", "Disabled", "Deny"],
+        "defaultValue": "Deny",
+        "metadata": {
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.DBforPostgreSQL/servers"
+          },
+          {
+            "field": "Microsoft.DBforPostgreSQL/servers/sslEnforcement",
+            "exists": "true"
+          },
+          {
+            "field": "Microsoft.DBforPostgreSQL/servers/sslEnforcement",
+            "notEquals": "Enabled"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

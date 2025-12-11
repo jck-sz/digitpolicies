@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1337-ContainerAppDisableExternalNetworkAccess",
+  "properties": {
+    "displayName": "SLZ - 1337 - Container Apps Should Disable External Network Access",
+        "description": "This policy ensures that external network access is disabled for Container Apps by enforcing internal-only ingress. This restricts inbound communication to only callers within the same Container Apps environment.",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy",
+                    "allowedValues": [
+                        "Audit",
+                        "Deny",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Audit"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.App/containerApps"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.App/containerApps/configuration.ingress",
+                                "exists": false
+                            },
+                            {
+                                "field": "Microsoft.App/containerApps/configuration.ingress.external",
+                                "equals": true
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

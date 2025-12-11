@@ -1,0 +1,68 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1332-APIAllowedSku",
+  "properties": {
+    "displayName": "SLZ - 1332 - Enforce Allowed SKUs for Azure API Management Service",
+        "description": "This policy ensures that only approved SKUs can be specified for Azure API Management Service to standardize service tiers and control resource allocation.",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy."
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "listOfAllowedSKUs": {
+                "type": "Array",
+                "metadata": {
+                    "displayName": "Allowed SKUs",
+                    "description": "The list of SKUs permitted for Azure API Management service."
+                },
+                "allowedValues": [
+                    "Developer",
+                    "Basic",
+                    "BasicV2",
+                    "Standard",
+                    "StandardV2",
+                    "Premium",
+                    "Isolated",
+                    "Consumption"
+                ],
+                "defaultValue": [
+                    "Developer",
+                    "Premium",
+                    "Isolated",
+                    "Standard",
+                    "Basic"
+                ]
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.ApiManagement/service"
+                    },
+                    {
+                        "not": {
+                            "field": "Microsoft.ApiManagement/service/sku.name",
+                            "in": "[parameters('listOfAllowedSKUs')]"
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

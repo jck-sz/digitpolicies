@@ -1,0 +1,44 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1356-SynapseSQLTLSVersion",
+    "properties": {
+        "displayName": "SLZ - 1356 - Azure Synapse Workspace SQL Server should be running tls version 1.2 or newer",
+        "description": "Setting tls version to 1.2 or newer improves security by ensuring your Azure Synapse workspace SQL server can only be accessed from clients using tls 1.2 or newer. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.1.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "defaultValue": "Audit",
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Synapse/workspaces/dedicatedSQLminimaltlsSettings"
+                    },
+                    {
+                        "field": "Microsoft.Synapse/workspaces/dedicatedSQLminimaltlsSettings/minimaltlsVersion",
+                        "notEquals": "1.2"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

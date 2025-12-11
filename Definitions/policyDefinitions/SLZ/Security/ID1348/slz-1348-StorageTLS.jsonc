@@ -1,0 +1,52 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1348-StorageTLS",
+    "properties": {
+        "displayName": "SLZ - 1348 - Azure Storage should have minimum TLS version",
+        "description": "This Azure Policy creates an audit event when the 'Minimum TLS version' setting is not set to 'Version 1.2'.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.0.0"
+        },
+        "parameters": {
+            "tlsVersionRequired": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Required TLS Version",
+                    "description": "The TLS version that should be configured on the Storage Account"
+                },
+                "defaultValue": "tls1_2"
+            },
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Audit or Disabled the execution of the Policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Disabled",
+                    "Deny"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts"
+                    },
+                    {
+                        "field": "Microsoft.Storage/storageAccounts/minimumtlsVersion",
+                        "notEquals": "[parameters('tlsVersionRequired')]"
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

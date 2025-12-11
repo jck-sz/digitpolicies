@@ -1,0 +1,98 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-195-SQLServerTDEEncryptionWithCMK",
+    "properties": {
+        "displayName": "SLZ - 195 - Ensure SQL server's Transparent Data Encryption (TDE) protector is encrypted with Customer-managed key",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "description": "This policy ensures that SQL Server's Transparent Data Encryption (TDE) protector is encrypted with a customer-managed key.",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "SQL"
+        },
+        "parameters": {
+            "tagName": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inclusion Name Tag",
+                    "description": "Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter."
+                },
+                "defaultValue": "ec.DataSensitivityLevel"
+            },
+            "tagValue": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Inlcusion Tag Value",
+                    "description": "Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter."
+                },
+                "defaultValue": "SNC"
+            },
+            "effect": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "anyOf": [
+                    {
+                        "allOf": [
+                            {
+                                "field": "type",
+                                "equals": "Microsoft.Sql/servers"
+                            },
+                            {
+                                "field": "[concat('tags[',parameters('tagName'), ']')]",
+                                "equals": "[parameters('tagValue')]"
+                            },
+                            {
+                                "value": "[resourcegroup().managedBy]",
+                                "notContains": "/providers/Microsoft.Synapse/"
+                            },
+                            {
+                                "anyOf": [
+                                    {
+                                        "field": "Microsoft.Sql/servers/keyid",
+                                        "exists": false
+                                    },
+                                    {
+                                        "field": "Microsoft.Sql/servers/keyid",
+                                        "equals": ""
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "field": "type",
+                                "equals": "Microsoft.Sql/servers/encryptionProtector"
+                            },
+                            {
+                                "value": "[resourcegroup().managedBy]",
+                                "notContains": "/providers/Microsoft.Synapse/"
+                            },
+                            {
+                                "field": "Microsoft.Sql/servers/encryptionProtector/serverKeyType",
+                                "notequals": "AzureKeyVault"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

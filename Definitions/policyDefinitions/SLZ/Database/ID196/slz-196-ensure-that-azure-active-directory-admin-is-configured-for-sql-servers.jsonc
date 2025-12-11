@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-196-SQLServerAADAdminConfiguration",
+  "properties": {
+    "displayName": "SLZ - 196 - Ensure that Azure Active Directory Admin is Configured for SQL Servers",
+    "description": "Deny the creation of SQL servers without an Azure AD account as an authentication method. AAD enables simplified permission management and centralized identity management of database users and other Microsoft services",
+    "mode": "All",
+    "metadata": {
+      "category": "SQL",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["Audit", "Deny", "Disabled"],
+        "defaultValue": "Deny",
+        "metadata": {
+          "description": "Enable or disable the execution of the audit policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Sql/servers"
+          },
+          {
+            "field": "Microsoft.Sql/servers/administrators.administratorType",
+            "notEquals": "ActiveDirectory"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

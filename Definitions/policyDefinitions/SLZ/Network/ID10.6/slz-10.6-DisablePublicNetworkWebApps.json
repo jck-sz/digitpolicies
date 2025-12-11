@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-10.6-DisablePublicNetworkWebApps",
+  "properties": {
+    "displayName": "SLZ - 10.6 - Public Network Access Control for Web Apps",
+        "description": "This policy ensures public network access is disabled for Azure Web Apps by auditing or denying non-compliance.",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Disabled",
+                    "Deny"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Web/sites"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.Web/sites/publicNetworkAccess",
+                                "exists": "false"
+                            },
+                            {
+                                "field": "Microsoft.Web/sites/publicNetworkAccess",
+                                "notEquals": "Disabled"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

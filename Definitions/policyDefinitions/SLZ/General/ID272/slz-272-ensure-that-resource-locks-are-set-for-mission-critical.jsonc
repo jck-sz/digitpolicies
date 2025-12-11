@@ -1,0 +1,62 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-272-ResourceLockForMissionCriticalResources",
+  "properties": {
+    "displayName": "SLZ - 272 - Ensure that Resource Locks are set for Mission-Critical",
+    "description": "Resource lock is applied for resources where defined TAG and its VALUE is applied.",
+    "mode": "All",
+    "metadata": {
+      "category": "General",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["AuditIfNotExists", "Disabled"],
+        "defaultValue": "AuditIfNotExists",
+        "metadata": {
+          "description": "AuditIfNotExists or Disabled the execution of the Policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "tagName": {
+        "metadata": {
+          "description": "The Tag name to audit against (i.e. Environment, CostCenter, etc.)",
+          "displayName": "Tag Name"
+        },
+        "type": "string"
+      },
+      "tagValue": {
+        "metadata": {
+          "description": "Value of the tag to audit against (i.e. Prod/UAT/TEST, 12345, etc.)",
+          "displayName": "Tag Value"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Resources/subscriptions/resourceGroups"
+          },
+          {
+            "field": "[concat('tags[', parameters('tagName'), ']')]",
+            "equals": "[parameters('tagValue')]"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Authorization/locks",
+          "existenceCondition": {
+            "field": "Microsoft.Authorization/locks/level",
+            "equals": "CanNotDelete"
+          }
+        }
+      }
+    }
+  }
+}

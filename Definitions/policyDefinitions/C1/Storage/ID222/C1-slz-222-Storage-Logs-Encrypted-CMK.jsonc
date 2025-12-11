@@ -1,0 +1,58 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "C1-SLZ-222-StorageAccountLogsCMK",
+    "properties": {
+        "displayName": "C1-SLZ - 222 - Ensure the storage account containing the container with activity logs is encrypted with Customer Managed Key",
+        "description": "Ensure the storage account containing the container with activity logs is encrypted with Customer Managed Key",
+        "mode": "All",
+        "metadata": {
+            "category": "Key Vault",
+            "version": "1.0.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "string",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Deny",
+                    "Audit",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "storageAccount": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Name of Storage Account",
+                    "description": "Name Storage account"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Storage/storageAccounts"
+                    },
+                    {
+                        "field": "name",
+                        "equals": "[parameters('storageAccount')]"
+                    },
+                    {
+                        "not": {
+                            "field": "Microsoft.Storage/storageAccounts/encryption.keySource",
+                            "equals": "Microsoft.Keyvault"
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

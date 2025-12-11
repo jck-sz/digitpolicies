@@ -1,0 +1,56 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1335-NoPublicIpOnAKSNodePools",
+  "properties": {
+    "displayName": "SLZ - 1335 - Prevent Public IP on AKS Node Pools",
+        "description": "This policy ensures that Azure Kubernetes Service (AKS) node pools do not have public IP addresses, preventing unnecessary public exposure of cluster nodes.",
+        "policyType": "Custom",
+        "mode": "Indexed",
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enforce, audit, or disable this policy enforcement.",
+                    "allowedValues": [
+                        "Deny",
+                        "Audit",
+                        "Disabled"
+                    ],
+                    "defaultValue": "Audit"
+                }
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.ContainerService/managedClusters"
+                    },
+                    {
+                        "count": {
+                            "field": "Microsoft.ContainerService/managedClusters/agentPoolProfiles[*]",
+                            "where": {
+                                "anyOf": [
+                                    {
+                                        "field": "Microsoft.ContainerService/managedClusters/agentPoolProfiles[*].enableNodePublicIP",
+                                        "exists": "False"
+                                    },
+                                    {
+                                        "field": "Microsoft.ContainerService/managedClusters/agentPoolProfiles[*].enableNodePublicIP",
+                                        "equals": "true"
+                                    }
+                                ]
+                            }
+                        },
+                        "greater": 0
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

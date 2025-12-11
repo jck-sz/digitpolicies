@@ -1,0 +1,36 @@
+/*
+@TargetNode='localhost'
+@GeneratedBy=eric.anllo-muniz
+@GenerationDate=09/18/2025 15:35:58
+@GenerationHost=C11-LFXFXPNOPXA
+*/
+
+instance of MSFT_ScriptResource as $MSFT_ScriptResource1ref
+{
+SetScript = "return $true";
+ ResourceID = "[Script]CheckLang";
+ SourceInfo = "C:\\Users\\eric.anllo-muniz\\OneDrive - Accenture\\Desktop\\DIGIT\\AzureLandingZone\\Definitions\\policyDefinitions\\SLZ\\Guest-Configuration\\ID734\\Audit.ps1::4::5::Script";
+ GetScript = "$lm = [string]$ExecutionContext.SessionState.LanguageMode\n@{ Result = \"LanguageMode=$lm\" }";
+ ModuleName = "PSDscResources";
+ ModuleVersion = "2.12.0.0";
+ TestScript = "$lm = [string]$ExecutionContext.SessionState.LanguageMode\nreturn ($lm -eq 'FullLanguage')";
+ ConfigurationName = "Audit_FullLanguage";
+};
+instance of OMI_ConfigurationDocument
+
+                    {
+ Version="2.0.0";
+
+                        MinimumCompatibleVersion = "1.0.0";
+
+                        CompatibleVersionAdditionalProperties= {"Omi_BaseResource:ConfigurationName"};
+
+                        Author="eric.anllo-muniz";
+
+                        GenerationDate="09/18/2025 15:35:58";
+
+                        GenerationHost="C11-LFXFXPNOPXA";
+
+                        Name="Audit_FullLanguage";
+
+                    };

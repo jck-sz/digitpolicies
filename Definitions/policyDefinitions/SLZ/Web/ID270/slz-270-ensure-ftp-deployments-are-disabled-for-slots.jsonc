@@ -1,0 +1,102 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-270-AppServiceSlotsFTPDeployments",
+  "properties": {
+    "displayName": "SLZ - 270 - Ensure FTP deployments are Disabled for Slots",
+    "description": "Policy will audit does FTP is disabled for App Service slots, if not, it allows to deploy FTPS only for App Service and Azure Functions.",
+    "mode": "Indexed",
+    "metadata": {
+      "category": "App Service",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["DeployIfNotExists", "AuditIfNotExists", "Disabled"],
+        "defaultValue": "AuditIfNotExists",
+        "metadata": {
+          "description": "DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      },
+      "allowFTPS": {
+        "defaultValue": false,
+        "metadata": {
+          "description": "true value will force using FTPSOnly",
+          "displayName": "Enforce FTPS"
+        },
+        "type": "boolean"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Web/sites/slots"
+          },
+          {
+            "field": "kind",
+            "contains": "functionapp"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.Web/sites/slots/config",
+          "existenceCondition": {
+            "field": "Microsoft.Web/sites/slots/config/ftpsState",
+            "in": "[if(parameters('allowFTPS'), createArray('FtpsOnly', 'Disabled'), createArray('Disabled'))]"
+          },
+          "roleDefinitionIds": [
+            "/providers/Microsoft.Authorization/roleDefinitions/de139f84-1756-47ae-9be6-808fbbe84772"
+          ],
+          "deployment": {
+            "properties": {
+              "parameters": {
+                "location": {
+                  "value": "[field('location')]"
+                },
+                "name": {
+                  "value": "[field('name')]"
+                },
+                "allowFTPS": {
+                  "value": "[parameters('allowFTPS')]"
+                }
+              },
+              "mode": "incremental",
+              "template": {
+                "parameters": {
+                  "location": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "allowFTPS": {
+                    "type": "bool"
+                  }
+                },
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                  {
+                    "type": "Microsoft.Web/sites/slots/config",
+                    "properties": {
+                      "ftpsState": "[if(parameters('allowFTPS'), 'FtpsOnly', 'Disabled')]"
+                    },
+                    "location": "[parameters('location')]",
+                    "apiVersion": "2018-11-01",
+                    "name": "[concat(parameters('name'), '/web')]"
+                  }
+                ],
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#"
+              }
+            }
+          },
+          "name": "web"
+        }
+      }
+    }
+  }
+}

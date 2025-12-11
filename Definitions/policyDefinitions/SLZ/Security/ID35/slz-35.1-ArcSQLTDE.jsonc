@@ -1,0 +1,51 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-35.1-ArcSQLTDE",
+    "properties": {
+        "displayName": "SLZ - 35.1 - Transparent Data Encryption must be enabled for Arc SQL managed instances.",
+        "description": "Enable transparent data encryption (TDE) at-rest on an Azure Arc-enabled SQL Managed Instance. Learn more at https://aka.ms/EnableTDEArcSQLMI.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.0.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.AzureArcData/sqlmanagedinstances"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.AzureArcData/sqlManagedInstances/k8sRaw.spec.security.transparentDataEncryption",
+                                "exists": false
+                            },
+                            {
+                                "field": "Microsoft.AzureArcData/sqlManagedInstances/k8sRaw.spec.security.transparentDataEncryption.mode",
+                                "equals": "Disabled"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

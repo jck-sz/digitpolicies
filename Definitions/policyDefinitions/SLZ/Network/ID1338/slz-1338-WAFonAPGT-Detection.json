@@ -1,0 +1,57 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-1338-WAFonAPGT-Detection",
+  "properties": {
+    "displayName": "SLZ - 1338 - Web Application Firewall (WAF) should use the specified mode for Application Gateway",
+    "mode": "Indexed",
+    "description": "Mandates the use of 'Detection' or 'Prevention' mode to be active on all Web Application Firewall policies for Application Gateway.",
+    "metadata": {
+        "version": "1.0.0",
+        "category": "Network"
+    },
+    "parameters": {
+        "effect": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Effect",
+                "description": "Enable or disable the execution of the policy"
+            },
+            "allowedValues": [
+                "Audit",
+                "Deny",
+                "Disabled"
+            ],
+            "defaultValue": "Audit"
+        },
+        "modeRequirement": {
+            "type": "String",
+            "metadata": {
+                "displayName": "Mode Requirement",
+                "description": "Mode required for all WAF policies"
+            },
+            "allowedValues": [
+                "Prevention",
+                "Detection"
+            ],
+            "defaultValue": "Detection"
+        }
+    },
+    "policyRule": {
+        "if": {
+            "allOf": [
+                {
+                    "field": "type",
+                    "equals": "Microsoft.Network/applicationGatewayWebApplicationFirewallPolicies"
+                },
+                {
+                    "field": "Microsoft.Network/applicationGatewayWebApplicationFirewallPolicies/policySettings.mode",
+                    "notEquals": "[parameters('modeRequirement')]"
+                }
+            ]
+        },
+        "then": {
+            "effect": "[parameters('effect')]"
+        }
+    }
+  }
+}

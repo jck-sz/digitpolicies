@@ -1,0 +1,52 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-179-StorageAccountsExpirationReminder",
+  "properties": {
+    "displayName": "SLZ - 179 - Ensure that 'Enable key rotation reminders' is enabled for each Storage Account",
+    "description": "Ensures that storage accounts have a key expiration reminder",
+    "metadata": {
+      "version": "1.0.0",
+      "category": "Storage"
+    },
+    "parameters": {
+      "effect": {
+        "type": "string",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Audit, Deny, or Disable the policy."
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Audit"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Storage/storageAccounts"
+          },
+          {
+            "anyOf": [
+              {
+                "field": "Microsoft.Storage/storageAccounts/keyPolicy.keyExpirationPeriodInDays",
+                "exists": false
+              },
+              {
+                "field": "Microsoft.Storage/storageAccounts/keyPolicy.keyExpirationPeriodInDays",
+                "lessOrEquals": 0
+              }
+            ]
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}

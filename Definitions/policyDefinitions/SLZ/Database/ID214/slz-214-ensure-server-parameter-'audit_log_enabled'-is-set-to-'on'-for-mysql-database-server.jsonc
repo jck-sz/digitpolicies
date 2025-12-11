@@ -1,0 +1,106 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-214-MySQLSQLServer_audit_log_enabled",
+  "properties": {
+    "displayName": "SLZ - 214 - Ensure server parameter 'audit_log_enabled' is set to 'ON' for MySQL Database Server",
+    "description": "Enabling audit_log_enabled helps MySQL Database to log items such as connection attempts to the server, DDL/DML access, and more. Log data can be used to identify, troubleshoot, and repair configuration errors and suboptimal performance.",
+    "mode": "All",
+    "metadata": {
+      "category": "SQL",
+      "version": "1.0.0"
+    },
+    "parameters": {
+      "effect": {
+        "allowedValues": ["DeployIfNotExists", "AuditIfNotExists", "Disabled"],
+        "defaultValue": "DeployIfNotExists",
+        "metadata": {
+          "description": "DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy",
+          "displayName": "Effect"
+        },
+        "type": "string"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.DBforMySQL/flexibleServers"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]",
+        "details": {
+          "type": "Microsoft.DBforMySQL/flexibleServers/configurations",
+          "existenceCondition": {
+            "field": "Microsoft.DBForMySql/flexibleServers/configurations/value",
+            "equals": "ON"
+          },
+          "roleDefinitionIds": [
+            "/providers/Microsoft.Authorization/roleDefinitions/b24988ac-6180-42a0-ab88-20f7382dd24c"
+          ],
+          "deployment": {
+            "properties": {
+              "parameters": {
+                "location": {
+                  "value": "[field('location')]"
+                },
+                "serverName": {
+                  "value": "[field('name')]"
+                },
+                "serverParameters": {
+                  "value": [
+                    {
+                      "value": "ON",
+                      "name": "audit_log_enabled",
+                      "source": "user-override"
+                    }
+                  ]
+                }
+              },
+              "mode": "incremental",
+              "template": {
+                "parameters": {
+                  "location": {
+                    "type": "string"
+                  },
+                  "serverName": {
+                    "type": "String"
+                  },
+                  "serverParameters": {
+                    "type": "Array"
+                  }
+                },
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                  {
+                    "type": "Microsoft.DBforMySQL/flexibleServers/configurations",
+                    "properties": {
+                      "value": "[parameters('serverParameters')[0].value]",
+                      "source": "[parameters('serverParameters')[0].source]"
+                    },
+                    "apiVersion": "[variables('api')]",
+                    "name": "[variables('serverName')]"
+                  }
+                ],
+                "variables": {
+                  "serverName": "[concat(parameters('serverName'),'/',parameters('serverParameters')[0].name)]",
+                  "api": "2021-05-01"
+                },
+                "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                "outputs": {
+                  "policy": {
+                    "type": "string",
+                    "value": "[concat('paramServerName: ', parameters('serverName'), ' | varServerName: ', parameters('serverName'), ' | Value: ', parameters('serverParameters')[0].value, ' | Source: ', parameters('serverParameters')[0].source,'')]"
+                  }
+                }
+              }
+            }
+          },
+          "name": "audit_log_enabled"
+        }
+      }
+    }
+  }
+}

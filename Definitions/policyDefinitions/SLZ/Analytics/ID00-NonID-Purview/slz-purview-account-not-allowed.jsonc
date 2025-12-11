@@ -1,0 +1,37 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-DenyPurviewAccounts",
+  "properties": {
+    "displayName": "SLZ - Deny purview accounts",
+    "description": "Deny the creation of purview accounts",
+    "policyType": "Custom",
+    "mode": "Indexed",
+    "parameters": {
+      "effect": {
+        "type": "string",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "The effect to enforce for this policy. Possible values are Audit, Deny, or Disable."
+        },
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disable"
+        ],
+        "defaultValue": "Audit"
+      }
+    },
+    "policyRule": {
+      "if": {
+        "field": "type",
+        "equals": "Microsoft.Purview/accounts"
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    },
+    "versions": [
+      "1.0.0"
+    ]
+  }
+}

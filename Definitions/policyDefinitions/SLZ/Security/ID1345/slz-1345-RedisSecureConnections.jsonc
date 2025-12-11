@@ -1,0 +1,63 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+    "name": "SLZ-1345-RedisSecureConnections",
+    "properties": {
+        "displayName": "SLZ - 1345 - Azure Cache for Redis only secure connections should be enabled",
+        "description": "Audit enabling of only connections via SSL to Azure Cache for Redis. Validate both the minimum TLS version and that enableNonSslPort is disabled. Using secure connections ensures authentication between the server and the service and protects data in transit from network layer attacks such as man-in-the-middle, eavesdropping, and session hijacking.",
+        "metadata": {
+            "category": "Security",
+            "version": "1.1.0"
+        },
+        "parameters": {
+            "effect": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Effect",
+                    "description": "Enable or disable the execution of the policy"
+                },
+                "allowedValues": [
+                    "Audit",
+                    "Deny",
+                    "Disabled"
+                ],
+                "defaultValue": "Audit"
+            },
+            "minimumtlsVersion": {
+                "type": "String",
+                "metadata": {
+                    "displayName": "Minimum TLS version for Azure Cache for Redis",
+                    "description": "Specify the minimum TLS version required for secure connections."
+                },
+                "allowedValues": [
+                    "1.2"
+                ],
+                "defaultValue": "1.2"
+            }
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [
+                    {
+                        "field": "type",
+                        "equals": "Microsoft.Cache/redis"
+                    },
+                    {
+                        "anyOf": [
+                            {
+                                "field": "Microsoft.Cache/Redis/enableNonSslPort",
+                                "equals": "true"
+                            },
+                            {
+                                "field": "Microsoft.Cache/Redis/minimumtlsVersion",
+                                "less": "[parameters('minimumtlsVersion')]"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "then": {
+                "effect": "[parameters('effect')]"
+            }
+        }
+    }
+}

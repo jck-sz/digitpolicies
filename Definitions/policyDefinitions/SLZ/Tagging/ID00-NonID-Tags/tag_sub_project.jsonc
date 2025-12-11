@@ -1,0 +1,49 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Azure/enterprise-azure-policy-as-code/main/Schemas/policy-definition-schema.json",
+  "name": "SLZ-878-CheckProjectTagOnSubscription",
+  "properties": {
+    "displayName": "SLZ - 878 - Check Project Tag on Subscription",
+    "description": "Ensure the Project tag exists on the subscription.",
+    "mode": "All",
+    "parameters": {
+      "tag-TagName3": {
+        "type": "String",
+        "defaultValue": "ec.GovIS2SeqNum",
+        "metadata": {
+          "displayName": "Tag Name",
+          "description": "Project tag"
+        }
+      },
+      "effect": {
+        "type": "string",
+        "allowedValues": [
+          "Audit",
+          "Deny",
+          "Disabled"
+        ],
+        "defaultValue": "Audit",
+        "metadata": {
+          "displayName": "Effect",
+          "description": "Effect of the policy"
+        }
+      }
+    },
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Resources/subscriptions"
+          },
+          {
+            "field": "[concat('tags[', parameters('tag-TagName3'), ']')]",
+            "exists": "false"
+          }
+        ]
+      },
+      "then": {
+        "effect": "[parameters('effect')]"
+      }
+    }
+  }
+}
