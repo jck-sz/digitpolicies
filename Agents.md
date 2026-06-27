@@ -1,0 +1,2 @@
+This is a public repository which can be found under https://github.com/digitc1/AzureDIGITManagedLZ
+The main outcome of this project is to produce documentation and explanation for each policy in the repository
