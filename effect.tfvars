@@ -9,23 +9,23 @@ initiative_parameters = {
   "C1-AzureLandingZoneCore" = {
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-AMA" = { value = "DeployIfNotExists" }
+    "effect-AMA" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-C1-SLZ-189-BlobServiceStorageLogging" = { value = "DeployIfNotExists" }
+    "effect-C1-SLZ-189-BlobServiceStorageLogging" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-C1-SLZ-190-TableServiceStorageLogging" = { value = "DeployIfNotExists" }
+    "effect-C1-SLZ-190-TableServiceStorageLogging" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-C1-SLZ-27-StorageAccountDiagnosticSettingsToWS" = { value = "DeployIfNotExists" }
+    "effect-C1-SLZ-27-StorageAccountDiagnosticSettingsToWS" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists" (inferred from referenced policy definitions)
     # Possible values: ["AuditIfNotExists", "DeployIfNotExists", "Disabled"] (inferred common values from referenced policy definitions)
-    "effect-C1-SLZ-51" = { value = "DeployIfNotExists" }
+    "effect-C1-SLZ-51" = { value = "AuditIfNotExists" }
 
     # Default: "Audit"
     # Possible values: ["Audit", "Deny", "Disabled"]
@@ -33,35 +33,35 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-MDC_DfSQL_AMA_DefaultPipeline_Arc" = { value = "DeployIfNotExists" }
+    "effect-SLZ-MDC_DfSQL_AMA_DefaultPipeline_Arc" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-MDC_DfSQL_AMA_DefaultPipeline_DCRA_Arc" = { value = "DeployIfNotExists" }
+    "effect-SLZ-MDC_DfSQL_AMA_DefaultPipeline_DCRA_Arc" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-MDC_DfSQL_AMA_DefaultPipeline_VM" = { value = "DeployIfNotExists" }
+    "effect-SLZ-MDC_DfSQL_AMA_DefaultPipeline_VM" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-MDC_DfSQL_DeployDefaultWorkspace" = { value = "DeployIfNotExists" }
+    "effect-SLZ-MDC_DfSQL_DeployDefaultWorkspace" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-MDC_DfSQL_DeployMicrosoftDefenderForSQLWindowsAgent_Arc" = { value = "DeployIfNotExists" }
+    "effect-SLZ-MDC_DfSQL_DeployMicrosoftDefenderForSQLWindowsAgent_Arc" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-MDC_DfSQL_DeployMicrosoftDefenderForSQLWindowsAgent_VM" = { value = "DeployIfNotExists" }
+    "effect-SLZ-MDC_DfSQL_DeployMicrosoftDefenderForSQLWindowsAgent_VM" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-MDC_DfSQL_DeployWindowsAMA_Arc" = { value = "DeployIfNotExists" }
+    "effect-SLZ-MDC_DfSQL_DeployWindowsAMA_Arc" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-MDC_DfSQL_DeployWindowsAMA_VM" = { value = "DeployIfNotExists" }
+    "effect-SLZ-MDC_DfSQL_DeployWindowsAMA_VM" = { value = "Disabled" }
 
     # Default: "Modify"
     # Possible values: ["Modify", "Disabled"]
@@ -78,7 +78,7 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-C1-SLZ-171-SecurityContactEmailAdditionalAddress" = { value = "DeployIfNotExists" }
+    "effect-C1-SLZ-171-SecurityContactEmailAdditionalAddress" = { value = "AuditIfNotExists" }
 
     # Default: "AuditIfNotExists"
     # Possible values: ["AuditIfNotExists", "Disabled"]
@@ -86,7 +86,7 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["AuditIfNotExists", "DeployIfNotExists", "Disabled"]
-    "effect-C1-SLZ-198-AuditingRetentionGreater90days" = { value = "DeployIfNotExists" }
+    "effect-C1-SLZ-198-AuditingRetentionGreater90days" = { value = "AuditIfNotExists" }
 
     # Default: "AuditIfNotExists"
     # Possible values: ["AuditIfNotExists", "Disabled"]
@@ -103,7 +103,7 @@ initiative_parameters = {
   "SLZ-ALZ-PolicySet" = {
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-SLZ-00-MicrosoftDefenderForContainer" = { value = "DeployIfNotExists" }
+    "effect-SLZ-00-MicrosoftDefenderForContainer" = { value = "AuditIfNotExists" }
 
     # Default: "Audit"
     # Possible values: ["Audit", "Deny", "Disable"]
@@ -183,7 +183,7 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-1343-FunctionAppSlotsLatestTLS" = { value = "DeployIfNotExists" }
+    "effect-SLZ-1343-FunctionAppSlotsLatestTLS" = { value = "AuditIfNotExists" }
 
     # Default: "AuditIfNotExists"
     # Possible values: ["AuditIfNotExists", "DeployIfNotExists", "Disabled"]
@@ -347,47 +347,47 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-1397-MicrosoftDefenderForCSPM" = { value = "DeployIfNotExists" }
+    "effect-SLZ-1397-MicrosoftDefenderForCSPM" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-153-DefenderCloudPricingForServer" = { value = "DeployIfNotExists" }
+    "effect-SLZ-153-DefenderCloudPricingForServer" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-153-DefenderForEndpoint" = { value = "DeployIfNotExists" }
+    "effect-SLZ-153-DefenderForEndpoint" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-SLZ-154-DefenderCloudPricingForApplicationServices" = { value = "DeployIfNotExists" }
+    "effect-SLZ-154-DefenderCloudPricingForApplicationServices" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-SLZ-156-DefenderCloudPricingForAzureSQLDB" = { value = "DeployIfNotExists" }
+    "effect-SLZ-156-DefenderCloudPricingForAzureSQLDB" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-SLZ-157-DefenderCloudPricingForDBOnServers" = { value = "DeployIfNotExists" }
+    "effect-SLZ-157-DefenderCloudPricingForDBOnServers" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-SLZ-158-DefenderCloudPricingForOpenDB" = { value = "DeployIfNotExists" }
+    "effect-SLZ-158-DefenderCloudPricingForOpenDB" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-159-DefenderCloudPricingForStorage" = { value = "DeployIfNotExists" }
+    "effect-SLZ-159-DefenderCloudPricingForStorage" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-SLZ-161-DefenderCloudPricingForAzureCosmosDB" = { value = "DeployIfNotExists" }
+    "effect-SLZ-161-DefenderCloudPricingForAzureCosmosDB" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-SLZ-162-DefenderCloudPricingForKeyVault" = { value = "DeployIfNotExists" }
+    "effect-SLZ-162-DefenderCloudPricingForKeyVault" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-SLZ-164-DefenderCloudPricingForResourceManager" = { value = "DeployIfNotExists" }
+    "effect-SLZ-164-DefenderCloudPricingForResourceManager" = { value = "AuditIfNotExists" }
 
     # Default: "Audit"
     # Possible values: ["Audit", "Disabled"]
@@ -403,7 +403,7 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled", "AuditIfNotExists"]
-    "effect-SLZ-168-MicrosoftDefenderConfigureVMForVulnerability" = { value = "DeployIfNotExists" }
+    "effect-SLZ-168-MicrosoftDefenderConfigureVMForVulnerability" = { value = "AuditIfNotExists" }
 
     # Default: "Deny"
     # Possible values: ["Audit", "Deny", "Disabled"]
@@ -431,7 +431,7 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-186-StorageAccountsPrivateEndpoints" = { value = "DeployIfNotExists" }
+    "effect-SLZ-186-StorageAccountsPrivateEndpoints" = { value = "AuditIfNotExists" }
 
     # Default: "Deny"
     # Possible values: ["Modify", "Deny", "Audit", "Disabled"]
@@ -455,11 +455,11 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-197-SQLDatabaseDataEncryption" = { value = "DeployIfNotExists" }
+    "effect-SLZ-197-SQLDatabaseDataEncryption" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-204-PostgresSQLFlexibleServerSSLConnection" = { value = "DeployIfNotExists" }
+    "effect-SLZ-204-PostgresSQLFlexibleServerSSLConnection" = { value = "AuditIfNotExists" }
 
     # Default: "Deny"
     # Possible values: ["Audit", "Disabled", "Deny"]
@@ -467,27 +467,27 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-205-PostgresSQLFlexibleServer_log_checkpoints" = { value = "DeployIfNotExists" }
+    "effect-SLZ-205-PostgresSQLFlexibleServer_log_checkpoints" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-205-PostgresSQLServer_log_checkpoints" = { value = "DeployIfNotExists" }
+    "effect-SLZ-205-PostgresSQLServer_log_checkpoints" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-206-PostgresSQLServerLogConnections" = { value = "DeployIfNotExists" }
+    "effect-SLZ-206-PostgresSQLServerLogConnections" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-207-PostgresSQLServerDisconnectionsLogging" = { value = "DeployIfNotExists" }
+    "effect-SLZ-207-PostgresSQLServerDisconnectionsLogging" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-208-PostgresSQLFlexibleServerConnectionThrottling" = { value = "DeployIfNotExists" }
+    "effect-SLZ-208-PostgresSQLFlexibleServerConnectionThrottling" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-208-PostgresSQLServerConnectionThrottling" = { value = "DeployIfNotExists" }
+    "effect-SLZ-208-PostgresSQLServerConnectionThrottling" = { value = "AuditIfNotExists" }
 
     # Default: "Deny"
     # Possible values: ["Audit", "Deny", "Disabled"]
@@ -507,11 +507,11 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-214-MySQLSQLServer_audit_log_enabled" = { value = "DeployIfNotExists" }
+    "effect-SLZ-214-MySQLSQLServer_audit_log_enabled" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-215-MySQLSQLServer_audit_log_events" = { value = "DeployIfNotExists" }
+    "effect-SLZ-215-MySQLSQLServer_audit_log_events" = { value = "AuditIfNotExists" }
 
     # Default: "Deny"
     # Possible values: ["Audit", "Deny", "Disabled"]
@@ -655,7 +655,7 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-244-NetworkWatcherEnabled" = { value = "DeployIfNotExists" }
+    "effect-SLZ-244-NetworkWatcherEnabled" = { value = "AuditIfNotExists" }
 
     # Default: "Audit"
     # Possible values: ["Audit", "Deny", "Disabled"]
@@ -831,7 +831,7 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["auditIfNotExists", "DeployIfNotExists", "Disabled"]
-    "effect-SLZ-629-VirtualNetworksDDOSProtection" = { value = "DeployIfNotExists" }
+    "effect-SLZ-629-VirtualNetworksDDOSProtection" = { value = "auditIfNotExists" }
 
     # Default: "Deny"
     # Possible values: ["Audit", "Deny", "Disabled"]
@@ -907,23 +907,23 @@ initiative_parameters = {
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "Disabled"]
-    "effect-SLZ-DefenderForAzureKubernetesServiceClusters" = { value = "DeployIfNotExists" }
+    "effect-SLZ-DefenderForAzureKubernetesServiceClusters" = { value = "Disabled" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-DefenderForDefenderForLinuxAgentDeploy" = { value = "DeployIfNotExists" }
+    "effect-SLZ-DefenderForDefenderForLinuxAgentDeploy" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-DefenderForDefenderForLinuxHybridAgentDeploy" = { value = "DeployIfNotExists" }
+    "effect-SLZ-DefenderForDefenderForLinuxHybridAgentDeploy" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-DefenderForDefenderForWindowsAgentDeploy" = { value = "DeployIfNotExists" }
+    "effect-SLZ-DefenderForDefenderForWindowsAgentDeploy" = { value = "AuditIfNotExists" }
 
     # Default: "DeployIfNotExists"
     # Possible values: ["DeployIfNotExists", "AuditIfNotExists", "Disabled"]
-    "effect-SLZ-DefenderForDefenderForWindowsArcAgentDeploy" = { value = "DeployIfNotExists" }
+    "effect-SLZ-DefenderForDefenderForWindowsArcAgentDeploy" = { value = "AuditIfNotExists" }
 
     # Default: "Audit"
     # Possible values: ["Audit", "Deny", "Disable"]
