@@ -462,24 +462,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** C1 - SLZ - 149 - Ensure That No Custom Administrator Roles Exists
 - **Folder:** `C1/General/ID149`
-- **Category:** `General`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Authorization/roleDefinitions`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks custom Role definitions in Azure and makes sure that the only custom roles match the allowed custom roles defined in the policy definition. In audit mode it will show which custom roles are not compliant, i.e. not in the list of allowed role names.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Authorization/roleDefinitions` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Authorization/roleDefinitions` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Choose the effect type: 'Audit', 'Deny', or 'Disabled'); `allowedCustomRolesNames` (default `11 values`; List of allowed custom roles (role ids) for subscription administrators).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -488,7 +481,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** C1 - SLZ - 198 - Ensure that 'Auditing' Retention is 'greater than 90 days'
 - **Folder:** `C1/General/ID198`
-- **Category:** `SQL`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`, `Microsoft.Sql/servers/auditingSettings`, `Microsoft.Resources/deployments`
 - **Cost impact:** Yes - retained logs or deleted data consume billable storage.
@@ -499,13 +491,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `retentionDays` (default `90`; The value in days of the retention period (0 indicates unlimited retention)); `storageAccountsResourceGroup` (default no default; Auditing writes database events to an audit log in your Azure Storage account (a storage account will be created in each region where a SQL Server is created that will be shared...).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -514,1194 +500,872 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** C1 - SLZ - 220 - An activity log alert should exist for specific Administrative operations
 - **Folder:** `C1/General/ID220`
-- **Category:** `not declared`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for administrative operations. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for administrative operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for administrative operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationNameAdministrative` (default no default; allowed `Microsoft.Sql/servers/firewallRules/write`, `Microsoft.Sql/servers/firewallRules/delete`, `Microsoft.Network/networkSecurityGroups/write`, `Microsoft.Network/networkSecurityGroups/delete`, `Microsoft.ClassicNetwork/networkSecurityGroups/write`, `Microsoft.ClassicNetwork/networkSecurityGroups/delete`, `Microsoft.Network/networkSecurityGroups/securityRules/write`, `Microsoft.Network/networkSecurityGroups/securityRules/delete`, plus 2 more; Administrative Operation name for which activity log alert should be configured).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-c1-slz-220-policyactivitylogalert"></a>
 ### C1-SLZ-220-PolicyActivityLogAlert
 
 - **Display name:** C1 - SLZ - 220 - An activity log alert should exist for specific Policy operations
 - **Folder:** `C1/General/ID220`
-- **Category:** `not declared`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for policy assignment create, update, or delete operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for policy assignment create, update, or delete operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationNamePolicy` (default no default; allowed `Microsoft.Authorization/policyAssignments/write`, `Microsoft.Authorization/policyAssignments/delete`; Policy Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-c1-slz-220-securityactivitylogalert"></a>
 ### C1-SLZ-220-SecurityActivityLogAlert
 
 - **Display name:** C1 - SLZ - 220 - An activity log alert should exist for specific Security operations
 - **Folder:** `C1/General/ID220`
-- **Category:** `not declared`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for security operations. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for security operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for security operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationNameSecurity` (default no default; allowed `Microsoft.Security/policies/write`, `Microsoft.Security/securitySolutions/write`, `Microsoft.Security/securitySolutions/delete`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-c1-slz-51-azuredirectorydomainservicesdiagsettingstows"></a>
 ### C1-SLZ-51-AzureDirectoryDomainServicesDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Active Directory Domain Services to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.AAD/DomainServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.AAD/DomainServices/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Microsoft Entra Domain Services instances and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Microsoft Entra Domain Services instances are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.AAD/DomainServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.AAD/DomainServices/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-automationaccountdiagsettingstows"></a>
 ### C1-SLZ-51-AutomationAccountDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Automation Account to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Automation/automationAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Automation/automationAccounts/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Automation Accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Automation Accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Automation/automationAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Automation/automationAccounts/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azureactivitylogsdiagsettingstows"></a>
 ### C1-SLZ-51-AzureActivityLogsDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Activity logs to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Azure subscriptions and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure subscriptions are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azureanalysisservicediagsettingstows"></a>
 ### C1-SLZ-51-AzureAnalysisServiceDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Analysis Services to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.AnalysisServices/servers`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.AnalysisServices/servers/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Azure Analysis Services servers and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Analysis Services servers are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.AnalysisServices/servers`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.AnalysisServices/servers/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azureapimanagementservicediagsettingstows"></a>
 ### C1-SLZ-51-AzureAPIManagementServiceDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure API Management Service to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.ApiManagement/service/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks API Management services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which API Management services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.ApiManagement/service`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.ApiManagement/service/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-appservicediagsettingstows"></a>
 ### C1-SLZ-51-AppServiceDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure App service to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Web/sites/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which App Service apps are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Web/sites`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Web/sites/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; Resource ID of the Log Analytics workspace); `policyName` (default `setByPolicy`; Policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-appgatewaydiagsettingstows"></a>
 ### C1-SLZ-51-AppGatewayDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Application Gateway to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/applicationGateways/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Application Gateways and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Application Gateways are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/applicationGateways`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/applicationGateways/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurebastiondiagsettingstows"></a>
 ### C1-SLZ-51-AzureBastionDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Bastion to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/bastionHosts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/bastionHosts/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Azure Bastion hosts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Bastion hosts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/bastionHosts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/bastionHosts/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurebatchdiagsettingstows"></a>
 ### C1-SLZ-51-AzureBatchDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Batch to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Batch/batchAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Batch/batchAccounts/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Azure Batch accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Batch accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Batch/batchAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Batch/batchAccounts/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurecongitivesearchdiagsettingstows"></a>
 ### C1-SLZ-51-AzureCongitiveSearchDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Cognitive Search to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Search/searchServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Search/searchServices/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Azure AI Search services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure AI Search services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Search/searchServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Search/searchServices/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurecongitiveservicesdiagsettingstows"></a>
 ### C1-SLZ-51-AzureCongitiveServicesDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Cognitive Services to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.CognitiveServices/accounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.CognitiveServices/accounts/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Azure AI services accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure AI services accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.CognitiveServices/accounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.CognitiveServices/accounts/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azuredatalakeanalyticsdiagsettingstows"></a>
 ### C1-SLZ-51-AzureDatalakeAnalyticsDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Datalake Analytics to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DataLakeAnalytics/accounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.DataLakeAnalytics/accounts/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Data Lake Analytics accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Data Lake Analytics accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.DataLakeAnalytics/accounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.DataLakeAnalytics/accounts/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azuredatalakestorediagsettingstows"></a>
 ### C1-SLZ-51-AzureDatalakeStoreDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Datalake Store to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DataLakeStore/accounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.DataLakeStore/accounts/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Data Lake Store accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Data Lake Store accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.DataLakeStore/accounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.DataLakeStore/accounts/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azureeventhubdiagsettingstows"></a>
 ### C1-SLZ-51-AzureEventHubDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Event Hub to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.EventHub/namespaces/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Event Hubs namespaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Event Hubs namespaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.EventHub/namespaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.EventHub/namespaces/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurefirewalldiagsettingstows"></a>
 ### C1-SLZ-51-AzureFirewallDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Firewall to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/azurefirewalls`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/azurefirewalls/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Azure Firewalls and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Firewalls are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/azurefirewalls`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/azurefirewalls/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurefunctiondiagsettingstows"></a>
 ### C1-SLZ-51-AzureFunctionDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Function App to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Web/sites/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which App Service apps are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Web/sites`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Web/sites/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azureintegrationservicesiagsettingstows"></a>
 ### C1-SLZ-51-AzureIntegrationServicesiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Integration Services to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Logic/integrationAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Logic/integrationAccounts/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks integration accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which integration accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Logic/integrationAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Logic/integrationAccounts/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurekeyvaultdiagsettingstows"></a>
 ### C1-SLZ-51-AzureKeyVaultDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Key Vaults to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.KeyVault/vaults/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Key Vaults and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Key Vaults are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.KeyVault/vaults`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.KeyVault/vaults/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azureloadbalancerdiagsettingstows"></a>
 ### C1-SLZ-51-AzureLoadBalancerDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Loadbalancers to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/loadBalancers`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/loadBalancers/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Load Balancers and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Load Balancers are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/loadBalancers`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/loadBalancers/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurerecoveryservicediagsettingstows"></a>
 ### C1-SLZ-51-AzureRecoveryServiceDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Recovery Service to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.RecoveryServices/Vaults`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.RecoveryServices/Vaults/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks vaults and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which vaults are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.RecoveryServices/Vaults`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.RecoveryServices/Vaults/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azuresqlmanagedinstancedbdiagsettingstows"></a>
 ### C1-SLZ-51-AzureSQLManagedInstanceDBDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure SQL Managed Instance Database to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/managedInstances/databases`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Sql/managedInstances/databases/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks databases and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which databases are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Sql/managedInstances/databases`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Sql/managedInstances/databases/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azuresqlmanagedinstancediagsettingstows"></a>
 ### C1-SLZ-51-AzureSQLManagedInstanceDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure SQL Managed Instance to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/managedInstances`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Sql/managedInstances/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL Managed Instances and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure SQL Managed Instances are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Sql/managedInstances`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Sql/managedInstances/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azuresqlserverdiagsettingstows"></a>
 ### C1-SLZ-51-AzureSQLServerDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure SQL Server to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/servers/databases`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Sql/servers/databases/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL databases and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure SQL databases are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Sql/servers/databases`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Sql/servers/databases/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurestreamanalyticsdiagsettingstows"></a>
 ### C1-SLZ-51-AzureStreamAnalyticsDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Stream Analytics to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.StreamAnalytics/streamingjobs`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.StreamAnalytics/streamingjobs/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks streamingjobs and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which streamingjobs are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.StreamAnalytics/streamingjobs`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.StreamAnalytics/streamingjobs/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-azurevirtualnetworkdiagsettingstows"></a>
 ### C1-SLZ-51-AzureVirtualNetworkDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Virtual Network to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworkGateways`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/virtualNetworkGateways/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks virtual network gateways and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which virtual network gateways are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/virtualNetworkGateways`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/virtualNetworkGateways/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's storage account); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-cdnandfrontdoordiagsettingstows"></a>
 ### C1-SLZ-51-CdnAndFrontdoorDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Enable logging by category group for Front Door and CDN profiles (microsoft.cdn/profiles) to Log Analytics
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Insights/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks diagnostic settings and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which diagnostic settings are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Insights/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-iotdiagsettingstows"></a>
 ### C1-SLZ-51-IoTDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for IoT (Internet of Things) Hub to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Devices/IotHubs`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Devices/IotHubs/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks IoT Hubs and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which IoT Hubs are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Devices/IotHubs`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Devices/IotHubs/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `policyName` (default `setByPolicy`; policy name); `workspaceId` (default `setByPolicy`; workspace id).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-logicappworkflowsdiagsettingstows"></a>
 ### C1-SLZ-51-LogicAppWorkflowsDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Logic App Workflows to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Logic/workflows`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Logic/workflows/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Logic Apps workflows and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Logic Apps workflows are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Logic/workflows`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Logic/workflows/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-networkfrontdoordiagsettingstows"></a>
 ### C1-SLZ-51-NetworkFrontdoorDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Network Frontdoor to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/frontdoors`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/frontdoors/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks frontdoors and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which frontdoors are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/frontdoors`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/frontdoors/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-networkinterfacediagsettingstows"></a>
 ### C1-SLZ-51-NetworkInterfaceDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Network Interface to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/networkInterfaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/networkInterfaces/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks network interfaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which network interfaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/networkInterfaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/networkInterfaces/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-networksecuritygroupsdiagsettingstows"></a>
 ### C1-SLZ-51-NetworkSecurityGroupsDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Network Security Groups to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Network Security Groups and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Network Security Groups are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/networkSecurityGroups`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-powerbidedicatedcapacitydiagsettingstows"></a>
 ### C1-SLZ-51-PowerBIDedicatedCapacityDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for PowerBI Dedicated Capacity to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.PowerBIDedicated/capacities`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.PowerBIDedicated/capacities/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Power BI dedicated capacities and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Power BI dedicated capacities are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.PowerBIDedicated/capacities`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.PowerBIDedicated/capacities/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-publicipdiagsettingstows"></a>
 ### C1-SLZ-51-PublicIPDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Public IP Address to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/publicIPAddresses`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/publicIPAddresses/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks public IP addresses and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which public IP addresses are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/publicIPAddresses`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/publicIPAddresses/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-servicebusnamespacediagsettingstows"></a>
 ### C1-SLZ-51-ServiceBusNamespaceDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Service Bus Namespace to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ServiceBus/namespaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.ServiceBus/namespaces/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Service Bus namespaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Service Bus namespaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.ServiceBus/namespaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.ServiceBus/namespaces/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-51-storageaccountsdiagsettingstows"></a>
 ### C1-SLZ-51-StorageAccountsDiagSettingsToWS
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Storage Accounts to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/workspaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/workspaces/blobServices/providers/diagnosticSettings`, `Microsoft.Storage/workspaces/fileServices/providers/diagnosticSettings`, `Microsoft.Storage/workspaces/tableServices/providers/diagnosticSettings`, `Microsoft.Storage/workspaces/queueServices/providers/diagnosticSettings`, `Microsoft.Storage/workspaces/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks workspaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which workspaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Storage/workspaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/workspaces/blobServices/providers/diagnosticSettings`, and related child resources to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or Disable the execution of the policy); `workspaceId` (default no default; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-171-securitycontactemailadditionaladdress"></a>
 ### C1-SLZ-171-SecurityContactEmailAdditionalAddress
 
 - **Display name:** C1 - SLZ - 171 - Ensure 'Additional email addresses' is Configured with a Security Contact Email
 - **Folder:** `C1/Security/ID171`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/securityContacts`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks Microsoft Defender for Cloud security contact settings and makes sure 'Additional email addresses' is Configured with a Security Contact Email. In audit mode it shows which subscriptions do not have the required security contact or notification setting configured.
 
-**How to align the environment:** Create the required Azure Monitor activity log alert rules and action group wiring at subscription scope.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `emailSecurityContact` (default `ec-digit-csirc@ec.europa.eu`; Provide email addresses (semi-colon separated) for Defender for Cloud contact details); `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Enable or disable the execution of the policy); `minimalSeverity` (default `High`; allowed `High`, `Medium`, `Low`; Defines the minimal alert severity which will be sent as email notifications).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires standard Azure Monitor alert definitions, action groups, and subscription-level alert lifecycle ownership.
-
-**Common false positives / exceptions:** A subscription can be monitored centrally by another alerting pattern, causing this policy to flag a missing local alert.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription missing the required activity log alert rule for the configured operation name.
-
-**Potential issues:** Alert presence does not prove the action group routing or incident process is effective. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-c1-slz-172-alertsnotifysettohigh"></a>
 ### C1-SLZ-172-AlertsNotifySetToHigh
 
 - **Display name:** C1 - SLZ - 172 - Ensure That 'Notify about alerts with the following severity' is Set to 'High'
 - **Folder:** `C1/Security/ID172`
-- **Category:** `Security Center`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/securityContacts`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks Microsoft Defender for Cloud security contact settings and makes sure 'Notify about alerts with the following severity' is Set to 'High'. In audit mode it shows which subscriptions do not have the required security contact or notification setting configured.
 
-**How to align the environment:** Create the required Azure Monitor activity log alert rules and action group wiring at subscription scope.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires standard Azure Monitor alert definitions, action groups, and subscription-level alert lifecycle ownership.
-
-**Common false positives / exceptions:** A subscription can be monitored centrally by another alerting pattern, causing this policy to flag a missing local alert.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription missing the required activity log alert rule for the configured operation name.
-
-**Potential issues:** Alert presence does not prove the action group routing or incident process is effective.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-c1-slz-27-storageaccountdiagnosticsettingstows"></a>
 ### C1-SLZ-27-StorageAccountDiagnosticSettingsToWS
 
 - **Display name:** C1 - SLZ - 27 - Configure diagnostic settings for Storage Accounts to Log Analytics workspace
 - **Folder:** `C1/Storage/ID027`
-- **Category:** `Monitoring`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Storage/storageAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `profileName` (default `setbypolicy_logAnalytics`; The diagnostic settings profile name); `logAnalytics` (default no default; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `True`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-deprecated"></a>
 ### DEPRECATED
 
 - **Display name:** C1 - SLZ - 27 - Configure diagnostic settings for Storage Accounts to Log Analytics workspace
 - **Folder:** `C1/Storage/ID027`
-- **Category:** `Monitoring`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/providers/diagnosticSettings`, `Microsoft.Storage/storageAccounts/blobServices/providers/diagnosticSettings`, `Microsoft.Storage/storageAccounts/fileServices/providers/diagnosticSettings`, `Microsoft.Storage/storageAccounts/queueServices/providers/diagnosticSettings`, `Microsoft.Storage/storageAccounts/tableServices/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Storage/storageAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/providers/diagnosticSettings`, and related child resources to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy); `logAnalytics` (default no default; Select Log Analytics workspace from dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permissions (o...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `setbypolicy_logAnalytics`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-189-blobservicestoragelogging"></a>
 ### C1-SLZ-189-BlobServiceStorageLogging
 
 - **Display name:** C1 - SLZ - 189 - Ensure Storage Logging is Enabled for Blob Service for 'Read', 'Write', and 'Delete' Requests
 - **Folder:** `C1/Storage/ID189`
-- **Category:** `Storage`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/blobServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/blobServices/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Storage blob services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage blob services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Storage/storageAccounts/blobServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/blobServices/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `logAnalytics` (default no default; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `blobServicesDiagnosticsLogsToWorkspace`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-190-tableservicestoragelogging"></a>
 ### C1-SLZ-190-TableServiceStorageLogging
 
 - **Display name:** C1 - SLZ - 190 - Ensure Storage Logging is Enabled for Table Service for 'Read', 'Write', and 'Delete' Requests
 - **Folder:** `C1/Storage/ID190`
-- **Category:** `Storage`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/tableServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/tableServices/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Storage table services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage table services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Storage/storageAccounts/tableServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/tableServices/providers/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `logAnalytics` (default no default; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `tableServicesDiagnosticsLogsToWorkspace`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-221-activitylogresourcesnotpubliclyaccessible"></a>
 ### C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible
 
 - **Display name:** C1 - SLZ - 221 - Ensure Activity Log Storage and LAW are not Publicly Accessible
 - **Folder:** `C1/Storage/ID221`
-- **Category:** `Monitoring`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.OperationalInsights/workspaces`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and workspaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage accounts and workspaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Storage/storageAccounts`, `Microsoft.OperationalInsights/workspaces` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; The effect determines what happens when the policy rule is evaluated to match); `targetStorageAccountName` (default no default; Name of the storage account that should not allow public access); `targetLogAnalyticsWorkspaceName` (default no default; Name of the Log Analytics workspace that should not allow public network access for ingestion and query).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
 <a id="policy-c1-slz-222-storageaccountlogscmk"></a>
 ### C1-SLZ-222-StorageAccountLogsCMK
 
 - **Display name:** C1-SLZ - 222 - Ensure the storage account containing the container with activity logs is encrypted with Customer Managed Key
 - **Folder:** `C1/Storage/ID222`
-- **Category:** `Key Vault`
 - **Allowed effects:** `Deny`, `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Keyvault`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and microsoft. keyvault and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Storage accounts and microsoft. keyvault are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Storage/storageAccounts`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Storage/storageAccounts`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Deny`, `Audit`, `Disabled`; Enable or disable the execution of the policy); `storageAccount` (default no default; Name Storage account).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -1710,24 +1374,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - Deny purview accounts
 - **Folder:** `SLZ/Analytics/ID00-NonID-Purview`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Purview/accounts`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks Microsoft Purview account deployments and makes sure they follow the allowed landing-zone stance for Purview. In audit mode it shows which Purview accounts are present and therefore need review or an approved exception.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Purview/accounts` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Purview/accounts` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; The effect to enforce for this policy. Possible values are Audit, Deny, or Disabled.).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -1736,7 +1393,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 165 - Machines should be configured to periodically check for missing system updates
 - **Folder:** `SLZ/Compute/ID165`
-- **Category:** `Azure Update Manager`
 - **Allowed effects:** `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.HybridCompute/machines`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -1747,13 +1403,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`; The desired effect of the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires teams to select approved production SKUs in IaC and budget for higher service tiers where needed.
-
-**Common false positives / exceptions:** Development, sandbox, trial, or cost-controlled non-production workloads may intentionally use lower SKUs.
-
-**Evidence / compliance signal:** Compliance evidence is a production-tagged or in-scope resource using a disallowed free, basic, trial, developer, or low-cost SKU.
+**Operational impact:** Requires teams to select approved production SKUs in Terraform-managed deployments and budget for higher service tiers where needed.
 
 **Potential issues:** Production SKU checks depend on reliable environment tagging or scoping; otherwise development resources may be incorrectly reported.
 
@@ -1762,7 +1412,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 165.2.1 - Configure periodic checking for missing system updates on azure LINUX virtual machines
 - **Folder:** `SLZ/Compute/ID165`
-- **Category:** `Azure Update Manager`
 - **Allowed effects:** `Audit`, `Modify`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
 - **Cost impact:** No
@@ -1773,13 +1422,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Modify`, `Disabled`; The desired effect of the policy.); `assessmentMode` (default `AutomaticByPlatform`; allowed `ImageDefault`, `AutomaticByPlatform`; Assessment mode for the machines.); `osType` (default `Linux`; allowed `Windows`, `Linux`; OS type for the machines.); `locations` (default `[]`; The list of locations from which machines need to be targeted.); `tagValues` (default `object value`; The list of tags that need to matched for getting target machines.); `tagOperator` (default `Any`; allowed `All`, `Any`; Matching condition for resource tags).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -1788,7 +1431,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 165.2.2 - Configure periodic checking for missing system updates on azure WINDOWS virtual machines
 - **Folder:** `SLZ/Compute/ID165`
-- **Category:** `Azure Update Manager`
 - **Allowed effects:** `Audit`, `Modify`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
 - **Cost impact:** No
@@ -1799,13 +1441,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Modify`, `Disabled`; The desired effect of the policy.); `assessmentMode` (default `AutomaticByPlatform`; allowed `ImageDefault`, `AutomaticByPlatform`; Assessment mode for the machines.); `osType` (default `Windows`; allowed `Windows`, `Linux`; OS type for the machines.); `locations` (default `[]`; The list of locations from which machines need to be targeted.); `tagValues` (default `object value`; The list of tags that need to matched for getting target machines.); `tagOperator` (default `Any`; allowed `All`, `Any`; Matching condition for resource tags).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -1814,7 +1450,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 250 - Ensure that Only Approved Extensions Are Installed
 - **Folder:** `SLZ/Compute/ID250`
-- **Category:** `Guest Configuration`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines/extensions`
 - **Cost impact:** No
@@ -1825,13 +1460,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; The effect determines what happens when the policy rule is evaluated to match); `approvedExtensions` (default `36 values`; The list of approved extension types that can be installed. Example: AzureDiskEncryption).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
-
-**Common false positives / exceptions:** Unsupported OS images, sealed appliances, Arc connectivity gaps, or blocked egress can appear as non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is a VM missing the expected identity, extension, assignment, or guest setting result.
 
 **Potential issues:** Guest Configuration can be noisy where VM images, extensions, identities, or egress are not standardized.
 
@@ -1840,7 +1469,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 193 - Auditing on SQL server should be enabled
 - **Folder:** `SLZ/Database/ID193`
-- **Category:** `SQL`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`, `Microsoft.Sql/servers/auditingSettings`
 - **Cost impact:** Yes - audit logs require billable storage or Log Analytics ingestion.
@@ -1851,13 +1479,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `setting` (default `enabled`; allowed `enabled`, `disabled`; Desired Auditing setting).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
 
@@ -1866,7 +1488,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 194 - Ensure no Azure SQL Databases allow ingress from 0.0.0.0/0 (ANY IP)
 - **Folder:** `SLZ/Database/ID194`
-- **Category:** `Storage`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/servers/firewallRules`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
@@ -1877,13 +1498,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Common false positives / exceptions:** Temporary migration endpoints, vendor-managed services, or services without private endpoint support may need scoped exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service missing a private endpoint/private link configuration or still allowing public access.
 
 **Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -1892,24 +1507,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 195 - Ensure SQL server's Transparent Data Encryption (TDE) protector is encrypted with Customer-managed key
 - **Folder:** `SLZ/Database/ID195`
-- **Category:** `SQL`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`, `Microsoft.Sql/servers/encryptionProtector`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL servers and encryption protector and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure SQL servers and encryption protector are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Sql/servers`, `Microsoft.Sql/servers/encryptionProtector` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Sql/servers`, `Microsoft.Sql/servers/encryptionProtector` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.); `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -1918,7 +1526,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 196 - Ensure that Azure Active Directory Admin is Configured for SQL Servers
 - **Folder:** `SLZ/Database/ID196`
-- **Category:** `SQL`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`
 - **Cost impact:** No
@@ -1929,13 +1536,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the audit policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
-
-**Common false positives / exceptions:** Unsupported OS images, sealed appliances, Arc connectivity gaps, or blocked egress can appear as non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is a VM missing the expected identity, extension, assignment, or guest setting result.
 
 **Potential issues:** Guest Configuration can be noisy where VM images, extensions, identities, or egress are not standardized. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -1944,24 +1545,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 197 - Ensure that 'Data encryption' is set to 'On' on a SQL Database
 - **Folder:** `SLZ/Database/ID197`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/servers/databases`, `Microsoft.Sql/servers/databases/transparentDataEncryption`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL databases and Azure SQL database TDE settings and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure SQL databases and Azure SQL database TDE settings are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Sql/servers/databases`, `Microsoft.Sql/servers/databases/transparentDataEncryption` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Sql/servers/databases`, `Microsoft.Sql/servers/databases/transparentDataEncryption` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -1970,7 +1564,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 204 - Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server FLEXIBLE
 - **Folder:** `SLZ/Database/ID204`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations`
 - **Cost impact:** No
@@ -1981,13 +1574,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -1996,7 +1583,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 204 - Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server SINGLE
 - **Folder:** `SLZ/Database/ID204`
-- **Category:** `SQL`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`
 - **Cost impact:** No
@@ -2007,13 +1593,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Disabled`, `Deny`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -2022,7 +1602,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 205 - Ensure Server Parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Flexible Server
 - **Folder:** `SLZ/Database/ID205`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations`
 - **Cost impact:** No
@@ -2033,13 +1612,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2048,7 +1621,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 205 - Ensure Server Parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server
 - **Folder:** `SLZ/Database/ID205`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations`
 - **Cost impact:** No
@@ -2059,13 +1631,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2074,7 +1640,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 206 - Log connections should be enabled for PostgreSQL database servers
 - **Folder:** `SLZ/Database/ID206`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations`
 - **Cost impact:** No
@@ -2085,13 +1650,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2100,7 +1659,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 207 - Disconnections should be logged for PostgreSQL database servers.
 - **Folder:** `SLZ/Database/ID207`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations`
 - **Cost impact:** No
@@ -2111,13 +1669,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2126,7 +1678,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 208 - Connection throttling should be enabled for PostgreSQL database servers FLEXIBLE
 - **Folder:** `SLZ/Database/ID208`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations`
 - **Cost impact:** No
@@ -2137,13 +1688,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2152,7 +1697,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 208 - Connection throttling should be enabled for PostgreSQL database servers
 - **Folder:** `SLZ/Database/ID208`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations`
 - **Cost impact:** No
@@ -2163,13 +1707,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2178,7 +1716,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 210 - Public network access should be disabled for PostgreSQL flexible servers
 - **Folder:** `SLZ/Database/ID210`
-- **Category:** `SQL`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
@@ -2189,13 +1726,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Common false positives / exceptions:** Temporary migration endpoints, vendor-managed services, or services without private endpoint support may need scoped exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service missing a private endpoint/private link configuration or still allowing public access.
 
 **Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -2204,7 +1735,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 210 - Public network access should be disabled for PostgreSQL servers
 - **Folder:** `SLZ/Database/ID210`
-- **Category:** `SQL`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
@@ -2215,13 +1745,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Common false positives / exceptions:** Temporary migration endpoints, vendor-managed services, or services without private endpoint support may need scoped exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service missing a private endpoint/private link configuration or still allowing public access.
 
 **Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -2230,7 +1754,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 212 - Ensure 'Enforce SSL connection' is set to 'Enabled' for Standard MySQL Database Server
 - **Folder:** `SLZ/Database/ID212`
-- **Category:** `Storage`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforMySQL/servers`
 - **Cost impact:** No
@@ -2241,13 +1764,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -2256,7 +1773,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 214 - Ensure server parameter 'audit_log_enabled' is set to 'ON' for MySQL Database Server
 - **Folder:** `SLZ/Database/ID214`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforMySQL/flexibleServers`, `Microsoft.DBforMySQL/flexibleServers/configurations`
 - **Cost impact:** No
@@ -2267,13 +1783,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2282,7 +1792,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 215 - Ensure server parameter 'audit_log_events' has 'CONNECTION' set for MySQL Database Server
 - **Folder:** `SLZ/Database/ID215`
-- **Category:** `SQL`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforMySQL/flexibleServers`, `Microsoft.DBforMySQL/flexibleServers/configurations`
 - **Cost impact:** No
@@ -2293,13 +1802,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Common false positives / exceptions:** Legacy database engines, migration windows, or vendor-managed appliances may not support the required setting immediately.
-
-**Evidence / compliance signal:** Compliance evidence is the database/server child setting or server property not matching the required audit, logging, encryption, TLS, firewall, or authentication value.
 
 **Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2308,7 +1811,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 216 - Ensure That 'Firewalls & Networks' Is Limited to use selected Networks Instead of All Networks
 - **Folder:** `SLZ/Database/ID216`
-- **Category:** `Storage`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
 - **Cost impact:** No
@@ -2319,13 +1821,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; The desired effect of the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -2334,7 +1830,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 217 - CosmosDB accounts should use private link
 - **Folder:** `SLZ/Database/ID217`
-- **Category:** `Cosmos DB`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
@@ -2345,13 +1840,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Disabled`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Common false positives / exceptions:** Temporary migration endpoints, vendor-managed services, or services without private endpoint support may need scoped exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service missing a private endpoint/private link configuration or still allowing public access.
 
 **Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -2360,7 +1849,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 218 - Cosmos DB database accounts should have local authentication methods disabled
 - **Folder:** `SLZ/Database/ID218`
-- **Category:** `Cosmos DB`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
 - **Cost impact:** No
@@ -2371,13 +1859,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -2386,7 +1868,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1397 - Configure Microsoft Defender for CSPM
 - **Folder:** `SLZ/Defender/ID1397`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2397,13 +1878,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `isSensitiveDataDiscoveryEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Sensitive Data Discovery add-on feature); `isContainerRegistriesVulnerabilityAssessmentsEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Container Registries Vulnerability Assessments add-on feature); `isAgentlessDiscoveryForKubernetesEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Agentless Discovery for Kubernetes add-on feature); `isAgentlessVmScanningEnabled` (default `false`; allowed `true`, `false`; Enable or disable the Agentless VM Scanning add-on feature); `isEntraPermissionsManagementEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Permissions Management add-on feature).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. Audit-only assignment is not supported by the current effect parameterization and requires a policy change or exclusion.
 
@@ -2412,7 +1887,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 153 - Configure Microsoft Defender Endpoint Integration
 - **Folder:** `SLZ/Defender/ID153.2`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/settings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2423,13 +1897,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2438,7 +1906,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 153 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Servers
 - **Folder:** `SLZ/Defender/ID153`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2449,13 +1916,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `subPlan` (default `P2`; allowed `P1`, `P2`; Select a Defender for Servers plan); `isAgentlessVmScanningEnabled` (default `false`; allowed `true`, `false`; Enable or disable the Agentless VM Scanning add-on feature); `isMdeDesignatedSubscriptionEnabled` (default `false`; allowed `true`, `false`; Enable or disable the MDE Designated Subscription add-on feature).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. Audit-only assignment is not supported by the current effect parameterization and requires a policy change or exclusion.
 
@@ -2464,7 +1925,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 154 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Application Services
 - **Folder:** `SLZ/Defender/ID154`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2475,13 +1935,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Effect).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2490,7 +1944,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 156 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (Azure SQL Databases)
 - **Folder:** `SLZ/Defender/ID156`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2501,13 +1954,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Effect).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2516,7 +1963,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 157 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (SQL servers on machines)
 - **Folder:** `SLZ/Defender/ID157`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2527,13 +1973,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Effect).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2542,7 +1982,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 158 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for OpenDB (Open-source relational db)
 - **Folder:** `SLZ/Defender/ID158`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2553,13 +1992,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Effect).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2568,7 +2001,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 159 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Storage
 - **Folder:** `SLZ/Defender/ID159`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2579,13 +2011,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. Audit-only assignment is not supported by the current effect parameterization and requires a policy change or exclusion.
 
@@ -2594,7 +2020,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 161 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (Azure Cosmos Db)
 - **Folder:** `SLZ/Defender/ID161`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2605,13 +2030,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Effect).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2620,7 +2039,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 162 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Key Vaults
 - **Folder:** `SLZ/Defender/ID162`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2631,13 +2049,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Effect).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2646,7 +2058,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 164 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Resource Manager
 - **Folder:** `SLZ/Defender/ID164`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2657,13 +2068,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Effect).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2672,7 +2077,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 168 - Configure machines to receive a vulnerability assessment provider
 - **Folder:** `SLZ/Defender/ID168`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.HybridCompute/machines`, `Microsoft.Security/assessments`, `Microsoft.Compute/virtualMachines/providers/serverVulnerabilityAssessments`, `Microsoft.HybridCompute/machines/providers/serverVulnerabilityAssessments`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2683,13 +2087,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Enable or disable the execution of the policy); `vaType` (default `mdeTvm`; allowed `default`, `mdeTvm`; Select the vulnerability assessment solution to provision to machines.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2698,7 +2096,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 00 - Configure Microsoft Defender for CONTAINERS
 - **Folder:** `SLZ/Defender/IDdefender`
-- **Category:** `Security Center`
 - **Allowed effects:** `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
 - **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
@@ -2709,13 +2106,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `Disabled`, `AuditIfNotExists`; Enable or disable the execution of the policy); `isContainerRegistriesVulnerabilityAssessmentsEnabled` (default `true`; allowed `true`, `false`; Controls the container registries vulnerability assessments add-on).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Common false positives / exceptions:** Subscriptions intentionally outside Defender coverage, trial migrations, or centrally managed security plans may need explicit exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the subscription security pricing or Defender setting not matching the required plan value.
 
 **Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -2724,24 +2115,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 78 - Designate allowed resource deployment region
 - **Folder:** `SLZ/General/ID078`
-- **Category:** `General`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks where Azure resources are deployed and makes sure deployments stay within the allowed regions or geographies. In audit mode it shows which resources are outside the approved location list.
 
-**How to align the environment:** Constrain deployment locations in IaC and subscription vending pipelines to the approved region list, with documented exceptions for unavailable services.
+**How to align the environment:** Constrain deployment locations in Terraform and subscription vending processes to the approved region list, with documented exceptions for unavailable services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `listOfAllowedLocations` (default no default; allowed `global`, `europe`, `northeurope`, `westeurope`, `francecentral`, `germanywestcentral`, `norwayeast`, `polandcentral`, plus 6 more; The list of locations that can be specified when deploying resources.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
-
-**Common false positives / exceptions:** Services with limited regional availability or disaster-recovery resources may need approved location exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a resource or resource group deployed outside the allowed location list.
 
 **Potential issues:** Allowed location policies need regular review as Azure service regional availability changes. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -2750,7 +2134,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.1 - Ensure API Management in PROD does not use Basic or Consumption SKU
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -2761,13 +2144,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -2776,7 +2153,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.10 - Ensure AKS in PROD does not use Free tier
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -2787,13 +2163,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -2802,33 +2172,25 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.11 - Ensure Load Balancer in PROD does not use Basic SKU
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/loadBalancers`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Network/loadBalancers` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-slz-238-12-vpngwprodnobasictier"></a>
 ### SLZ-238.12-VpnGwProdNoBasicTier
 
 - **Display name:** SLZ - 238.12 - Ensure VPN Gateway in PROD does not use Basic tier
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworkGateways`
 - **Cost impact:** No
@@ -2839,13 +2201,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -2854,7 +2210,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.13 - Ensure Azure Cognitive Search in PROD does not use Free or Basic SKU
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Search/searchServices`
 - **Cost impact:** No
@@ -2865,13 +2220,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -2880,7 +2229,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.14 - Ensure Azure SignalR in PROD does not use Free tier
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.SignalRService/SignalR`
 - **Cost impact:** No
@@ -2891,13 +2239,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -2906,7 +2248,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.2 - Ensure App Configuration in PROD does not use Free SKU
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.AppConfiguration/configurationStores`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -2917,13 +2258,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -2932,7 +2267,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.3 - Ensure App Service Plan in PROD does not use Free, Shared, or Basic SKUs
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/serverfarms`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -2943,13 +2277,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -2958,7 +2286,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.4 - Ensure Azure Data Explorer in PROD does not use Developer Tier
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Kusto/clusters`
 - **Cost impact:** No
@@ -2969,13 +2296,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -2984,7 +2305,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.5 - Ensure Azure Databricks in PROD does not use Standard or Trial SKU
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Databricks/workspaces`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -2995,13 +2315,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -3010,7 +2324,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.6 - Ensure Disks in PROD are not using Standard HDD (Standard_LRS)
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Compute/disks`
 - **Cost impact:** No
@@ -3021,13 +2334,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -3036,7 +2343,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.7 - Ensure ACR in PROD does not use Basic SKU
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ContainerRegistry/registries`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -3047,13 +2353,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -3062,7 +2362,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.8 - Ensure Event Hubs in PROD do not use Basic SKU
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -3073,13 +2372,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -3088,7 +2381,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 238.9 - Ensure Key Vault in PROD does not use Standard SKU
 - **Folder:** `SLZ/General/ID238`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -3099,13 +2391,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -3114,7 +2400,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 272 - Ensure that Resource Locks are set for Mission-Critical
 - **Folder:** `SLZ/General/ID272`
-- **Category:** `General`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions/resourceGroups`, `Microsoft.Authorization/locks`
 - **Cost impact:** No
@@ -3125,13 +2410,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; AuditIfNotExists or Disabled the execution of the Policy); `tagName` (default no default; The Tag name to audit against (i.e. Environment, CostCenter, etc.)); `tagValue` (default no default; Value of the tag to audit against (i.e. Prod/UAT/TEST, 12345, etc.)).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -3140,24 +2419,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 287 - Ensure IAM Users Receive Permissions Only Through Groups
 - **Folder:** `SLZ/General/ID287`
-- **Category:** `RBAC`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Authorization/roleAssignments`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks Azure role assignments and makes sure user access is granted through groups rather than unmanaged direct user assignments. In audit mode it shows which direct user assignments need review or migration to group-based access.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Authorization/roleAssignments` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Authorization/roleAssignments` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -3166,24 +2438,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 617 - Only allowed geo locations
 - **Folder:** `SLZ/General/ID617`
-- **Category:** `General`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks where Azure resources are deployed and makes sure deployments stay within the allowed regions or geographies. In audit mode it shows which resources are outside the approved location list.
 
-**How to align the environment:** Constrain deployment locations in IaC and subscription vending pipelines to the approved region list, with documented exceptions for unavailable services.
+**How to align the environment:** Constrain deployment locations in Terraform and subscription vending processes to the approved region list, with documented exceptions for unavailable services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Choose between 'Audit' or 'Deny' effects.); `listOfAllowedLocations` (default `14 values`; The list of locations that can be specified when deploying resources.).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
-
-**Common false positives / exceptions:** Services with limited regional availability or disaster-recovery resources may need approved location exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a resource or resource group deployed outside the allowed location list.
 
 **Potential issues:** Allowed location policies need regular review as Azure service regional availability changes.
 
@@ -3192,7 +2457,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 01 Guest Configuration - Guest Configuration assignments on Windows
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
-- **Category:** `Guest Configuration`
 - **Allowed effects:** not declared
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration`
 - **Cost impact:** No
@@ -3203,13 +2467,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** None declared.
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. Audit-only assignment is not supported by the current effect parameterization and requires a policy change or exclusion.
 
@@ -3218,7 +2476,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 02 Guest Configuration - Guest Configuration assignments on Linux
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
-- **Category:** `Guest Configuration`
 - **Allowed effects:** not declared
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration`
 - **Cost impact:** No
@@ -3229,13 +2486,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** None declared.
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. Audit-only assignment is not supported by the current effect parameterization and requires a policy change or exclusion.
 
@@ -3244,7 +2495,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 03 Guest Configuration - Add system-assigned on VMs with no identities
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
-- **Category:** `Guest Configuration`
 - **Allowed effects:** not declared
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
 - **Cost impact:** No
@@ -3255,13 +2505,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** None declared.
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. Audit-only assignment is not supported by the current effect parameterization and requires a policy change or exclusion.
 
@@ -3270,7 +2514,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 04 Guest Configuration - Add system-assigned on VMs with User-Assigned identities
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
-- **Category:** `Guest Configuration`
 - **Allowed effects:** not declared
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
 - **Cost impact:** No
@@ -3281,13 +2524,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** None declared.
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. Audit-only assignment is not supported by the current effect parameterization and requires a policy change or exclusion.
 
@@ -3296,631 +2533,462 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 223 - Ensure that logging for Azure Key Vault is 'Enabled'
 - **Folder:** `SLZ/Monitoring/ID223`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`, `Microsoft.Insights/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Key Vaults, keys, or secrets and makes sure logging for Azure Key Vault is 'Enabled'. In audit mode it shows which vaults, keys, or secrets do not meet the required lifecycle, recovery, RBAC, expiry, private access, or rotation setting.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.KeyVault/vaults`, `Microsoft.Insights/diagnosticSettings` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `requiredRetentionDays` (default `365`; The required resource logs retention in days).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-slz-226-logscreatepolicy"></a>
 ### SLZ-226-logsCreatePolicy
 
 - **Display name:** SLZ - 226 - Ensure that Activity Log Alert exists for Create Policy Assignment
 - **Folder:** `SLZ/Monitoring/ID226`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create Policy Assignment operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create Policy Assignment operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create Policy Assignment operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Authorization/policyAssignments/write`; Policy Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-227-logsdeletepolicy"></a>
 ### SLZ-227-logsDeletePolicy
 
 - **Display name:** SLZ - 227 - Ensure that Activity Log Alert exists for Delete Policy Assignment
 - **Folder:** `SLZ/Monitoring/ID227`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Policy Assignment operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Policy Assignment operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Policy Assignment operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Authorization/policyAssignments/delete`; Policy Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-228-logscreateupdatensg"></a>
 ### SLZ-228-logsCreateUpdateNsg
 
 - **Display name:** SLZ - 228 - Ensure that Activity Log Alert exists for Create or Update Network Security Group
 - **Folder:** `SLZ/Monitoring/ID228`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update Network Security Group operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update Network Security Group operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update Network Security Group operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/networkSecurityGroups/write`; Administrative Operation name for which activity log alert should be configured).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-229-logsdeletensg"></a>
 ### SLZ-229-logsDeleteNsg
 
 - **Display name:** SLZ - 229 - Ensure that Activity Log Alert exists for Delete Network Security Group
 - **Folder:** `SLZ/Monitoring/ID229`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Network Security Group operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Network Security Group operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Network Security Group operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/networkSecurityGroups/delete`; Administrative Operation name for which activity log alert should be configured).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-230-logscreateupdatesecuritysolutions"></a>
 ### SLZ-230-logsCreateUpdateSecuritySolutions
 
 - **Display name:** SLZ - 230 - Ensure that Activity Log Alert exists for Create or Update Security Solution
 - **Folder:** `SLZ/Monitoring/ID230`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update Security Solution operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update Security Solution operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update Security Solution operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Security/securitySolutions/write`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-231-logsdeletesecuritysolutions"></a>
 ### SLZ-231-logsDeleteSecuritySolutions
 
 - **Display name:** SLZ - 231 - Ensure that Activity Log Alert exists for Delete Security Solution
 - **Folder:** `SLZ/Monitoring/ID231`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Security Solution operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Security Solution operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Security Solution operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Security/securitySolutions/delete`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-232-logscreateupdatesqlserverfirewallrule"></a>
 ### SLZ-232-logsCreateUpdateSqlServerFirewallRule
 
 - **Display name:** SLZ - 232 - Ensure that Activity Log Alert exists for Create or Update SQL Server Firewall Rule
 - **Folder:** `SLZ/Monitoring/ID232`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update SQL Server Firewall Rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update SQL Server Firewall Rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update SQL Server Firewall Rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Sql/servers/firewallRules/write`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-233-logsdeletesqlserverfirewallrule"></a>
 ### SLZ-233-logsDeleteSqlServerFirewallRule
 
 - **Display name:** SLZ - 233 - Ensure that Activity Log Alert exists for Delete SQL Server Firewall Rule
 - **Folder:** `SLZ/Monitoring/ID233`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete SQL Server Firewall Rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete SQL Server Firewall Rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete SQL Server Firewall Rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Sql/servers/firewallRules/delete`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-234-logscreateorupdatepubliciprule"></a>
 ### SLZ-234-logsCreateOrUpdatePublicIpRule
 
 - **Display name:** SLZ - 234 - Ensure that Activity Log Alert exists for Create or Update Public IP Address rule
 - **Folder:** `SLZ/Monitoring/ID234`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update Public IP Address rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update Public IP Address rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update Public IP Address rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/publicIPAddresses/write`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-235-logsdeletepubliciprule"></a>
 ### SLZ-235-logsDeletePublicIpRule
 
 - **Display name:** SLZ - 235 - Ensure that Activity Log Alert exists for Delete Public IP Address rule
 - **Folder:** `SLZ/Monitoring/ID235`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Public IP Address rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured, so monitoring gaps can be fixed or explicitly accepted.
+**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Public IP Address rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Public IP Address rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/publicIPAddresses/delete`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-236-1-webappsnoinsights"></a>
 ### SLZ-236.1-webAppsNoInsights
 
 - **Display name:** SLZ - 236.1 - Audit Web Apps without Application Insights
 - **Folder:** `SLZ/Monitoring/ID236`
-- **Category:** `Monitoring`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure web Apps without Application Insights. In audit mode it shows which App Service apps are not compliant with that requirement.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Web/sites` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-slz-236-2-functionappsnoinsights"></a>
 ### SLZ-236.2-functionAppsNoInsights
 
 - **Display name:** SLZ - 236.2 - Audit Function Apps without Application Insights
 - **Folder:** `SLZ/Monitoring/ID236`
-- **Category:** `Monitoring`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure function Apps without Application Insights. In audit mode it shows which App Service apps are not compliant with that requirement.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Web/sites` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-slz-236-3-logicappsnoinsights"></a>
 ### SLZ-236.3-logicAppsNoInsights
 
 - **Display name:** SLZ - 236.3 - Audit Logic Apps without Application Insights
 - **Folder:** `SLZ/Monitoring/ID236`
-- **Category:** `Monitoring`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Logic/workflows`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks Logic Apps workflows and makes sure logic Apps without Application Insights. In audit mode it shows which Logic Apps workflows are not compliant with that requirement.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Logic/workflows` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-slz-324-logscreatesecuritygroups"></a>
 ### SLZ-324-logsCreateSecurityGroups
 
 - **Display name:** SLZ - 324 - Ensure a log metric filter and alarm exist for Create security group changes
 - **Folder:** `SLZ/Monitoring/ID324`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/networkSecurityGroups/securityRules/write`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-324-logsdeletesecuritygroup"></a>
 ### SLZ-324-logsDeleteSecurityGroup
 
 - **Display name:** SLZ - 324 - Ensure a log metric filter and alarm exist for Delete security group changes
 - **Folder:** `SLZ/Monitoring/ID324`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/networkSecurityGroups/securityRules/delete`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-326-logscreatenetworkgateway"></a>
 ### SLZ-326-logsCreateNetworkGateway
 
 - **Display name:** SLZ - 326 - Ensure a log metric filter and alarm exist for Create Network Gateway
 - **Folder:** `SLZ/Monitoring/ID326`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/virtualNetworkGateways/write`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-326-logsdeletenetworkgateway"></a>
 ### SLZ-326-logsDeleteNetworkGateway
 
 - **Display name:** SLZ - 326 - Ensure a log metric filter and alarm exist for Delete Network Gateway
 - **Folder:** `SLZ/Monitoring/ID326`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/virtualNetworkGateways/delete`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-327-logscreateroutetables"></a>
 ### SLZ-327-logsCreateRouteTables
 
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Create Route Tables
 - **Folder:** `SLZ/Monitoring/ID327`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/routeTables/write`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-327-logscreateroutetablesroute"></a>
 ### SLZ-327-logsCreateRouteTablesRoute
 
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Create Route Tables Route
 - **Folder:** `SLZ/Monitoring/ID327`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/routeTables/routes/write`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-327-logsdeletesecuritygroup"></a>
 ### SLZ-327-logsDeleteSecurityGroup
 
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Delete Route Tables
 - **Folder:** `SLZ/Monitoring/ID327`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/routeTables/delete`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-327-logsdeletesecuritygrouproute"></a>
 ### SLZ-327-logsDeleteSecurityGroupRoute
 
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Delete Route Tables Route
 - **Folder:** `SLZ/Monitoring/ID327`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/routeTables/routes/delete`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-328-logscreatevirtualnetwork"></a>
 ### SLZ-328-logsCreateVirtualNetwork
 
 - **Display name:** SLZ - 328 - Ensure a log metric filter and alarm exist for Create Virtual Networks
 - **Folder:** `SLZ/Monitoring/ID328`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/virtualNetworks/write`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-328-logsdeletevirtualnetworks"></a>
 ### SLZ-328-logsDeleteVirtualNetworks
 
 - **Display name:** SLZ - 328 - Ensure a log metric filter and alarm exist for Delete Virtual Networks
 - **Folder:** `SLZ/Monitoring/ID328`
-- **Category:** `Monitoring`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `operationName` (default no default; allowed `Microsoft.Network/virtualNetworks/delete`; Security Operation name for which activity log alert should exist).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
+**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-10-6-disablepublicnetworkwebapps"></a>
 ### SLZ-10.6-DisablePublicNetworkWebApps
 
 - **Display name:** SLZ - 10.6 - Public Network Access Control for Web Apps
 - **Folder:** `SLZ/Network/ID10.6`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
 - **Cost impact:** Yes - WAF-capable Application Gateway or Front Door SKU.
@@ -3931,13 +2999,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -3946,7 +3008,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1325 - Web Application Firewall (WAF) Must Be Enabled on Application Gateways
 - **Folder:** `SLZ/Network/ID1325`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled` (declared under `metadata`; schema should be fixed)
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`
 - **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
@@ -3957,13 +3018,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (intended default `Audit` declared under metadata; intended allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
-
-**Common false positives / exceptions:** Internal-only apps, non-HTTP workloads, or shared ingress services may be valid exceptions when protected elsewhere.
-
-**Evidence / compliance signal:** Compliance evidence is an ingress resource missing WAF mode, WAF policy, or a required WAF-capable SKU.
 
 **Potential issues:** The effect parameter metadata is malformed in this definition. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
@@ -3972,7 +3027,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1326 - Application Gateway Must Use WAF_v2 SKU
 - **Folder:** `SLZ/Network/ID1326`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled` (declared under `metadata`; schema should be fixed)
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`
 - **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
@@ -3983,13 +3037,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (intended default `Audit` declared under metadata; intended allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
-
-**Common false positives / exceptions:** Internal-only apps, non-HTTP workloads, or shared ingress services may be valid exceptions when protected elsewhere.
-
-**Evidence / compliance signal:** Compliance evidence is an ingress resource missing WAF mode, WAF policy, or a required WAF-capable SKU.
 
 **Potential issues:** The effect parameter metadata is malformed in this definition. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
@@ -3998,7 +3046,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1327 - Azure CDN profiles of type Front Door should have a Web Application Firewall configured
 - **Folder:** `SLZ/Network/ID1327`
-- **Category:** `CDN`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Cdn/profiles`, `Microsoft.Cdn/profiles/securityPolicies`
 - **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
@@ -4009,13 +3056,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
-
-**Common false positives / exceptions:** Internal-only apps, non-HTTP workloads, or shared ingress services may be valid exceptions when protected elsewhere.
-
-**Evidence / compliance signal:** Compliance evidence is an ingress resource missing WAF mode, WAF policy, or a required WAF-capable SKU.
 
 **Potential issues:** Some definitions without an exposed audit effect cannot be used as-is for reporting-only assignment.
 
@@ -4024,7 +3065,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1328 - Web Application Firewall (WAF) should use the specified mode for Azure Front Door Service
 - **Folder:** `SLZ/Network/ID1328`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/frontdoorwebapplicationfirewallpolicies`
 - **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
@@ -4035,13 +3075,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `modeRequirement` (default `Detection`; allowed `Prevention`, `Detection`; Mode required for all WAF policies).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
-
-**Common false positives / exceptions:** Internal-only apps, non-HTTP workloads, or shared ingress services may be valid exceptions when protected elsewhere.
-
-**Evidence / compliance signal:** Compliance evidence is an ingress resource missing WAF mode, WAF policy, or a required WAF-capable SKU.
 
 **Potential issues:** Some definitions without an exposed audit effect cannot be used as-is for reporting-only assignment.
 
@@ -4050,7 +3084,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1329 - Public Network Access Control for Function Apps
 - **Folder:** `SLZ/Network/ID1329`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
 - **Cost impact:** Yes - WAF-capable Application Gateway or Front Door SKU.
@@ -4061,13 +3094,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4076,7 +3103,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1330 - Ensure Private Endpoint for Azure API Management Services
 - **Folder:** `SLZ/Network/ID1330`
-- **Category:** `not declared`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
@@ -4087,13 +3113,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Audit non-compliant resources or disable the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Common false positives / exceptions:** Temporary migration endpoints, vendor-managed services, or services without private endpoint support may need scoped exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service missing a private endpoint/private link configuration or still allowing public access.
 
 **Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete.
 
@@ -4102,7 +3122,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1331 - Ensure Public network access must be Disabled
 - **Folder:** `SLZ/Network/ID1331`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled` (declared under `metadata`; schema should be fixed)
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
 - **Cost impact:** No
@@ -4113,13 +3132,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (intended default `Audit` declared under metadata; intended allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
@@ -4128,7 +3141,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1331.2 - Ensure Public network access must be Disabled for API management with Private Endpoints
 - **Folder:** `SLZ/Network/ID1331`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled` (declared under `metadata`; schema should be fixed)
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
@@ -4139,13 +3151,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (intended default `Audit` declared under metadata; intended allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Common false positives / exceptions:** Temporary migration endpoints, vendor-managed services, or services without private endpoint support may need scoped exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service missing a private endpoint/private link configuration or still allowing public access.
 
 **Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
@@ -4154,7 +3160,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1332 - Enforce Allowed SKUs for Azure API Management Service
 - **Folder:** `SLZ/Network/ID1332`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -4165,13 +3170,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `listOfAllowedSKUs` (default `["Developer", "Premium", "Isolated", "Standard", "Basic"]`; allowed `Developer`, `Basic`, `BasicV2`, `Standard`, `StandardV2`, `Premium`, `Isolated`, `Consumption`; The list of SKUs permitted for Azure API Management service.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires teams to select approved production SKUs in IaC and budget for higher service tiers where needed.
-
-**Common false positives / exceptions:** Development, sandbox, trial, or cost-controlled non-production workloads may intentionally use lower SKUs.
-
-**Evidence / compliance signal:** Compliance evidence is a production-tagged or in-scope resource using a disallowed free, basic, trial, developer, or low-cost SKU.
+**Operational impact:** Requires teams to select approved production SKUs in Terraform-managed deployments and budget for higher service tiers where needed.
 
 **Potential issues:** Production SKU checks depend on reliable environment tagging or scoping; otherwise development resources may be incorrectly reported.
 
@@ -4180,7 +3179,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1333 - Network Interfaces Should Not Have Public IPs
 - **Folder:** `SLZ/Network/ID1333`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/networkInterfaces`
 - **Cost impact:** No
@@ -4191,13 +3189,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4206,7 +3198,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1334 - Kubernetes Clusters Should Use Internal Load Balancers
 - **Folder:** `SLZ/Network/ID1334`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
 - **Cost impact:** No
@@ -4217,13 +3208,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `source` (default `Original`; allowed `All`, `Generated`, `Original`; The source k8s object for constraint evaluation. 'Original' means evaluate only the GroupVersionKind specified. 'Generated' means evaluate only Gatekeeper ExpansionTemplates. 'A...); `warn` (default `False`; Whether or not to return warnings back to the user in the kubectl CLI.); `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Controls how policy violations are handled. 'Audit' flags non-compliant resources. 'Deny' blocks them. 'Disabled' turns off the policy.); `excludedNamespaces` (default `["kube-system", "gatekeeper-system", "azure-arc", "azure-extensions-usage-system"]`; List of namespaces to exclude from policy evaluation. System namespaces 'kube-system', 'gatekeeper-system', and 'azure-arc' are always excluded by design.); `namespaces` (default `[]`; List of namespaces to include in the policy evaluation. An empty list means all namespaces are included.); `labelSelector` (default `object value`; Label query to select Kubernetes resources for policy evaluation. An empty selector matches all resources.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -4232,24 +3217,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1335 - Prevent Public IP on AKS Node Pools
 - **Folder:** `SLZ/Network/ID1335`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled` (declared under `metadata`; schema should be fixed)
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks Azure Kubernetes Service clusters and makes sure public network access or public IP exposure is disabled or limited to the approved access pattern. In audit mode it shows which Azure Kubernetes Service clusters still allow public access and need review.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.ContainerService/managedClusters` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.ContainerService/managedClusters` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (intended default `Audit` declared under metadata; intended allowed `Audit`, `Deny`, `Disabled`; Enforce, audit, or disable this policy enforcement.).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
@@ -4258,7 +3236,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1336 - Container Apps Environment Should Disable Public Network Access
 - **Folder:** `SLZ/Network/ID1336`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled` (declared under `metadata`; schema should be fixed)
 - **Affected Azure resource types:** `Microsoft.App/managedEnvironments`
 - **Cost impact:** No
@@ -4269,13 +3246,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (intended default `Audit` declared under metadata; intended allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
@@ -4284,24 +3255,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1337 - Container Apps Should Disable External Network Access
 - **Folder:** `SLZ/Network/ID1337`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled` (declared under `metadata`; schema should be fixed)
 - **Affected Azure resource types:** `Microsoft.App/containerApps`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks Container Apps and makes sure container Apps Should Disable External Network Access. In audit mode it shows which Container Apps are not compliant with that requirement.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.App/containerApps` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.App/containerApps` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (intended default `Audit` declared under metadata; intended allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
@@ -4310,7 +3274,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1338 - Web Application Firewall (WAF) should use the specified mode for Application Gateway
 - **Folder:** `SLZ/Network/ID1338`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGatewayWebApplicationFirewallPolicies`
 - **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
@@ -4321,13 +3284,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `modeRequirement` (default `Detection`; allowed `Prevention`, `Detection`; Mode required for all WAF policies).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
-
-**Common false positives / exceptions:** Internal-only apps, non-HTTP workloads, or shared ingress services may be valid exceptions when protected elsewhere.
-
-**Evidence / compliance signal:** Compliance evidence is an ingress resource missing WAF mode, WAF policy, or a required WAF-capable SKU.
 
 **Potential issues:** Some definitions without an exposed audit effect cannot be used as-is for reporting-only assignment.
 
@@ -4336,24 +3293,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 239 - Ensure that RDP access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID239`
-- **Category:** `Guest Configuration`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose RDP access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose RDP access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4362,24 +3312,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 240 - Ensure that SSH access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID240`
-- **Category:** `Guest Configuration`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose SSH access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose SSH access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4388,24 +3331,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 241 - Ensure that UDP access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID241`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose the restricted service or administration port access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose the restricted service or administration port access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4414,24 +3350,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 242 - Ensure that HTTP access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID242`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose HTTP access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose HTTP access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4440,24 +3369,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 244 - Ensure that Network Watcher is 'Enabled'
 - **Folder:** `SLZ/Network/ID244`
-- **Category:** `Network`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworks`, `Microsoft.Network/networkWatchers`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks virtual networks and Network Watcher resources and makes sure network Watcher is 'Enabled'. In audit mode it shows which virtual networks and Network Watcher resources are not compliant with that requirement.
 
-**How to align the environment:** Constrain deployment locations in IaC and subscription vending pipelines to the approved region list, with documented exceptions for unavailable services.
+**How to align the environment:** Constrain deployment locations in Terraform and subscription vending processes to the approved region list, with documented exceptions for unavailable services.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
-
-**Common false positives / exceptions:** Services with limited regional availability or disaster-recovery resources may need approved location exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a resource or resource group deployed outside the allowed location list.
 
 **Potential issues:** Allowed location policies need regular review as Azure service regional availability changes. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -4466,24 +3388,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 332 - Ensure no security groups allow ingress from 0.0.0.0/0 to remote server administration ports
 - **Folder:** `SLZ/Network/ID332`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose RDP access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose RDP access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4492,24 +3407,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 333 - Ensure no security groups allow ingress from ::/0 to remote server administration ports
 - **Folder:** `SLZ/Network/ID333`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks Network Security Group rules and makes sure no security groups allow ingress from ::/0 to remote server administration ports. In audit mode it shows which Network Security Group rules are not compliant with that requirement.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Network/networkSecurityGroups/securityRules` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Network/networkSecurityGroups/securityRules` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -4518,7 +3426,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 629 - Enforce DDoS Protection
 - **Folder:** `SLZ/Network/ID629`
-- **Category:** `Network`
 - **Allowed effects:** `auditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworks`, `Microsoft.Resources/deployments`
 - **Cost impact:** Yes [High impact] - Azure DDoS Protection plan.
@@ -4529,13 +3436,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `auditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `planId` (default no default; DDoS Protection Plan resource to be associated to the virtual networks).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires a DDoS Protection plan and consistent virtual network association model.
-
-**Common false positives / exceptions:** Small isolated subscriptions or networks protected by another approved perimeter may be exception candidates.
-
-**Evidence / compliance signal:** Compliance evidence is a virtual network that is not associated with the required DDoS Protection plan.
 
 **Potential issues:** DDoS plan requirements can be expensive and may not fit every subscription without central network architecture decisions. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -4544,24 +3445,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 983 - Ensure that FTP access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID983`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose the restricted service or administration port access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose the restricted service or administration port access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `ports` (default `["20", "21"]`; FTP ports to be blocked).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4570,24 +3464,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 984 - Ensure that MongoDB access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID984`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose MongoDB access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose MongoDB access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `ports` (default `["27017", "27018"]`; MongoDB ports to be blocked).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4596,24 +3483,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 985 - Ensure that Cassandra access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID985`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Cassandra access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Cassandra access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `ports` (default `["7199", "9160", "8888"]`; Cassandra ports to be blocked).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4622,24 +3502,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 986 - Ensure that Elasticsearch/Kibana  access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID986`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Elasticsearch/Kibana access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Elasticsearch/Kibana access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `ports` (default `["9200", "9300", "5601"]`; Elasticsearch/Kibana ports to be blocked).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4648,24 +3521,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 987 - Ensure that Kafka access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID987`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Kafka access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Kafka access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4674,24 +3540,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 988 - Ensure that Memcached access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID988`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Memcached access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Memcached access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4700,24 +3559,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 989 - Ensure that MySQL access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID989`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose MySQL access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose MySQL access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4726,24 +3578,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 990 - Ensure that Oracle access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID990`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose the restricted service or administration port access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose the restricted service or administration port access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `ports` (default `["1521", "2483"]`; Oracle ports to be blocked).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4752,24 +3597,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 991 - Ensure that Postgres access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID991`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose PostgreSQL access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose PostgreSQL access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4778,24 +3616,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 992 - Ensure that Redis access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID992`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Redis access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Redis access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4804,24 +3635,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 993 - Ensure that Windows SQL Server access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID993`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose SQL Server access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose SQL Server access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `ports` (default `["1433", "1434"]`; Windows SQL Server ports to be blocked).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4830,24 +3654,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 994 - Ensure that Telnet access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID994`
-- **Category:** `Network`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Telnet access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure so they can be removed, narrowed, or formally exempted.
+**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Telnet access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
@@ -4856,7 +3673,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1340 - App Service apps should use the latest tls version
 - **Folder:** `SLZ/Security/ID1340`
-- **Category:** `Security`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
@@ -4867,13 +3683,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -4882,7 +3692,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1341 - App Service app slots should use the latest TLS version
 - **Folder:** `SLZ/Security/ID1341`
-- **Category:** `Security`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
@@ -4893,13 +3702,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Effect).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -4908,7 +3711,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1342 - Configure Function apps to use the latest TLS version
 - **Folder:** `SLZ/Security/ID1342`
-- **Category:** `Security`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
@@ -4919,13 +3721,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -4934,7 +3730,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1343 - Configure Function app slots to use the latest TLS version
 - **Folder:** `SLZ/Security/ID1343`
-- **Category:** `Security`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
@@ -4945,13 +3740,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -4960,7 +3749,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1344 - Configure Logic Apps to use the latest TLS version
 - **Folder:** `SLZ/Security/ID1344`
-- **Category:** `Security`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
@@ -4971,13 +3759,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -4986,7 +3768,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1345 - Azure Cache for Redis only secure connections should be enabled
 - **Folder:** `SLZ/Security/ID1345`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Cache/redis`
 - **Cost impact:** No
@@ -4997,13 +3778,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `minimumtlsVersion` (default `1.2`; allowed `1.2`; Specify the minimum TLS version required for secure connections.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5012,7 +3787,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1346 - Azure Front Door Standard and Premium should be running minimum TLS version of 1.2
 - **Folder:** `SLZ/Security/ID1346`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Cdn/profiles/customDomains`
 - **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
@@ -5023,13 +3797,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5038,7 +3806,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1347 - Event Hub namespaces should have the specified minimum TLS version
 - **Folder:** `SLZ/Security/ID1347`
-- **Category:** `Security`
 - **Allowed effects:** `Deny`, `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`
 - **Cost impact:** No
@@ -5049,13 +3816,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `minimumtlsVersion` (default `1.2`; allowed `1.0`, `1.1`, `1.2`; Minimum version of TLS required to access data in the Event Hub Namespace); `effect` (default `Audit`; allowed `Deny`, `Audit`, `Disabled`; Deny, Audit or Disabled the execution of the Policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5064,7 +3825,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1348 - Azure Storage should have minimum TLS version
 - **Folder:** `SLZ/Security/ID1348`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
@@ -5075,13 +3835,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `tlsVersionRequired` (default `tls1_2`; The TLS version that should be configured on the Storage Account); `effect` (default `Audit`; allowed `Audit`, `Disabled`, `Deny`; Audit or Disabled the execution of the Policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5090,7 +3844,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1349 - Azure Active Directory Domain Services managed domains should use tls 1.2 only mode
 - **Folder:** `SLZ/Security/ID1349`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.AAD/domainServices`
 - **Cost impact:** No
@@ -5101,13 +3854,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5116,7 +3863,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1350 - Azure COSMOS Database should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1350`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
 - **Cost impact:** No
@@ -5127,13 +3873,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5142,7 +3882,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1351 - SQL Managed Instance should have the minimal tls version of 1.2
 - **Folder:** `SLZ/Security/ID1351`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Sql/managedInstances`
 - **Cost impact:** No
@@ -5153,13 +3892,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5168,7 +3901,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1352 - tls protocol 1.2 must be used for Arc SQL managed instances.
 - **Folder:** `SLZ/Security/ID1352`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.AzureArcData/sqlmanagedinstances`
 - **Cost impact:** No
@@ -5179,13 +3911,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5194,7 +3920,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1353 - Azure SQL Database should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1353`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`
 - **Cost impact:** No
@@ -5205,13 +3930,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5220,7 +3939,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1354 - PostgreSQL flexible servers should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1354`
-- **Category:** `Security`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/flexibleServers/configurations`
 - **Cost impact:** No
@@ -5231,13 +3949,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5246,7 +3958,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1355 - Azure MARIA Database should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1355`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.DBForMariaDB/servers`
 - **Cost impact:** No
@@ -5257,13 +3968,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5272,7 +3977,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1356 - Azure Synapse Workspace SQL Server should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1356`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Synapse/workspaces/dedicatedSQLminimaltlsSettings`
 - **Cost impact:** No
@@ -5283,13 +3987,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -5298,24 +3996,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1357 - Azure Kubernetes Clusters should enable Key Management Service (KMS)
 - **Folder:** `SLZ/Security/ID1357`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure Kubernetes Service clusters and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Kubernetes Service clusters still allow the older or less secure protocol setting.
 
-**How to align the environment:** Configure `Microsoft.ContainerService/managedClusters` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.ContainerService/managedClusters` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5324,24 +4015,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1358 - Azure AI Services resources should encrypt data at rest with a customer-managed key (CMK) (only SNC resources)
 - **Folder:** `SLZ/Security/ID1358`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.CognitiveServices/accounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure AI services accounts and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure AI services accounts are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.CognitiveServices/accounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.CognitiveServices/accounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; The effect determines what happens when the policy rule is evaluated to match); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.); `excludedKinds` (default `16 values`; The list of excluded API kinds for customer-managed key, default is the list of API kinds that don't have data stored in Cognitive Services).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5350,24 +4034,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1359 - Azure Automation accounts should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1359`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Automation/automationAccounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Automation Accounts and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Automation Accounts are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Automation/automationAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Automation/automationAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; 'Audit' allows a non-compliant resource to be created or updated, but flags it as non-compliant. 'Deny' blocks the non-compliant resource creation or update. 'Disabled' turns of...); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5376,24 +4053,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1360 - Azure Backup Vaults should use customer-managed keys for encrypting backup data(SNC resources)
 - **Folder:** `SLZ/Security/ID1360`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DataProtection/backupvaults`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks backupvaults and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which backupvaults are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.DataProtection/backupvaults` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.DataProtection/backupvaults` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.); `checkInfrastructureEncryption` (default `False`; allowed `True`, `False`; Check if Infrastructure Encryption is enabled on Backup Vaults. For more details refer to https://aka.ms/az-backup-vault-infra-encryption-at-rest-with-cmk.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5402,24 +4072,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1361 - Azure Batch account should use customer-managed keys to encrypt data (only SNC resources)
 - **Folder:** `SLZ/Security/ID1361`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Batch/batchAccounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure Batch accounts and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure Batch accounts are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Batch/batchAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Batch/batchAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; The desired effect of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5428,24 +4091,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1362 - Azure load testing resource should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1362`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.LoadTestService/loadtests`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks loadtests and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which loadtests are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.LoadTestService/loadtests` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.LoadTestService/loadtests` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy.); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5454,24 +4110,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1363 - Azure Cache for Redis Enterprise should use customer-managed keys for encrypting disk data (only SNC resources)
 - **Folder:** `SLZ/Security/ID1363`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Cache/redisEnterprise`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks redis enterprise and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which redis enterprise are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Cache/redisEnterprise` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Cache/redisEnterprise` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5480,24 +4129,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1364 - Azure Cognitive Search services should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1364`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Search/searchServices`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure AI Search services and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure AI Search services are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Search/searchServices` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Search/searchServices` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5506,24 +4148,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1365 - Azure Container Instance container group should use customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1365`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.ContainerInstance/containerGroups`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks container groups and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which container groups are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.ContainerInstance/containerGroups` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.ContainerInstance/containerGroups` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`, `Deny`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5532,24 +4167,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1366 - Container registries should be encrypted with a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1366`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ContainerRegistry/registries`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Container Registries and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Container Registries are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.ContainerRegistry/registries` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.ContainerRegistry/registries` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5558,24 +4186,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1367 - Azure Cosmos DB accounts should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1367`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure Cosmos DB accounts and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure Cosmos DB accounts are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.DocumentDB/databaseAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.DocumentDB/databaseAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; The desired effect of the policy.); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5584,24 +4205,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1368 - Azure Data Explorer encryption at rest should use a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1368`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Kusto/Clusters`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks clusters and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which clusters are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Kusto/Clusters` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Kusto/Clusters` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5610,24 +4224,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1369 - Azure data factories should be encrypted with a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1369`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DataFactory/factories`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks factories and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which factories are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.DataFactory/factories` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.DataFactory/factories` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5636,24 +4243,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1370 - ElasticSan Volume Group should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1370`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ElasticSan/elasticSans/volumeGroups`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks volume groups and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which volume groups are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.ElasticSan/elasticSans/volumeGroups` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.ElasticSan/elasticSans/volumeGroups` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5662,24 +4262,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1371 - Event Hub namespaces should use a customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1371`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`, `Microsoft.Keyvault`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Event Hubs namespaces and microsoft. keyvault and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Event Hubs namespaces and microsoft. keyvault are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.EventHub/namespaces`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.EventHub/namespaces`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5688,24 +4281,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1372 - Fluid Relay should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1372`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.FluidRelay/fluidRelayServers`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks fluid relay servers and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which fluid relay servers are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.FluidRelay/fluidRelayServers` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.FluidRelay/fluidRelayServers` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5714,50 +4300,36 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1373 - Azure HDInsight clusters should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1373`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.HDInsight/clusters`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
 **Breakdown of what the policy does:** The policy checks clusters and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which clusters are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Update Terraform/Bicep modules for `Microsoft.HDInsight/clusters` to create diagnostic settings that send required logs and metrics to the approved workspace or sink. Backfill existing resources with the same standard.
+**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace or monitoring sink. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
+**Operational impact:** Requires a known Log Analytics workspace or monitoring sink, a decision on which diagnostic categories to collect, and a process to keep manually configured and Terraform-managed resources consistent.
 
-**Operational impact:** Requires consistent diagnostic settings in deployment modules, a known Log Analytics workspace or monitoring sink, and review of ingestion volume and retention.
-
-**Common false positives / exceptions:** Resources can appear non-compliant when diagnostic categories differ by region or API version, when a different approved sink is used, or when the workspace parameter is wrong.
-
-**Evidence / compliance signal:** Compliance evidence is a non-compliant resource missing the expected diagnostic setting, categories, metrics, or workspace/sink association.
-
-**Potential issues:** High log volume can increase Log Analytics costs, and category names are not identical for all resource API versions.
+**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-slz-1374-healthbotssncencryptioncmk"></a>
 ### SLZ-1374-HealthBotsSNCEncryptionCMK
 
 - **Display name:** SLZ - 1374 - Azure Health Bots should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1374`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.HealthBot/healthBots`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks health bots and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which health bots are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.HealthBot/healthBots` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.HealthBot/healthBots` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`; The desired effect of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5766,24 +4338,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1375 - HPC Cache accounts should use customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1375`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`, `Deny`
 - **Affected Azure resource types:** `Microsoft.StorageCache/caches`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks caches and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which caches are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.StorageCache/caches` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.StorageCache/caches` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`, `Deny`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5792,24 +4357,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1376 - Azure IoT Hub should use customer-managed key to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1376`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Devices/IotHubs`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks IoT Hubs and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which IoT Hubs are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Devices/IotHubs` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Devices/IotHubs` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; The desired effect of the policy.); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5818,24 +4376,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1378 - Logic Apps Integration Service Environment should be encrypted with customer-managed keys (only SNC resources)
 - **Folder:** `SLZ/Security/ID1378`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Logic/integrationServiceEnvironments`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks integration service environments and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which integration service environments are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Logic/integrationServiceEnvironments` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Logic/integrationServiceEnvironments` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5844,24 +4395,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1379 - Azure Machine Learning workspaces should be encrypted with a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1379`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.MachineLearningServices/workspaces`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks workspaces and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which workspaces are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.MachineLearningServices/workspaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.MachineLearningServices/workspaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5870,24 +4414,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1380 - Azure Synapse workspaces should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1380`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Synapse/workspaces`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks workspaces and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which workspaces are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Synapse/workspaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Synapse/workspaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5896,24 +4433,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1381 - OS and data disks should be encrypted with a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1381`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, `Microsoft.Compute/images`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks virtual machines, virtual machine scale sets, managed disks, and related resources and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which virtual machines, virtual machine scale sets, managed disks, and related resources are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, and related child resources to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, and related child resources to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to identify resources included in this policy.); `tagValue` (default `SNC`; Value of the tag to identify resources included in this policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5922,24 +4452,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1382 - PostgreSQL flexible servers should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1382`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL flexible servers and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure Database for PostgreSQL flexible servers are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.DBforPostgreSQL/flexibleServers` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.DBforPostgreSQL/flexibleServers` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5948,24 +4471,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1384 - Service Bus Premium namespaces should use a customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1384`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.ServiceBus/namespaces`, `Microsoft.Keyvault`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Service Bus namespaces and microsoft. keyvault and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Service Bus namespaces and microsoft. keyvault are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.ServiceBus/namespaces`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.ServiceBus/namespaces`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -5974,24 +4490,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 1385 - Storage account encryption scopes should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1385`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/encryptionScopes`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks encryption scopes and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which encryption scopes are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Storage/storageAccounts/encryptionScopes` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Storage/storageAccounts/encryptionScopes` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the audit policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -6000,7 +4509,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 213 - Ensure 'TLS Version' is set to 'TLSV1.2' for MySQL flexible Database
 - **Folder:** `SLZ/Security/ID213`
-- **Category:** `Security`
 - **Allowed effects:** `AuditIfNotExists`, `DeployIfNotExists`, `Deny`
 - **Affected Azure resource types:** `Microsoft.DBforMySQL/servers`
 - **Cost impact:** No
@@ -6011,13 +4519,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `DeployIfNotExists`, `Deny`; Enable or disable the execution of the policy); `minimaltlsVersion` (default `tls1_2`; allowed `tls1_2`, `tls1_3`; Select version minimum tls version Azure Database for MySQL server to enforce).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -6026,7 +4528,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 254 - Ensure that the Expiration Date is set for all Keys in Key Vaults (RBAC and Non-RBAC)
 - **Folder:** `SLZ/Security/ID254`
-- **Category:** `Key Vault`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults/keys`
 - **Cost impact:** No
@@ -6037,13 +4538,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires Key Vault configuration standards to be embedded in IaC and operational key or secret lifecycle processes.
-
-**Common false positives / exceptions:** Break-glass vaults, temporary migration secrets, or service-managed key constraints can require narrowly scoped exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a Key Vault, key, or secret missing the required RBAC, recoverability, expiry, rotation, or private access state.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
 **Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
 
@@ -6052,7 +4547,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 256 - Ensure that the Expiration Date is set for all Secrets in Key Vaults (RBAC and Non-RBAC)
 - **Folder:** `SLZ/Security/ID256`
-- **Category:** `Key Vault`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults/secrets`
 - **Cost impact:** No
@@ -6063,13 +4557,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires Key Vault configuration standards to be embedded in IaC and operational key or secret lifecycle processes.
-
-**Common false positives / exceptions:** Break-glass vaults, temporary migration secrets, or service-managed key constraints can require narrowly scoped exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a Key Vault, key, or secret missing the required RBAC, recoverability, expiry, rotation, or private access state.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
 **Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
 
@@ -6078,7 +4566,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 257 - Ensure the Key Vault is Recoverable
 - **Folder:** `SLZ/Security/ID257`
-- **Category:** `Key Vault`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
@@ -6089,13 +4576,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires Key Vault configuration standards to be embedded in IaC and operational key or secret lifecycle processes.
-
-**Common false positives / exceptions:** Break-glass vaults, temporary migration secrets, or service-managed key constraints can require narrowly scoped exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a Key Vault, key, or secret missing the required RBAC, recoverability, expiry, rotation, or private access state.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
 **Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -6104,7 +4585,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 258 - Enable Role Based Access Control for Azure Key Vault
 - **Folder:** `SLZ/Security/ID258`
-- **Category:** `Key Vault`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
 - **Cost impact:** No
@@ -6115,13 +4595,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires Key Vault configuration standards to be embedded in IaC and operational key or secret lifecycle processes.
-
-**Common false positives / exceptions:** Break-glass vaults, temporary migration secrets, or service-managed key constraints can require narrowly scoped exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a Key Vault, key, or secret missing the required RBAC, recoverability, expiry, rotation, or private access state.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
 **Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -6130,7 +4604,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 259 - Ensure that Private Endpoints are Used for Azure Key Vault
 - **Folder:** `SLZ/Security/ID259`
-- **Category:** `Key Vault`
 - **Allowed effects:** `Audit`, `Deny`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
@@ -6141,13 +4614,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Common false positives / exceptions:** Temporary migration endpoints, vendor-managed services, or services without private endpoint support may need scoped exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service missing a private endpoint/private link configuration or still allowing public access.
 
 **Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete.
 
@@ -6156,7 +4623,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 260 - Ensure Automatic Key Rotation is Enabled Within Azure Key Vault for the Supported Services
 - **Folder:** `SLZ/Security/ID260`
-- **Category:** `Key Vault`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults/keys`
 - **Cost impact:** No
@@ -6167,13 +4633,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; 'Audit' allows a non-compliant resource to be created but flags it as non-compliant. 'Deny' blocks the resource creation and update. 'Disabled' turns off the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires Key Vault configuration standards to be embedded in IaC and operational key or secret lifecycle processes.
-
-**Common false positives / exceptions:** Break-glass vaults, temporary migration secrets, or service-managed key constraints can require narrowly scoped exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a Key Vault, key, or secret missing the required RBAC, recoverability, expiry, rotation, or private access state.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
 **Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
 
@@ -6182,7 +4642,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 31.15 - PostgreSQL flexible servers should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID31`
-- **Category:** `Security`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/servers/configurations`
 - **Cost impact:** No
@@ -6193,13 +4652,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -6208,7 +4661,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 31.9 - Application Gateway should be deployed with predefined Microsoft policy that is using latest tls version
 - **Folder:** `SLZ/Security/ID31`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`
 - **Cost impact:** No
@@ -6219,13 +4671,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -6234,24 +4680,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 35.1 - Transparent Data Encryption must be enabled for Arc SQL managed instances.
 - **Folder:** `SLZ/Security/ID35`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.AzureArcData/sqlmanagedinstances`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks sqlmanagedinstances and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which sqlmanagedinstances are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.AzureArcData/sqlmanagedinstances` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.AzureArcData/sqlmanagedinstances` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -6260,24 +4699,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 35.2 - Azure Synapse Analytics dedicated SQL pools should enable encryption
 - **Folder:** `SLZ/Security/ID35`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks transparent data encryption and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which transparent data encryption are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Choose Deny or disable the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -6286,24 +4718,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 872.13 - DICOM Service should use a customer-managed key to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID872`
-- **Category:** `Security`
 - **Allowed effects:** `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.HealthcareApis/workspaces/dicomservices`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks dicomservices and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which dicomservices are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.HealthcareApis/workspaces/dicomservices` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.HealthcareApis/workspaces/dicomservices` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -6312,24 +4737,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 872.27 - PostgreSQL servers should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID872`
-- **Category:** `Security`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/keys`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL single servers and keys and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure Database for PostgreSQL single servers and keys are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/keys` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/keys` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -6338,7 +4756,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 177 - Secure transfer to storage accounts should be enabled
 - **Folder:** `SLZ/Storage/ID177`
-- **Category:** `Storage`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
@@ -6349,13 +4766,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; The effect determines what happens when the policy rule is evaluated to match).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -6364,24 +4775,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 178 - Storage accounts should have infrastructure encryption
 - **Folder:** `SLZ/Storage/ID178`
-- **Category:** `Storage`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and makes sure storage accounts should have infrastructure encryption. In audit mode it shows which Storage accounts are not compliant with that requirement.
 
-**How to align the environment:** Configure `Microsoft.Storage/storageAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Storage/storageAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the audit policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -6390,7 +4794,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 179 - Ensure that 'Enable key rotation reminders' is enabled for each Storage Account
 - **Folder:** `SLZ/Storage/ID179`
-- **Category:** `Storage`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
@@ -6401,13 +4804,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Audit, Deny, or Disable the policy.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires Key Vault configuration standards to be embedded in IaC and operational key or secret lifecycle processes.
-
-**Common false positives / exceptions:** Break-glass vaults, temporary migration secrets, or service-managed key constraints can require narrowly scoped exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a Key Vault, key, or secret missing the required RBAC, recoverability, expiry, rotation, or private access state.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
 **Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
 
@@ -6416,7 +4813,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 183 - Storage account public access should be disallowed
 - **Folder:** `SLZ/Storage/ID183`
-- **Category:** `Storage`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
@@ -6427,13 +4823,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; The effect determines what happens when the policy rule is evaluated to match).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -6442,7 +4832,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 184 - Ensure Default Network Access Rule for Storage Accounts is Set to Deny
 - **Folder:** `SLZ/Storage/ID184`
-- **Category:** `Storage`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
@@ -6453,13 +4842,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the audit policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Common false positives / exceptions:** Controlled public ingress through WAF, Azure Front Door, partner ranges, or break-glass administration can be legitimate if documented.
-
-**Evidence / compliance signal:** Compliance evidence is a public access property, firewall rule, or NSG/security rule that permits the flagged Internet exposure.
 
 **Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -6468,24 +4851,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 185 - Ensure 'Allow Azure services on the trusted services list to access this storage account' is Enabled
 - **Folder:** `SLZ/Storage/ID185`
-- **Category:** `Storage`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and makes sure 'Allow Azure services on the trusted services list to access this storage account' is Enabled. In audit mode it shows which Storage accounts are not compliant with that requirement.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Storage/storageAccounts` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Storage/storageAccounts` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Audit`, `Deny`, `Disabled`; The effect determines what happens when the policy rule is evaluated to match).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -6494,7 +4870,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 186 - Ensure Private Endpoints are used to access Storage Accounts
 - **Folder:** `SLZ/Storage/ID186`
-- **Category:** `Storage`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Storage/storageAccounts/privateEndpointConnections`, `Microsoft.Resources/deployments`, `Microsoft.Network/privateEndpoints`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
@@ -6505,13 +4880,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `DeployIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `privateEndpointSubnetId` (default no default; A subnet with private endpoint network policies disabled.).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Common false positives / exceptions:** Temporary migration endpoints, vendor-managed services, or services without private endpoint support may need scoped exemptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service missing a private endpoint/private link configuration or still allowing public access.
 
 **Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete. The checked-in default effect is `DeployIfNotExists`, so the assignment must override it to remain reporting-only.
 
@@ -6520,24 +4889,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 187 - Azure Storage Blobs and Containers should have Soft Delete enabled (Minimum 30 days)
 - **Folder:** `SLZ/Storage/ID187`
-- **Category:** `Storage`
 - **Allowed effects:** `Modify`, `Deny`, `Audit`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/blobServices`
 - **Cost impact:** Yes - retained logs or deleted data consume billable storage.
 
 **Breakdown of what the policy does:** The policy checks Storage blob services and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Storage blob services are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Storage/storageAccounts/blobServices` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Storage/storageAccounts/blobServices` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `Deny`; allowed `Modify`, `Deny`, `Audit`, `Disabled`; Modify, Deny, Audit or Disabled the execution of the Policy); `retentionInDays` (default no default; How long should deleted resources be retained for (minimum 30 days).).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior. The checked-in default effect is `Deny`, so the assignment must override it to remain reporting-only.
 
@@ -6546,24 +4908,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 248 - Ensure that 'OS and Data' disks are encrypted with Customer Managed Key (CMK) for SNC data
 - **Folder:** `SLZ/Storage/ID248`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, `Microsoft.Compute/galleries/images/versions`, `Microsoft.Compute/images`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks virtual machines, virtual machine scale sets, managed disks, and related resources and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which virtual machines, virtual machine scale sets, managed disks, and related resources are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, and related child resources to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, and related child resources to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Name parameter.); `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -6572,24 +4927,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 249 - Ensure that 'Unattached disks' are encrypted with 'Customer Managed Key' (CMK) for SNC data
 - **Folder:** `SLZ/Storage/ID249`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks in-scope Azure resources and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which in-scope Azure resources are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure the affected resources to use the required encryption setting, customer-managed key, or service-managed encryption control in IaC, including Key Vault access where required.
+**How to align the environment:** Configure the affected resources to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Name parameter.); `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in IaC.
-
-**Common false positives / exceptions:** Service limitations, legacy SKUs, key access delays, or approved Microsoft-managed-key usage can require exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service or child encryption resource not using the required encryption or customer-managed key state.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 **Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
@@ -6598,7 +4946,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** Tag Inheritance
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Modify`, `Disabled`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
 - **Cost impact:** No
@@ -6609,13 +4956,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `tag-TagName1` (default `ec.EnvironmentType`; Environment tag); `tag-TagName2` (default `ec.DataSensitivityLevel`; DataSensitivity tag); `tag-TagName3` (default `ec.GovIS2SeqNum`; Project tag); `tag-TagName4` (default `ec.SystemOwner`; Organization tag); `effect` (default `Audit`; allowed `Audit`, `Modify`, `Disabled`; Effect of policy).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -6624,7 +4965,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 604 - Check ec.DataSensitivityLevel Tag on Subscription
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
 - **Cost impact:** No
@@ -6635,13 +4975,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `tag-TagName2` (default `ec.DataSensitivityLevel`; ec.DataSensitivityLevel tag); `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Effect of the policy).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -6650,7 +4984,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - XXX - Check Environment Tag on Subscription
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
 - **Cost impact:** No
@@ -6661,13 +4994,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `tag-TagName1` (default `ec.EnvironmentType`; Environment tag); `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Effect of the policy).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -6676,7 +5003,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - XXX - Check Organization Tag on Subscription
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
 - **Cost impact:** No
@@ -6687,13 +5013,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `tag-TagName4` (default `ec.SystemOwner`; Organization tag); `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Effect of the policy).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -6702,7 +5022,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 878 - Check Project Tag on Subscription
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
-- **Category:** `not declared`
 - **Allowed effects:** `Audit`, `Deny`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
 - **Cost impact:** No
@@ -6713,13 +5032,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `tag-TagName3` (default `ec.GovIS2SeqNum`; Project tag); `effect` (default `Audit`; allowed `Audit`, `Deny`, `Disabled`; Effect of the policy).
 
-**Does subscription-level assignment make sense:** Yes. The policy is subscription-scoped by design.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -6728,24 +5041,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 261 - Ensure App Service Authentication is set up for apps in Azure App Service
 - **Folder:** `SLZ/Web/ID261`
-- **Category:** `App Service`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure app Service Authentication is set up for apps in Azure App Service. In audit mode it shows which App Service apps and App Service configuration are not compliant with that requirement.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -6754,7 +5060,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 262 - Ensure Web App Redirects All HTTP traffic to HTTPS in Azure App Service Slots
 - **Folder:** `SLZ/Web/ID262`
-- **Category:** `App Service`
 - **Allowed effects:** `Audit`, `Modify`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`
 - **Cost impact:** No
@@ -6765,13 +5070,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Modify`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -6780,7 +5079,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 262 - Ensure Web App Redirects All HTTP traffic to HTTPS in Azure App Service
 - **Folder:** `SLZ/Web/ID262`
-- **Category:** `App Service`
 - **Allowed effects:** `Audit`, `Modify`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
 - **Cost impact:** No
@@ -6791,13 +5089,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `Audit`; allowed `Audit`, `Modify`, `Disabled`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Common false positives / exceptions:** Legacy clients, unsupported runtime stacks, or managed service defaults can cause temporary exceptions during migration.
-
-**Evidence / compliance signal:** Compliance evidence is the affected service property showing an older TLS/SSL/HTTP setting, disabled HTTPS, enabled FTP, or insecure transfer allowed.
 
 **Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
@@ -6806,7 +5098,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 265 - Ensure that Register with Azure Active Directory is enabled on App Service
 - **Folder:** `SLZ/Web/ID265`
-- **Category:** `App Service`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`, `DeployIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
@@ -6817,13 +5108,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`, `DeployIfNotExists`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes, if the subscription has a consistent landing-zone baseline and exemption process. For shared platform services, management-group assignment may be more consistent.
-
 **Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
-
-**Common false positives / exceptions:** Unsupported OS images, sealed appliances, Arc connectivity gaps, or blocked egress can appear as non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is a VM missing the expected identity, extension, assignment, or guest setting result.
 
 **Potential issues:** Guest Configuration can be noisy where VM images, extensions, identities, or egress are not standardized.
 
@@ -6832,24 +5117,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 267 - Ensure that 'Python version' is the Latest Stable Version, if Used to Run the Web App Slots
 - **Folder:** `SLZ/Web/ID267`
-- **Category:** `App Service`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks App Service deployment slots and App Service slot configuration and makes sure 'Python version' is the Latest Stable Version, if Used to Run the Web App Slots. In audit mode it shows which App Service deployment slots and App Service slot configuration are not compliant with that requirement.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `pythonVersion` (default ``; Specify a supported Python version for App Service); `pythonVersion2` (default ``; Specify a supported Python version for App Service); `pythonPrefix` (default `PYTHON|`; Specify a supported Python prefix for App Service).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -6858,24 +5136,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 267 - Ensure that 'Python version' is the Latest Stable Version, if Used to Run the Web App
 - **Folder:** `SLZ/Web/ID267`
-- **Category:** `App Service`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure 'Python version' is the Latest Stable Version, if Used to Run the Web App. In audit mode it shows which App Service apps and App Service configuration are not compliant with that requirement.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `pythonVersion` (default ``; Specify a supported Python version for App Service); `pythonVersion2` (default ``; Specify a supported Python version for App Service); `pythonPrefix` (default `PYTHON|`; Specify a supported Python prefix for App Service).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -6884,24 +5155,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 268 - Ensure that 'Java version' is the latest, if used to run the Web App for Slots
 - **Folder:** `SLZ/Web/ID268`
-- **Category:** `App Service`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks App Service deployment slots and App Service slot configuration and makes sure 'Java version' is the latest, if used to run the Web App for Slots. In audit mode it shows which App Service deployment slots and App Service slot configuration are not compliant with that requirement.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `javaVersion` (default ``; Specify a supported Java version for App Service).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -6910,24 +5174,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 268 - Ensure that 'Java version' is the latest, if used to run the Web App
 - **Folder:** `SLZ/Web/ID268`
-- **Category:** `App Service`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure 'Java version' is the latest, if used to run the Web App. In audit mode it shows which App Service apps and App Service configuration are not compliant with that requirement.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`; Enable or disable the execution of the policy); `javaVersion` (default ``; Specify a supported Java version for App Service).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -6936,7 +5193,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 269 - Ensure that 'HTTP Version' is the Latest, if Used to Run the Web App for Slots
 - **Folder:** `SLZ/Web/ID269`
-- **Category:** `not declared`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`, `DeployIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
@@ -6947,13 +5203,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`, `DeployIfNotExists`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -6962,7 +5212,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 269 - Ensure that 'HTTP Version' is the Latest, if Used to Run the Web App
 - **Folder:** `SLZ/Web/ID269`
-- **Category:** `not declared`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`, `DeployIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
@@ -6973,13 +5222,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`, `DeployIfNotExists`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -6988,7 +5231,6 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 269 - Ensure that 'HTTP Version' is the Latest, if Used to Run the Function App
 - **Folder:** `SLZ/Web/ID269`
-- **Category:** `not declared`
 - **Allowed effects:** `AuditIfNotExists`, `Disabled`, `DeployIfNotExists`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
@@ -6999,13 +5241,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `AuditIfNotExists`, `Disabled`, `DeployIfNotExists`; Enable or disable the execution of the policy).
 
-**Does subscription-level assignment make sense:** Yes. Subscription assignment is appropriate; consider management-group assignment only when parameters and exemptions are standardized.
-
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Common false positives / exceptions:** System-created resources, inherited tags not visible at the checked scope, or subscriptions pending onboarding may need exceptions.
-
-**Evidence / compliance signal:** Compliance evidence is a subscription or resource missing the required tag name/value or inheritance result.
 
 **Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
@@ -7014,24 +5250,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 270 - Ensure FTP deployments are Disabled
 - **Folder:** `SLZ/Web/ID270`
-- **Category:** `App Service`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service apps and App Service configuration still allow the older or less secure protocol setting.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy); `allowFTPS` (default `False`; true value will force using FTPSOnly).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -7040,24 +5269,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 270 - Ensure FTP deployments are Disabled for Slots
 - **Folder:** `SLZ/Web/ID270`
-- **Category:** `App Service`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks App Service deployment slots and App Service slot configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service deployment slots and App Service slot configuration still allow the older or less secure protocol setting.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy); `allowFTPS` (default `False`; true value will force using FTPSOnly).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
@@ -7066,24 +5288,17 @@ Total policy definitions assessed: **255**.
 
 - **Display name:** SLZ - 270 - Ensure FTP deployments are Disabled
 - **Folder:** `SLZ/Web/ID270`
-- **Category:** `App Service`
 - **Allowed effects:** `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service apps and App Service configuration still allow the older or less secure protocol setting.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the relevant IaC module and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `effect` (default `AuditIfNotExists`; allowed `DeployIfNotExists`, `AuditIfNotExists`, `Disabled`; DeployIfNotExists, AuditIfNotExists or Disabled the execution of the Policy); `allowFTPS` (default `False`; true value will force using FTPSOnly).
 
-**Does subscription-level assignment make sense:** Yes, provided the resource types are expected in the subscription and ownership for exceptions is clear.
-
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in IaC and monitor compliance drift.
-
-**Common false positives / exceptions:** Platform-created resources, unsupported API versions, or documented architecture exceptions can produce expected non-compliance.
-
-**Evidence / compliance signal:** Compliance evidence is the resource instance whose fields match the policy condition and therefore appears non-compliant in Azure Policy.
+**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
 **Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
