@@ -461,9 +461,18 @@ Total policy definitions assessed: **255**.
 <summary><h2>Assessment</h2></summary>
 
 
+<details open>
+<summary><h3>C1</h3></summary>
+
+<details open>
+<summary><h4>General</h4></summary>
+
+<details open>
+<summary><h5>ID149</h5></summary>
+
 <a id="policy-c1-slz-149-nocustomadministratorroles"></a>
 <details open>
-<summary><h3>C1-SLZ-149-NoCustomAdministratorRoles</h3></summary>
+<summary><h6>C1-SLZ-149-NoCustomAdministratorRoles</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 149 - Ensure That No Custom Administrator Roles Exists
@@ -481,9 +490,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID198</h5></summary>
+
 <a id="policy-c1-slz-198-auditingretentiongreater90days"></a>
 <details open>
-<summary><h3>C1-SLZ-198-AuditingRetentionGreater90days</h3></summary>
+<summary><h6>C1-SLZ-198-AuditingRetentionGreater90days</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 198 - Ensure that 'Auditing' Retention is 'greater than 90 days'
@@ -501,9 +515,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID220</h5></summary>
+
 <a id="policy-c1-slz-220-administrativeactivitylogalert"></a>
 <details open>
-<summary><h3>C1-SLZ-220-AdministrativeActivityLogAlert</h3></summary>
+<summary><h6>C1-SLZ-220-AdministrativeActivityLogAlert</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 220 - An activity log alert should exist for specific Administrative operations
@@ -523,7 +542,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-220-policyactivitylogalert"></a>
 <details open>
-<summary><h3>C1-SLZ-220-PolicyActivityLogAlert</h3></summary>
+<summary><h6>C1-SLZ-220-PolicyActivityLogAlert</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 220 - An activity log alert should exist for specific Policy operations
@@ -543,7 +562,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-220-securityactivitylogalert"></a>
 <details open>
-<summary><h3>C1-SLZ-220-SecurityActivityLogAlert</h3></summary>
+<summary><h6>C1-SLZ-220-SecurityActivityLogAlert</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 220 - An activity log alert should exist for specific Security operations
@@ -561,9 +580,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Monitoring</h4></summary>
+
+<details open>
+<summary><h5>ID051-SLZ-Monitor</h5></summary>
+
 <a id="policy-c1-slz-51-azuredirectorydomainservicesdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureDirectoryDomainServicesDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureDirectoryDomainServicesDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Active Directory Domain Services to Log Analytics workspace
@@ -583,7 +612,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-automationaccountdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AutomationAccountDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AutomationAccountDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Automation Account to Log Analytics workspace
@@ -603,7 +632,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azureactivitylogsdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureActivityLogsDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureActivityLogsDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Activity logs to Log Analytics workspace
@@ -623,7 +652,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azureanalysisservicediagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureAnalysisServiceDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureAnalysisServiceDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Analysis Services to Log Analytics workspace
@@ -643,7 +672,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azureapimanagementservicediagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureAPIManagementServiceDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureAPIManagementServiceDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure API Management Service to Log Analytics workspace
@@ -663,7 +692,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-appservicediagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AppServiceDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AppServiceDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure App service to Log Analytics workspace
@@ -683,7 +712,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-appgatewaydiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AppGatewayDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AppGatewayDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Application Gateway to Log Analytics workspace
@@ -703,7 +732,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurebastiondiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureBastionDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureBastionDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Bastion to Log Analytics workspace
@@ -723,7 +752,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurebatchdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureBatchDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureBatchDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Batch to Log Analytics workspace
@@ -743,7 +772,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurecongitivesearchdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureCongitiveSearchDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureCongitiveSearchDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Cognitive Search to Log Analytics workspace
@@ -763,7 +792,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurecongitiveservicesdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureCongitiveServicesDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureCongitiveServicesDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Cognitive Services to Log Analytics workspace
@@ -783,7 +812,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azuredatalakeanalyticsdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureDatalakeAnalyticsDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureDatalakeAnalyticsDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Datalake Analytics to Log Analytics workspace
@@ -803,7 +832,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azuredatalakestorediagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureDatalakeStoreDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureDatalakeStoreDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Datalake Store to Log Analytics workspace
@@ -823,7 +852,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azureeventhubdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureEventHubDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureEventHubDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Event Hub to Log Analytics workspace
@@ -843,7 +872,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurefirewalldiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureFirewallDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureFirewallDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Firewall to Log Analytics workspace
@@ -863,7 +892,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurefunctiondiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureFunctionDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureFunctionDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Function App to Log Analytics workspace
@@ -883,7 +912,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azureintegrationservicesiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureIntegrationServicesiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureIntegrationServicesiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Integration Services to Log Analytics workspace
@@ -903,7 +932,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurekeyvaultdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureKeyVaultDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureKeyVaultDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Key Vaults to Log Analytics workspace
@@ -923,7 +952,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azureloadbalancerdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureLoadBalancerDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureLoadBalancerDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Loadbalancers to Log Analytics workspace
@@ -943,7 +972,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurerecoveryservicediagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureRecoveryServiceDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureRecoveryServiceDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Recovery Service to Log Analytics workspace
@@ -963,7 +992,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azuresqlmanagedinstancedbdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureSQLManagedInstanceDBDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureSQLManagedInstanceDBDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure SQL Managed Instance Database to Log Analytics workspace
@@ -983,7 +1012,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azuresqlmanagedinstancediagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureSQLManagedInstanceDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureSQLManagedInstanceDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure SQL Managed Instance to Log Analytics workspace
@@ -1003,7 +1032,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azuresqlserverdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureSQLServerDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureSQLServerDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure SQL Server to Log Analytics workspace
@@ -1023,7 +1052,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurestreamanalyticsdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureStreamAnalyticsDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureStreamAnalyticsDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Stream Analytics to Log Analytics workspace
@@ -1043,7 +1072,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-azurevirtualnetworkdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-AzureVirtualNetworkDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-AzureVirtualNetworkDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Virtual Network to Log Analytics workspace
@@ -1063,7 +1092,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-cdnandfrontdoordiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-CdnAndFrontdoorDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-CdnAndFrontdoorDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Enable logging by category group for Front Door and CDN profiles (microsoft.cdn/profiles) to Log Analytics
@@ -1083,7 +1112,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-iotdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-IoTDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-IoTDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for IoT (Internet of Things) Hub to Log Analytics workspace
@@ -1103,7 +1132,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-logicappworkflowsdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-LogicAppWorkflowsDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-LogicAppWorkflowsDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Logic App Workflows to Log Analytics workspace
@@ -1123,7 +1152,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-networkfrontdoordiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-NetworkFrontdoorDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-NetworkFrontdoorDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Network Frontdoor to Log Analytics workspace
@@ -1143,7 +1172,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-networkinterfacediagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-NetworkInterfaceDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-NetworkInterfaceDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Network Interface to Log Analytics workspace
@@ -1163,7 +1192,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-networksecuritygroupsdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-NetworkSecurityGroupsDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-NetworkSecurityGroupsDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Network Security Groups to Log Analytics workspace
@@ -1183,7 +1212,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-powerbidedicatedcapacitydiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-PowerBIDedicatedCapacityDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-PowerBIDedicatedCapacityDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for PowerBI Dedicated Capacity to Log Analytics workspace
@@ -1203,7 +1232,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-publicipdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-PublicIPDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-PublicIPDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Public IP Address to Log Analytics workspace
@@ -1223,7 +1252,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-servicebusnamespacediagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-ServiceBusNamespaceDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-ServiceBusNamespaceDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Service Bus Namespace to Log Analytics workspace
@@ -1243,7 +1272,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-51-storageaccountsdiagsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-51-StorageAccountsDiagSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-51-StorageAccountsDiagSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Storage Accounts to Log Analytics workspace
@@ -1261,9 +1290,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Security</h4></summary>
+
+<details open>
+<summary><h5>ID171</h5></summary>
+
 <a id="policy-c1-slz-171-securitycontactemailadditionaladdress"></a>
 <details open>
-<summary><h3>C1-SLZ-171-SecurityContactEmailAdditionalAddress</h3></summary>
+<summary><h6>C1-SLZ-171-SecurityContactEmailAdditionalAddress</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 171 - Ensure 'Additional email addresses' is Configured with a Security Contact Email
@@ -1281,9 +1320,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID172</h5></summary>
+
 <a id="policy-c1-slz-172-alertsnotifysettohigh"></a>
 <details open>
-<summary><h3>C1-SLZ-172-AlertsNotifySetToHigh</h3></summary>
+<summary><h6>C1-SLZ-172-AlertsNotifySetToHigh</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 172 - Ensure That 'Notify about alerts with the following severity' is Set to 'High'
@@ -1301,9 +1345,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Storage</h4></summary>
+
+<details open>
+<summary><h5>ID027</h5></summary>
+
 <a id="policy-c1-slz-27-storageaccountdiagnosticsettingstows"></a>
 <details open>
-<summary><h3>C1-SLZ-27-StorageAccountDiagnosticSettingsToWS</h3></summary>
+<summary><h6>C1-SLZ-27-StorageAccountDiagnosticSettingsToWS</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 27 - Configure diagnostic settings for Storage Accounts to Log Analytics workspace
@@ -1323,7 +1377,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-deprecated"></a>
 <details open>
-<summary><h3>DEPRECATED</h3></summary>
+<summary><h6>DEPRECATED</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 27 - Configure diagnostic settings for Storage Accounts to Log Analytics workspace
@@ -1341,9 +1395,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID189</h5></summary>
+
 <a id="policy-c1-slz-189-blobservicestoragelogging"></a>
 <details open>
-<summary><h3>C1-SLZ-189-BlobServiceStorageLogging</h3></summary>
+<summary><h6>C1-SLZ-189-BlobServiceStorageLogging</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 189 - Ensure Storage Logging is Enabled for Blob Service for 'Read', 'Write', and 'Delete' Requests
@@ -1361,9 +1420,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID190</h5></summary>
+
 <a id="policy-c1-slz-190-tableservicestoragelogging"></a>
 <details open>
-<summary><h3>C1-SLZ-190-TableServiceStorageLogging</h3></summary>
+<summary><h6>C1-SLZ-190-TableServiceStorageLogging</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 190 - Ensure Storage Logging is Enabled for Table Service for 'Read', 'Write', and 'Delete' Requests
@@ -1381,9 +1445,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID221</h5></summary>
+
 <a id="policy-c1-slz-221-activitylogresourcesnotpubliclyaccessible"></a>
 <details open>
-<summary><h3>C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible</h3></summary>
+<summary><h6>C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible</h6></summary>
 
 
 - **Display name:** C1 - SLZ - 221 - Ensure Activity Log Storage and LAW are not Publicly Accessible
@@ -1401,9 +1470,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID222</h5></summary>
+
 <a id="policy-c1-slz-222-storageaccountlogscmk"></a>
 <details open>
-<summary><h3>C1-SLZ-222-StorageAccountLogsCMK</h3></summary>
+<summary><h6>C1-SLZ-222-StorageAccountLogsCMK</h6></summary>
 
 
 - **Display name:** C1-SLZ - 222 - Ensure the storage account containing the container with activity logs is encrypted with Customer Managed Key
@@ -1421,9 +1495,24 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+</details>
+
+<details open>
+<summary><h3>SLZ</h3></summary>
+
+<details open>
+<summary><h4>Analytics</h4></summary>
+
+<details open>
+<summary><h5>ID00-NonID-Purview</h5></summary>
+
 <a id="policy-slz-denypurviewaccounts"></a>
 <details open>
-<summary><h3>SLZ-DenyPurviewAccounts</h3></summary>
+<summary><h6>SLZ-DenyPurviewAccounts</h6></summary>
 
 
 - **Display name:** SLZ - Deny purview accounts
@@ -1441,9 +1530,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Compute</h4></summary>
+
+<details open>
+<summary><h5>ID165</h5></summary>
+
 <a id="policy-slz-165-machinesauditperiodsystemupdatescheck"></a>
 <details open>
-<summary><h3>SLZ-165-MachinesAuditPeriodSystemUpdatesCheck</h3></summary>
+<summary><h6>SLZ-165-MachinesAuditPeriodSystemUpdatesCheck</h6></summary>
 
 
 - **Display name:** SLZ - 165 - Machines should be configured to periodically check for missing system updates
@@ -1463,7 +1562,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-165-2-1-machinesconfigureperiodsystemupdatescheck"></a>
 <details open>
-<summary><h3>SLZ-165.2.1-MachinesConfigurePeriodSystemUpdatesCheck</h3></summary>
+<summary><h6>SLZ-165.2.1-MachinesConfigurePeriodSystemUpdatesCheck</h6></summary>
 
 
 - **Display name:** SLZ - 165.2.1 - Configure periodic checking for missing system updates on azure LINUX virtual machines
@@ -1483,7 +1582,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-165-2-machinesconfigureperiodsystemupdatescheck"></a>
 <details open>
-<summary><h3>SLZ-165.2-MachinesConfigurePeriodSystemUpdatesCheck</h3></summary>
+<summary><h6>SLZ-165.2-MachinesConfigurePeriodSystemUpdatesCheck</h6></summary>
 
 
 - **Display name:** SLZ - 165.2.2 - Configure periodic checking for missing system updates on azure WINDOWS virtual machines
@@ -1501,9 +1600,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID250</h5></summary>
+
 <a id="policy-slz-250-onlyapprovedextensions"></a>
 <details open>
-<summary><h3>SLZ-250-OnlyApprovedExtensions</h3></summary>
+<summary><h6>SLZ-250-OnlyApprovedExtensions</h6></summary>
 
 
 - **Display name:** SLZ - 250 - Ensure that Only Approved Extensions Are Installed
@@ -1521,9 +1625,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Database</h4></summary>
+
+<details open>
+<summary><h5>ID193</h5></summary>
+
 <a id="policy-slz-193-sqlserverauditing"></a>
 <details open>
-<summary><h3>SLZ-193-SQLServerAuditing</h3></summary>
+<summary><h6>SLZ-193-SQLServerAuditing</h6></summary>
 
 
 - **Display name:** SLZ - 193 - Auditing on SQL server should be enabled
@@ -1541,9 +1655,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID194</h5></summary>
+
 <a id="policy-slz-194-azuresqldbingressfrom0000"></a>
 <details open>
-<summary><h3>SLZ-194-AzureSQLDBIngressFrom0000</h3></summary>
+<summary><h6>SLZ-194-AzureSQLDBIngressFrom0000</h6></summary>
 
 
 - **Display name:** SLZ - 194 - Ensure no Azure SQL Databases allow ingress from 0.0.0.0/0 (ANY IP)
@@ -1561,9 +1680,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID195</h5></summary>
+
 <a id="policy-slz-195-sqlservertdeencryptionwithcmk"></a>
 <details open>
-<summary><h3>SLZ-195-SQLServerTDEEncryptionWithCMK</h3></summary>
+<summary><h6>SLZ-195-SQLServerTDEEncryptionWithCMK</h6></summary>
 
 
 - **Display name:** SLZ - 195 - Ensure SQL server's Transparent Data Encryption (TDE) protector is encrypted with Customer-managed key
@@ -1581,9 +1705,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID196</h5></summary>
+
 <a id="policy-slz-196-sqlserveraadadminconfiguration"></a>
 <details open>
-<summary><h3>SLZ-196-SQLServerAADAdminConfiguration</h3></summary>
+<summary><h6>SLZ-196-SQLServerAADAdminConfiguration</h6></summary>
 
 
 - **Display name:** SLZ - 196 - Ensure that Azure Active Directory Admin is Configured for SQL Servers
@@ -1601,9 +1730,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID197</h5></summary>
+
 <a id="policy-slz-197-sqldatabasedataencryption"></a>
 <details open>
-<summary><h3>SLZ-197-SQLDatabaseDataEncryption</h3></summary>
+<summary><h6>SLZ-197-SQLDatabaseDataEncryption</h6></summary>
 
 
 - **Display name:** SLZ - 197 - Ensure that 'Data encryption' is set to 'On' on a SQL Database
@@ -1621,9 +1755,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID204</h5></summary>
+
 <a id="policy-slz-204-postgressqlflexibleserversslconnection"></a>
 <details open>
-<summary><h3>SLZ-204-PostgresSQLFlexibleServerSSLConnection</h3></summary>
+<summary><h6>SLZ-204-PostgresSQLFlexibleServerSSLConnection</h6></summary>
 
 
 - **Display name:** SLZ - 204 - Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server FLEXIBLE
@@ -1643,7 +1782,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-204-postgressqlserversslconnection"></a>
 <details open>
-<summary><h3>SLZ-204-PostgresSQLServerSSLConnection</h3></summary>
+<summary><h6>SLZ-204-PostgresSQLServerSSLConnection</h6></summary>
 
 
 - **Display name:** SLZ - 204 - Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server SINGLE
@@ -1661,9 +1800,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID205</h5></summary>
+
 <a id="policy-slz-205-postgressqlflexibleserver-log-checkpoints"></a>
 <details open>
-<summary><h3>SLZ-205-PostgresSQLFlexibleServer_log_checkpoints</h3></summary>
+<summary><h6>SLZ-205-PostgresSQLFlexibleServer_log_checkpoints</h6></summary>
 
 
 - **Display name:** SLZ - 205 - Ensure Server Parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Flexible Server
@@ -1683,7 +1827,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-205-postgressqlserver-log-checkpoints"></a>
 <details open>
-<summary><h3>SLZ-205-PostgresSQLServer_log_checkpoints</h3></summary>
+<summary><h6>SLZ-205-PostgresSQLServer_log_checkpoints</h6></summary>
 
 
 - **Display name:** SLZ - 205 - Ensure Server Parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server
@@ -1701,9 +1845,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID206</h5></summary>
+
 <a id="policy-slz-206-postgressqlserverlogconnections"></a>
 <details open>
-<summary><h3>SLZ-206-PostgresSQLServerLogConnections</h3></summary>
+<summary><h6>SLZ-206-PostgresSQLServerLogConnections</h6></summary>
 
 
 - **Display name:** SLZ - 206 - Log connections should be enabled for PostgreSQL database servers
@@ -1721,9 +1870,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID207</h5></summary>
+
 <a id="policy-slz-207-postgressqlserverdisconnectionslogging"></a>
 <details open>
-<summary><h3>SLZ-207-PostgresSQLServerDisconnectionsLogging</h3></summary>
+<summary><h6>SLZ-207-PostgresSQLServerDisconnectionsLogging</h6></summary>
 
 
 - **Display name:** SLZ - 207 - Disconnections should be logged for PostgreSQL database servers.
@@ -1741,9 +1895,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID208</h5></summary>
+
 <a id="policy-slz-208-postgressqlflexibleserverconnectionthrottling"></a>
 <details open>
-<summary><h3>SLZ-208-PostgresSQLFlexibleServerConnectionThrottling</h3></summary>
+<summary><h6>SLZ-208-PostgresSQLFlexibleServerConnectionThrottling</h6></summary>
 
 
 - **Display name:** SLZ - 208 - Connection throttling should be enabled for PostgreSQL database servers FLEXIBLE
@@ -1763,7 +1922,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-208-postgressqlserverconnectionthrottling"></a>
 <details open>
-<summary><h3>SLZ-208-PostgresSQLServerConnectionThrottling</h3></summary>
+<summary><h6>SLZ-208-PostgresSQLServerConnectionThrottling</h6></summary>
 
 
 - **Display name:** SLZ - 208 - Connection throttling should be enabled for PostgreSQL database servers
@@ -1781,9 +1940,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID210</h5></summary>
+
 <a id="policy-slz-210-postgressqlflexibleserverpublicnetworkaccess"></a>
 <details open>
-<summary><h3>SLZ-210-PostgresSQLFlexibleServerPublicNetworkAccess</h3></summary>
+<summary><h6>SLZ-210-PostgresSQLFlexibleServerPublicNetworkAccess</h6></summary>
 
 
 - **Display name:** SLZ - 210 - Public network access should be disabled for PostgreSQL flexible servers
@@ -1803,7 +1967,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-210-postgressqlserverpublicnetworkaccess"></a>
 <details open>
-<summary><h3>SLZ-210-PostgresSQLServerPublicNetworkAccess</h3></summary>
+<summary><h6>SLZ-210-PostgresSQLServerPublicNetworkAccess</h6></summary>
 
 
 - **Display name:** SLZ - 210 - Public network access should be disabled for PostgreSQL servers
@@ -1821,9 +1985,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID212</h5></summary>
+
 <a id="policy-slz-212-mysqlsqlserverenforcesslconnection"></a>
 <details open>
-<summary><h3>SLZ-212-MySQLSQLServerEnforceSSLConnection</h3></summary>
+<summary><h6>SLZ-212-MySQLSQLServerEnforceSSLConnection</h6></summary>
 
 
 - **Display name:** SLZ - 212 - Ensure 'Enforce SSL connection' is set to 'Enabled' for Standard MySQL Database Server
@@ -1841,9 +2010,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID214</h5></summary>
+
 <a id="policy-slz-214-mysqlsqlserver-audit-log-enabled"></a>
 <details open>
-<summary><h3>SLZ-214-MySQLSQLServer_audit_log_enabled</h3></summary>
+<summary><h6>SLZ-214-MySQLSQLServer_audit_log_enabled</h6></summary>
 
 
 - **Display name:** SLZ - 214 - Ensure server parameter 'audit_log_enabled' is set to 'ON' for MySQL Database Server
@@ -1861,9 +2035,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID215</h5></summary>
+
 <a id="policy-slz-215-mysqlsqlserver-audit-log-events"></a>
 <details open>
-<summary><h3>SLZ-215-MySQLSQLServer_audit_log_events</h3></summary>
+<summary><h6>SLZ-215-MySQLSQLServer_audit_log_events</h6></summary>
 
 
 - **Display name:** SLZ - 215 - Ensure server parameter 'audit_log_events' has 'CONNECTION' set for MySQL Database Server
@@ -1881,9 +2060,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID216</h5></summary>
+
 <a id="policy-slz-216-azurecosmosdbfwlimitsforselectednetwork"></a>
 <details open>
-<summary><h3>SLZ-216-AzureCosmosDBFWLimitsForSelectedNetwork</h3></summary>
+<summary><h6>SLZ-216-AzureCosmosDBFWLimitsForSelectedNetwork</h6></summary>
 
 
 - **Display name:** SLZ - 216 - Ensure That 'Firewalls & Networks' Is Limited to use selected Networks Instead of All Networks
@@ -1901,9 +2085,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID217</h5></summary>
+
 <a id="policy-slz-217-azurecosmosdbprivatelink"></a>
 <details open>
-<summary><h3>SLZ-217-AzureCosmosDBPrivateLink</h3></summary>
+<summary><h6>SLZ-217-AzureCosmosDBPrivateLink</h6></summary>
 
 
 - **Display name:** SLZ - 217 - CosmosDB accounts should use private link
@@ -1921,9 +2110,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID218</h5></summary>
+
 <a id="policy-slz-218-azurecosmosdblocalauthenticationdisabled"></a>
 <details open>
-<summary><h3>SLZ-218-AzureCosmosDBLocalAuthenticationDisabled</h3></summary>
+<summary><h6>SLZ-218-AzureCosmosDBLocalAuthenticationDisabled</h6></summary>
 
 
 - **Display name:** SLZ - 218 - Cosmos DB database accounts should have local authentication methods disabled
@@ -1941,9 +2135,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Defender</h4></summary>
+
+<details open>
+<summary><h5>ID1397</h5></summary>
+
 <a id="policy-slz-1397-microsoftdefenderforcspm"></a>
 <details open>
-<summary><h3>SLZ-1397-MicrosoftDefenderForCSPM</h3></summary>
+<summary><h6>SLZ-1397-MicrosoftDefenderForCSPM</h6></summary>
 
 
 - **Display name:** SLZ - 1397 - Configure Microsoft Defender for CSPM
@@ -1961,9 +2165,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID153.2</h5></summary>
+
 <a id="policy-slz-153-defenderforendpoint"></a>
 <details open>
-<summary><h3>SLZ-153-DefenderForEndpoint</h3></summary>
+<summary><h6>SLZ-153-DefenderForEndpoint</h6></summary>
 
 
 - **Display name:** SLZ - 153 - Configure Microsoft Defender Endpoint Integration
@@ -1981,9 +2190,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID153</h5></summary>
+
 <a id="policy-slz-153-defendercloudpricingforserver"></a>
 <details open>
-<summary><h3>SLZ-153-DefenderCloudPricingForServer</h3></summary>
+<summary><h6>SLZ-153-DefenderCloudPricingForServer</h6></summary>
 
 
 - **Display name:** SLZ - 153 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Servers
@@ -2001,9 +2215,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID154</h5></summary>
+
 <a id="policy-slz-154-defendercloudpricingforapplicationservices"></a>
 <details open>
-<summary><h3>SLZ-154-DefenderCloudPricingForApplicationServices</h3></summary>
+<summary><h6>SLZ-154-DefenderCloudPricingForApplicationServices</h6></summary>
 
 
 - **Display name:** SLZ - 154 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Application Services
@@ -2021,9 +2240,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID156</h5></summary>
+
 <a id="policy-slz-156-defendercloudpricingforazuresqldb"></a>
 <details open>
-<summary><h3>SLZ-156-DefenderCloudPricingForAzureSQLDB</h3></summary>
+<summary><h6>SLZ-156-DefenderCloudPricingForAzureSQLDB</h6></summary>
 
 
 - **Display name:** SLZ - 156 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (Azure SQL Databases)
@@ -2041,9 +2265,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID157</h5></summary>
+
 <a id="policy-slz-157-defendercloudpricingfordbonservers"></a>
 <details open>
-<summary><h3>SLZ-157-DefenderCloudPricingForDBOnServers</h3></summary>
+<summary><h6>SLZ-157-DefenderCloudPricingForDBOnServers</h6></summary>
 
 
 - **Display name:** SLZ - 157 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (SQL servers on machines)
@@ -2061,9 +2290,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID158</h5></summary>
+
 <a id="policy-slz-158-defendercloudpricingforopendb"></a>
 <details open>
-<summary><h3>SLZ-158-DefenderCloudPricingForOpenDB</h3></summary>
+<summary><h6>SLZ-158-DefenderCloudPricingForOpenDB</h6></summary>
 
 
 - **Display name:** SLZ - 158 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for OpenDB (Open-source relational db)
@@ -2081,9 +2315,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID159</h5></summary>
+
 <a id="policy-slz-159-defendercloudpricingforstorage"></a>
 <details open>
-<summary><h3>SLZ-159-DefenderCloudPricingForStorage</h3></summary>
+<summary><h6>SLZ-159-DefenderCloudPricingForStorage</h6></summary>
 
 
 - **Display name:** SLZ - 159 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Storage
@@ -2101,9 +2340,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID161</h5></summary>
+
 <a id="policy-slz-161-defendercloudpricingforazurecosmosdb"></a>
 <details open>
-<summary><h3>SLZ-161-DefenderCloudPricingForAzureCosmosDB</h3></summary>
+<summary><h6>SLZ-161-DefenderCloudPricingForAzureCosmosDB</h6></summary>
 
 
 - **Display name:** SLZ - 161 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (Azure Cosmos Db)
@@ -2121,9 +2365,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID162</h5></summary>
+
 <a id="policy-slz-162-defendercloudpricingforkeyvault"></a>
 <details open>
-<summary><h3>SLZ-162-DefenderCloudPricingForKeyVault</h3></summary>
+<summary><h6>SLZ-162-DefenderCloudPricingForKeyVault</h6></summary>
 
 
 - **Display name:** SLZ - 162 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Key Vaults
@@ -2141,9 +2390,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID164</h5></summary>
+
 <a id="policy-slz-164-defendercloudpricingforresourcemanager"></a>
 <details open>
-<summary><h3>SLZ-164-DefenderCloudPricingForResourceManager</h3></summary>
+<summary><h6>SLZ-164-DefenderCloudPricingForResourceManager</h6></summary>
 
 
 - **Display name:** SLZ - 164 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Resource Manager
@@ -2161,9 +2415,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID168</h5></summary>
+
 <a id="policy-slz-168-microsoftdefenderconfigurevmforvulnerability"></a>
 <details open>
-<summary><h3>SLZ-168-MicrosoftDefenderConfigureVMForVulnerability</h3></summary>
+<summary><h6>SLZ-168-MicrosoftDefenderConfigureVMForVulnerability</h6></summary>
 
 
 - **Display name:** SLZ - 168 - Configure machines to receive a vulnerability assessment provider
@@ -2181,9 +2440,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>IDdefender</h5></summary>
+
 <a id="policy-slz-00-microsoftdefenderforcontainer"></a>
 <details open>
-<summary><h3>SLZ-00-MicrosoftDefenderForContainer</h3></summary>
+<summary><h6>SLZ-00-MicrosoftDefenderForContainer</h6></summary>
 
 
 - **Display name:** SLZ - 00 - Configure Microsoft Defender for CONTAINERS
@@ -2201,9 +2465,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>General</h4></summary>
+
+<details open>
+<summary><h5>ID078</h5></summary>
+
 <a id="policy-slz-78-alloweddeploymentregions"></a>
 <details open>
-<summary><h3>SLZ-78-AllowedDeploymentRegions</h3></summary>
+<summary><h6>SLZ-78-AllowedDeploymentRegions</h6></summary>
 
 
 - **Display name:** SLZ - 78 - Designate allowed resource deployment region
@@ -2221,9 +2495,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID238</h5></summary>
+
 <a id="policy-slz-238-1-apimprodnobasicsku"></a>
 <details open>
-<summary><h3>SLZ-238.1-ApimProdNoBasicSku</h3></summary>
+<summary><h6>SLZ-238.1-ApimProdNoBasicSku</h6></summary>
 
 
 - **Display name:** SLZ - 238.1 - Ensure API Management in PROD does not use Basic or Consumption SKU
@@ -2243,7 +2522,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-10-aksprodnofreetier"></a>
 <details open>
-<summary><h3>SLZ-238.10-AKSProdNoFreeTier</h3></summary>
+<summary><h6>SLZ-238.10-AKSProdNoFreeTier</h6></summary>
 
 
 - **Display name:** SLZ - 238.10 - Ensure AKS in PROD does not use Free tier
@@ -2263,7 +2542,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-11-lbprodnobasicsku"></a>
 <details open>
-<summary><h3>SLZ-238.11-LBProdNoBasicSku</h3></summary>
+<summary><h6>SLZ-238.11-LBProdNoBasicSku</h6></summary>
 
 
 - **Display name:** SLZ - 238.11 - Ensure Load Balancer in PROD does not use Basic SKU
@@ -2283,7 +2562,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-12-vpngwprodnobasictier"></a>
 <details open>
-<summary><h3>SLZ-238.12-VpnGwProdNoBasicTier</h3></summary>
+<summary><h6>SLZ-238.12-VpnGwProdNoBasicTier</h6></summary>
 
 
 - **Display name:** SLZ - 238.12 - Ensure VPN Gateway in PROD does not use Basic tier
@@ -2303,7 +2582,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-13-azuresearchprodnofreeorbasicsku"></a>
 <details open>
-<summary><h3>SLZ-238.13-AzureSearchProdNoFreeOrBasicSku</h3></summary>
+<summary><h6>SLZ-238.13-AzureSearchProdNoFreeOrBasicSku</h6></summary>
 
 
 - **Display name:** SLZ - 238.13 - Ensure Azure Cognitive Search in PROD does not use Free or Basic SKU
@@ -2323,7 +2602,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-14-signalrprodnofreetier"></a>
 <details open>
-<summary><h3>SLZ-238.14-SignalRProdNoFreeTier</h3></summary>
+<summary><h6>SLZ-238.14-SignalRProdNoFreeTier</h6></summary>
 
 
 - **Display name:** SLZ - 238.14 - Ensure Azure SignalR in PROD does not use Free tier
@@ -2343,7 +2622,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-2-appconfigprodnofreesku"></a>
 <details open>
-<summary><h3>SLZ-238.2-AppConfigProdNoFreeSku</h3></summary>
+<summary><h6>SLZ-238.2-AppConfigProdNoFreeSku</h6></summary>
 
 
 - **Display name:** SLZ - 238.2 - Ensure App Configuration in PROD does not use Free SKU
@@ -2363,7 +2642,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-3-appserviceprodnolowtiersku"></a>
 <details open>
-<summary><h3>SLZ-238.3-AppServiceProdNoLowTierSku</h3></summary>
+<summary><h6>SLZ-238.3-AppServiceProdNoLowTierSku</h6></summary>
 
 
 - **Display name:** SLZ - 238.3 - Ensure App Service Plan in PROD does not use Free, Shared, or Basic SKUs
@@ -2383,7 +2662,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-4-adxprodnodevelopertier"></a>
 <details open>
-<summary><h3>SLZ-238.4-ADXProdNoDeveloperTier</h3></summary>
+<summary><h6>SLZ-238.4-ADXProdNoDeveloperTier</h6></summary>
 
 
 - **Display name:** SLZ - 238.4 - Ensure Azure Data Explorer in PROD does not use Developer Tier
@@ -2403,7 +2682,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-5-databricksprodnostandardortrialsku"></a>
 <details open>
-<summary><h3>SLZ-238.5-DatabricksProdNoStandardOrTrialSku</h3></summary>
+<summary><h6>SLZ-238.5-DatabricksProdNoStandardOrTrialSku</h6></summary>
 
 
 - **Display name:** SLZ - 238.5 - Ensure Azure Databricks in PROD does not use Standard or Trial SKU
@@ -2423,7 +2702,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-6-disksprodnostandardhdd"></a>
 <details open>
-<summary><h3>SLZ-238.6-DisksProdNoStandardHDD</h3></summary>
+<summary><h6>SLZ-238.6-DisksProdNoStandardHDD</h6></summary>
 
 
 - **Display name:** SLZ - 238.6 - Ensure Disks in PROD are not using Standard HDD (Standard_LRS)
@@ -2443,7 +2722,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-7-acrprodnobasicsku"></a>
 <details open>
-<summary><h3>SLZ-238.7-ACRProdNoBasicSku</h3></summary>
+<summary><h6>SLZ-238.7-ACRProdNoBasicSku</h6></summary>
 
 
 - **Display name:** SLZ - 238.7 - Ensure ACR in PROD does not use Basic SKU
@@ -2463,7 +2742,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-8-eventhubprodnobasicsku"></a>
 <details open>
-<summary><h3>SLZ-238.8-EventHubProdNoBasicSku</h3></summary>
+<summary><h6>SLZ-238.8-EventHubProdNoBasicSku</h6></summary>
 
 
 - **Display name:** SLZ - 238.8 - Ensure Event Hubs in PROD do not use Basic SKU
@@ -2483,7 +2762,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-238-9-keyvaultprodnostandardsku"></a>
 <details open>
-<summary><h3>SLZ-238.9-KeyVaultProdNoStandardSku</h3></summary>
+<summary><h6>SLZ-238.9-KeyVaultProdNoStandardSku</h6></summary>
 
 
 - **Display name:** SLZ - 238.9 - Ensure Key Vault in PROD does not use Standard SKU
@@ -2501,9 +2780,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID272</h5></summary>
+
 <a id="policy-slz-272-resourcelockformissioncriticalresources"></a>
 <details open>
-<summary><h3>SLZ-272-ResourceLockForMissionCriticalResources</h3></summary>
+<summary><h6>SLZ-272-ResourceLockForMissionCriticalResources</h6></summary>
 
 
 - **Display name:** SLZ - 272 - Ensure that Resource Locks are set for Mission-Critical
@@ -2521,9 +2805,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID287</h5></summary>
+
 <a id="policy-slz-287-iampermissionsthroughgroups"></a>
 <details open>
-<summary><h3>SLZ-287-IAMPermissionsThroughGroups</h3></summary>
+<summary><h6>SLZ-287-IAMPermissionsThroughGroups</h6></summary>
 
 
 - **Display name:** SLZ - 287 - Ensure IAM Users Receive Permissions Only Through Groups
@@ -2541,9 +2830,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID617</h5></summary>
+
 <a id="policy-slz-617-onlyallowedgeolocations"></a>
 <details open>
-<summary><h3>SLZ-617-OnlyAllowedGeoLocations</h3></summary>
+<summary><h6>SLZ-617-OnlyAllowedGeoLocations</h6></summary>
 
 
 - **Display name:** SLZ - 617 - Only allowed geo locations
@@ -2561,9 +2855,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Guest-Configuration</h4></summary>
+
+<details open>
+<summary><h5>ID00-Guest-Config</h5></summary>
+
 <a id="policy-385f5831-96d4-41db-9a3c-cd3af78aaae6"></a>
 <details open>
-<summary><h3>385f5831-96d4-41db-9a3c-cd3af78aaae6</h3></summary>
+<summary><h6>385f5831-96d4-41db-9a3c-cd3af78aaae6</h6></summary>
 
 
 - **Display name:** SLZ - 01 Guest Configuration - Guest Configuration assignments on Windows
@@ -2583,7 +2887,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-331e8ea8-378a-410f-a2e5-ae22f38bb0da"></a>
 <details open>
-<summary><h3>331e8ea8-378a-410f-a2e5-ae22f38bb0da</h3></summary>
+<summary><h6>331e8ea8-378a-410f-a2e5-ae22f38bb0da</h6></summary>
 
 
 - **Display name:** SLZ - 02 Guest Configuration - Guest Configuration assignments on Linux
@@ -2603,7 +2907,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-3cf2ab00-13f1-4d0c-8971-2ac904541a7e"></a>
 <details open>
-<summary><h3>3cf2ab00-13f1-4d0c-8971-2ac904541a7e</h3></summary>
+<summary><h6>3cf2ab00-13f1-4d0c-8971-2ac904541a7e</h6></summary>
 
 
 - **Display name:** SLZ - 03 Guest Configuration - Add system-assigned on VMs with no identities
@@ -2623,7 +2927,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-497dff13-db2a-4c0f-8603-28fa3b331ab6"></a>
 <details open>
-<summary><h3>497dff13-db2a-4c0f-8603-28fa3b331ab6</h3></summary>
+<summary><h6>497dff13-db2a-4c0f-8603-28fa3b331ab6</h6></summary>
 
 
 - **Display name:** SLZ - 04 Guest Configuration - Add system-assigned on VMs with User-Assigned identities
@@ -2641,9 +2945,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Monitoring</h4></summary>
+
+<details open>
+<summary><h5>ID223</h5></summary>
+
 <a id="policy-slz-223-logskeyvault"></a>
 <details open>
-<summary><h3>SLZ-223-logsKeyVault</h3></summary>
+<summary><h6>SLZ-223-logsKeyVault</h6></summary>
 
 
 - **Display name:** SLZ - 223 - Ensure that logging for Azure Key Vault is 'Enabled'
@@ -2661,9 +2975,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID226</h5></summary>
+
 <a id="policy-slz-226-logscreatepolicy"></a>
 <details open>
-<summary><h3>SLZ-226-logsCreatePolicy</h3></summary>
+<summary><h6>SLZ-226-logsCreatePolicy</h6></summary>
 
 
 - **Display name:** SLZ - 226 - Ensure that Activity Log Alert exists for Create Policy Assignment
@@ -2681,9 +3000,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID227</h5></summary>
+
 <a id="policy-slz-227-logsdeletepolicy"></a>
 <details open>
-<summary><h3>SLZ-227-logsDeletePolicy</h3></summary>
+<summary><h6>SLZ-227-logsDeletePolicy</h6></summary>
 
 
 - **Display name:** SLZ - 227 - Ensure that Activity Log Alert exists for Delete Policy Assignment
@@ -2701,9 +3025,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID228</h5></summary>
+
 <a id="policy-slz-228-logscreateupdatensg"></a>
 <details open>
-<summary><h3>SLZ-228-logsCreateUpdateNsg</h3></summary>
+<summary><h6>SLZ-228-logsCreateUpdateNsg</h6></summary>
 
 
 - **Display name:** SLZ - 228 - Ensure that Activity Log Alert exists for Create or Update Network Security Group
@@ -2721,9 +3050,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID229</h5></summary>
+
 <a id="policy-slz-229-logsdeletensg"></a>
 <details open>
-<summary><h3>SLZ-229-logsDeleteNsg</h3></summary>
+<summary><h6>SLZ-229-logsDeleteNsg</h6></summary>
 
 
 - **Display name:** SLZ - 229 - Ensure that Activity Log Alert exists for Delete Network Security Group
@@ -2741,9 +3075,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID230</h5></summary>
+
 <a id="policy-slz-230-logscreateupdatesecuritysolutions"></a>
 <details open>
-<summary><h3>SLZ-230-logsCreateUpdateSecuritySolutions</h3></summary>
+<summary><h6>SLZ-230-logsCreateUpdateSecuritySolutions</h6></summary>
 
 
 - **Display name:** SLZ - 230 - Ensure that Activity Log Alert exists for Create or Update Security Solution
@@ -2761,9 +3100,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID231</h5></summary>
+
 <a id="policy-slz-231-logsdeletesecuritysolutions"></a>
 <details open>
-<summary><h3>SLZ-231-logsDeleteSecuritySolutions</h3></summary>
+<summary><h6>SLZ-231-logsDeleteSecuritySolutions</h6></summary>
 
 
 - **Display name:** SLZ - 231 - Ensure that Activity Log Alert exists for Delete Security Solution
@@ -2781,9 +3125,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID232</h5></summary>
+
 <a id="policy-slz-232-logscreateupdatesqlserverfirewallrule"></a>
 <details open>
-<summary><h3>SLZ-232-logsCreateUpdateSqlServerFirewallRule</h3></summary>
+<summary><h6>SLZ-232-logsCreateUpdateSqlServerFirewallRule</h6></summary>
 
 
 - **Display name:** SLZ - 232 - Ensure that Activity Log Alert exists for Create or Update SQL Server Firewall Rule
@@ -2801,9 +3150,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID233</h5></summary>
+
 <a id="policy-slz-233-logsdeletesqlserverfirewallrule"></a>
 <details open>
-<summary><h3>SLZ-233-logsDeleteSqlServerFirewallRule</h3></summary>
+<summary><h6>SLZ-233-logsDeleteSqlServerFirewallRule</h6></summary>
 
 
 - **Display name:** SLZ - 233 - Ensure that Activity Log Alert exists for Delete SQL Server Firewall Rule
@@ -2821,9 +3175,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID234</h5></summary>
+
 <a id="policy-slz-234-logscreateorupdatepubliciprule"></a>
 <details open>
-<summary><h3>SLZ-234-logsCreateOrUpdatePublicIpRule</h3></summary>
+<summary><h6>SLZ-234-logsCreateOrUpdatePublicIpRule</h6></summary>
 
 
 - **Display name:** SLZ - 234 - Ensure that Activity Log Alert exists for Create or Update Public IP Address rule
@@ -2841,9 +3200,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID235</h5></summary>
+
 <a id="policy-slz-235-logsdeletepubliciprule"></a>
 <details open>
-<summary><h3>SLZ-235-logsDeletePublicIpRule</h3></summary>
+<summary><h6>SLZ-235-logsDeletePublicIpRule</h6></summary>
 
 
 - **Display name:** SLZ - 235 - Ensure that Activity Log Alert exists for Delete Public IP Address rule
@@ -2861,9 +3225,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID236</h5></summary>
+
 <a id="policy-slz-236-1-webappsnoinsights"></a>
 <details open>
-<summary><h3>SLZ-236.1-webAppsNoInsights</h3></summary>
+<summary><h6>SLZ-236.1-webAppsNoInsights</h6></summary>
 
 
 - **Display name:** SLZ - 236.1 - Audit Web Apps without Application Insights
@@ -2883,7 +3252,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-236-2-functionappsnoinsights"></a>
 <details open>
-<summary><h3>SLZ-236.2-functionAppsNoInsights</h3></summary>
+<summary><h6>SLZ-236.2-functionAppsNoInsights</h6></summary>
 
 
 - **Display name:** SLZ - 236.2 - Audit Function Apps without Application Insights
@@ -2903,7 +3272,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-236-3-logicappsnoinsights"></a>
 <details open>
-<summary><h3>SLZ-236.3-logicAppsNoInsights</h3></summary>
+<summary><h6>SLZ-236.3-logicAppsNoInsights</h6></summary>
 
 
 - **Display name:** SLZ - 236.3 - Audit Logic Apps without Application Insights
@@ -2921,9 +3290,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID324</h5></summary>
+
 <a id="policy-slz-324-logscreatesecuritygroups"></a>
 <details open>
-<summary><h3>SLZ-324-logsCreateSecurityGroups</h3></summary>
+<summary><h6>SLZ-324-logsCreateSecurityGroups</h6></summary>
 
 
 - **Display name:** SLZ - 324 - Ensure a log metric filter and alarm exist for Create security group changes
@@ -2943,7 +3317,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-324-logsdeletesecuritygroup"></a>
 <details open>
-<summary><h3>SLZ-324-logsDeleteSecurityGroup</h3></summary>
+<summary><h6>SLZ-324-logsDeleteSecurityGroup</h6></summary>
 
 
 - **Display name:** SLZ - 324 - Ensure a log metric filter and alarm exist for Delete security group changes
@@ -2961,9 +3335,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID326</h5></summary>
+
 <a id="policy-slz-326-logscreatenetworkgateway"></a>
 <details open>
-<summary><h3>SLZ-326-logsCreateNetworkGateway</h3></summary>
+<summary><h6>SLZ-326-logsCreateNetworkGateway</h6></summary>
 
 
 - **Display name:** SLZ - 326 - Ensure a log metric filter and alarm exist for Create Network Gateway
@@ -2983,7 +3362,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-326-logsdeletenetworkgateway"></a>
 <details open>
-<summary><h3>SLZ-326-logsDeleteNetworkGateway</h3></summary>
+<summary><h6>SLZ-326-logsDeleteNetworkGateway</h6></summary>
 
 
 - **Display name:** SLZ - 326 - Ensure a log metric filter and alarm exist for Delete Network Gateway
@@ -3001,9 +3380,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID327</h5></summary>
+
 <a id="policy-slz-327-logscreateroutetables"></a>
 <details open>
-<summary><h3>SLZ-327-logsCreateRouteTables</h3></summary>
+<summary><h6>SLZ-327-logsCreateRouteTables</h6></summary>
 
 
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Create Route Tables
@@ -3023,7 +3407,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-327-logscreateroutetablesroute"></a>
 <details open>
-<summary><h3>SLZ-327-logsCreateRouteTablesRoute</h3></summary>
+<summary><h6>SLZ-327-logsCreateRouteTablesRoute</h6></summary>
 
 
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Create Route Tables Route
@@ -3043,7 +3427,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-327-logsdeletesecuritygroup"></a>
 <details open>
-<summary><h3>SLZ-327-logsDeleteSecurityGroup</h3></summary>
+<summary><h6>SLZ-327-logsDeleteSecurityGroup</h6></summary>
 
 
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Delete Route Tables
@@ -3063,7 +3447,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-327-logsdeletesecuritygrouproute"></a>
 <details open>
-<summary><h3>SLZ-327-logsDeleteSecurityGroupRoute</h3></summary>
+<summary><h6>SLZ-327-logsDeleteSecurityGroupRoute</h6></summary>
 
 
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Delete Route Tables Route
@@ -3081,9 +3465,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID328</h5></summary>
+
 <a id="policy-slz-328-logscreatevirtualnetwork"></a>
 <details open>
-<summary><h3>SLZ-328-logsCreateVirtualNetwork</h3></summary>
+<summary><h6>SLZ-328-logsCreateVirtualNetwork</h6></summary>
 
 
 - **Display name:** SLZ - 328 - Ensure a log metric filter and alarm exist for Create Virtual Networks
@@ -3103,7 +3492,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-328-logsdeletevirtualnetworks"></a>
 <details open>
-<summary><h3>SLZ-328-logsDeleteVirtualNetworks</h3></summary>
+<summary><h6>SLZ-328-logsDeleteVirtualNetworks</h6></summary>
 
 
 - **Display name:** SLZ - 328 - Ensure a log metric filter and alarm exist for Delete Virtual Networks
@@ -3121,9 +3510,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Network</h4></summary>
+
+<details open>
+<summary><h5>ID10.6</h5></summary>
+
 <a id="policy-slz-10-6-disablepublicnetworkwebapps"></a>
 <details open>
-<summary><h3>SLZ-10.6-DisablePublicNetworkWebApps</h3></summary>
+<summary><h6>SLZ-10.6-DisablePublicNetworkWebApps</h6></summary>
 
 
 - **Display name:** SLZ - 10.6 - Public Network Access Control for Web Apps
@@ -3141,9 +3540,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1325</h5></summary>
+
 <a id="policy-slz-1325-wafonapgt"></a>
 <details open>
-<summary><h3>SLZ-1325-WAFonAPGT</h3></summary>
+<summary><h6>SLZ-1325-WAFonAPGT</h6></summary>
 
 
 - **Display name:** SLZ - 1325 - Web Application Firewall (WAF) Must Be Enabled on Application Gateways
@@ -3161,9 +3565,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1326</h5></summary>
+
 <a id="policy-slz-1326-wafskuv2"></a>
 <details open>
-<summary><h3>SLZ-1326-WAFSkuV2</h3></summary>
+<summary><h6>SLZ-1326-WAFSkuV2</h6></summary>
 
 
 - **Display name:** SLZ - 1326 - Application Gateway Must Use WAF_v2 SKU
@@ -3181,9 +3590,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1327</h5></summary>
+
 <a id="policy-slz-1327-wafonfrontdoor"></a>
 <details open>
-<summary><h3>SLZ-1327-WAFonFrontDoor</h3></summary>
+<summary><h6>SLZ-1327-WAFonFrontDoor</h6></summary>
 
 
 - **Display name:** SLZ - 1327 - Azure CDN profiles of type Front Door should have a Web Application Firewall configured
@@ -3201,9 +3615,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1328</h5></summary>
+
 <a id="policy-slz-1328-wafonfrontdoor-detection"></a>
 <details open>
-<summary><h3>SLZ-1328-WAFonFrontDoor-Detection</h3></summary>
+<summary><h6>SLZ-1328-WAFonFrontDoor-Detection</h6></summary>
 
 
 - **Display name:** SLZ - 1328 - Web Application Firewall (WAF) should use the specified mode for Azure Front Door Service
@@ -3221,9 +3640,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1329</h5></summary>
+
 <a id="policy-slz-1329-disablepublicnetworkfunctionapps"></a>
 <details open>
-<summary><h3>SLZ-1329-DisablePublicNetworkFunctionApps</h3></summary>
+<summary><h6>SLZ-1329-DisablePublicNetworkFunctionApps</h6></summary>
 
 
 - **Display name:** SLZ - 1329 - Public Network Access Control for Function Apps
@@ -3241,9 +3665,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1330</h5></summary>
+
 <a id="policy-slz-1330-privateendpointapi"></a>
 <details open>
-<summary><h3>SLZ-1330-PrivateEndpointAPI</h3></summary>
+<summary><h6>SLZ-1330-PrivateEndpointAPI</h6></summary>
 
 
 - **Display name:** SLZ - 1330 - Ensure Private Endpoint for Azure API Management Services
@@ -3261,9 +3690,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1331</h5></summary>
+
 <a id="policy-slz-1331-disablepublicaccessapi"></a>
 <details open>
-<summary><h3>SLZ-1331-DisablePublicAccessAPI</h3></summary>
+<summary><h6>SLZ-1331-DisablePublicAccessAPI</h6></summary>
 
 
 - **Display name:** SLZ - 1331 - Ensure Public network access must be Disabled
@@ -3283,7 +3717,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-1331-2-disablepublicaccessapipe"></a>
 <details open>
-<summary><h3>SLZ-1331.2-DisablePublicAccessAPIPE</h3></summary>
+<summary><h6>SLZ-1331.2-DisablePublicAccessAPIPE</h6></summary>
 
 
 - **Display name:** SLZ - 1331.2 - Ensure Public network access must be Disabled for API management with Private Endpoints
@@ -3301,9 +3735,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1332</h5></summary>
+
 <a id="policy-slz-1332-apiallowedsku"></a>
 <details open>
-<summary><h3>SLZ-1332-APIAllowedSku</h3></summary>
+<summary><h6>SLZ-1332-APIAllowedSku</h6></summary>
 
 
 - **Display name:** SLZ - 1332 - Enforce Allowed SKUs for Azure API Management Service
@@ -3321,9 +3760,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1333</h5></summary>
+
 <a id="policy-slz-1333-nopubliciponnics"></a>
 <details open>
-<summary><h3>SLZ-1333-NoPublicIpOnNics</h3></summary>
+<summary><h6>SLZ-1333-NoPublicIpOnNics</h6></summary>
 
 
 - **Display name:** SLZ - 1333 - Network Interfaces Should Not Have Public IPs
@@ -3341,9 +3785,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1334</h5></summary>
+
 <a id="policy-slz-1334-kubernetesinternallb"></a>
 <details open>
-<summary><h3>SLZ-1334-KubernetesInternalLB</h3></summary>
+<summary><h6>SLZ-1334-KubernetesInternalLB</h6></summary>
 
 
 - **Display name:** SLZ - 1334 - Kubernetes Clusters Should Use Internal Load Balancers
@@ -3361,9 +3810,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1335</h5></summary>
+
 <a id="policy-slz-1335-nopubliciponaksnodepools"></a>
 <details open>
-<summary><h3>SLZ-1335-NoPublicIpOnAKSNodePools</h3></summary>
+<summary><h6>SLZ-1335-NoPublicIpOnAKSNodePools</h6></summary>
 
 
 - **Display name:** SLZ - 1335 - Prevent Public IP on AKS Node Pools
@@ -3381,9 +3835,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1336</h5></summary>
+
 <a id="policy-slz-1336-containerappsnopublicna"></a>
 <details open>
-<summary><h3>SLZ-1336-ContainerAppsNoPublicNA</h3></summary>
+<summary><h6>SLZ-1336-ContainerAppsNoPublicNA</h6></summary>
 
 
 - **Display name:** SLZ - 1336 - Container Apps Environment Should Disable Public Network Access
@@ -3401,9 +3860,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1337</h5></summary>
+
 <a id="policy-slz-1337-containerappdisableexternalnetworkaccess"></a>
 <details open>
-<summary><h3>SLZ-1337-ContainerAppDisableExternalNetworkAccess</h3></summary>
+<summary><h6>SLZ-1337-ContainerAppDisableExternalNetworkAccess</h6></summary>
 
 
 - **Display name:** SLZ - 1337 - Container Apps Should Disable External Network Access
@@ -3421,9 +3885,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1338</h5></summary>
+
 <a id="policy-slz-1338-wafonapgt-detection"></a>
 <details open>
-<summary><h3>SLZ-1338-WAFonAPGT-Detection</h3></summary>
+<summary><h6>SLZ-1338-WAFonAPGT-Detection</h6></summary>
 
 
 - **Display name:** SLZ - 1338 - Web Application Firewall (WAF) should use the specified mode for Application Gateway
@@ -3441,9 +3910,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID239</h5></summary>
+
 <a id="policy-slz-239-rpdaccessdisabledforinternet"></a>
 <details open>
-<summary><h3>SLZ-239-RPDAccessDisabledForInternet</h3></summary>
+<summary><h6>SLZ-239-RPDAccessDisabledForInternet</h6></summary>
 
 
 - **Display name:** SLZ - 239 - Ensure that RDP access from the Internet is evaluated and restricted
@@ -3461,9 +3935,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID240</h5></summary>
+
 <a id="policy-slz-240-sshaccessdisabledforinternet"></a>
 <details open>
-<summary><h3>SLZ-240-SSHAccessDisabledForInternet</h3></summary>
+<summary><h6>SLZ-240-SSHAccessDisabledForInternet</h6></summary>
 
 
 - **Display name:** SLZ - 240 - Ensure that SSH access from the Internet is evaluated and restricted
@@ -3481,9 +3960,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID241</h5></summary>
+
 <a id="policy-slz-241-udpaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-241-UDPAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-241-UDPAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 241 - Ensure that UDP access from the Internet is evaluated and restricted
@@ -3501,9 +3985,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID242</h5></summary>
+
 <a id="policy-slz-242-httpsaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-242-HTTPsAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-242-HTTPsAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 242 - Ensure that HTTP access from the Internet is evaluated and restricted
@@ -3521,9 +4010,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID244</h5></summary>
+
 <a id="policy-slz-244-networkwatcherenabled"></a>
 <details open>
-<summary><h3>SLZ-244-NetworkWatcherEnabled</h3></summary>
+<summary><h6>SLZ-244-NetworkWatcherEnabled</h6></summary>
 
 
 - **Display name:** SLZ - 244 - Ensure that Network Watcher is 'Enabled'
@@ -3541,9 +4035,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID332</h5></summary>
+
 <a id="policy-slz-332-nsgnoingressfrom0000for22or3389"></a>
 <details open>
-<summary><h3>SLZ-332-NSGNoIngressFrom0000For22or3389</h3></summary>
+<summary><h6>SLZ-332-NSGNoIngressFrom0000For22or3389</h6></summary>
 
 
 - **Display name:** SLZ - 332 - Ensure no security groups allow ingress from 0.0.0.0/0 to remote server administration ports
@@ -3561,9 +4060,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID333</h5></summary>
+
 <a id="policy-slz-333-nsgnoingressfrom0for22or3389"></a>
 <details open>
-<summary><h3>SLZ-333-NSGNoIngressFrom0For22or3389</h3></summary>
+<summary><h6>SLZ-333-NSGNoIngressFrom0For22or3389</h6></summary>
 
 
 - **Display name:** SLZ - 333 - Ensure no security groups allow ingress from ::/0 to remote server administration ports
@@ -3581,9 +4085,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID629</h5></summary>
+
 <a id="policy-slz-629-virtualnetworksddosprotection"></a>
 <details open>
-<summary><h3>SLZ-629-VirtualNetworksDDOSProtection</h3></summary>
+<summary><h6>SLZ-629-VirtualNetworksDDOSProtection</h6></summary>
 
 
 - **Display name:** SLZ - 629 - Enforce DDoS Protection
@@ -3601,9 +4110,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID983</h5></summary>
+
 <a id="policy-slz-983-ftpaccessfrominternetevaluatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-983-FTPAccessFromInternetEvaluatedAndRestricted</h3></summary>
+<summary><h6>SLZ-983-FTPAccessFromInternetEvaluatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 983 - Ensure that FTP access from the Internet is evaluated and restricted
@@ -3621,9 +4135,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID984</h5></summary>
+
 <a id="policy-slz-984-mongodbaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-984-MongoDBAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-984-MongoDBAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 984 - Ensure that MongoDB access from the Internet is evaluated and restricted
@@ -3641,9 +4160,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID985</h5></summary>
+
 <a id="policy-slz-985-cassandraaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-985-CassandraAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-985-CassandraAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 985 - Ensure that Cassandra access from the Internet is evaluated and restricted
@@ -3661,9 +4185,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID986</h5></summary>
+
 <a id="policy-slz-986-elasticsearchaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-986-ElasticsearchAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-986-ElasticsearchAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 986 - Ensure that Elasticsearch/Kibana  access from the Internet is evaluated and restricted
@@ -3681,9 +4210,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID987</h5></summary>
+
 <a id="policy-slz-987-kafkaaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-987-KafkaAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-987-KafkaAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 987 - Ensure that Kafka access from the Internet is evaluated and restricted
@@ -3701,9 +4235,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID988</h5></summary>
+
 <a id="policy-slz-988-memcachedaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-988-MemcachedAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-988-MemcachedAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 988 - Ensure that Memcached access from the Internet is evaluated and restricted
@@ -3721,9 +4260,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID989</h5></summary>
+
 <a id="policy-slz-989-mysqlaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-989-MySQLAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-989-MySQLAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 989 - Ensure that MySQL access from the Internet is evaluated and restricted
@@ -3741,9 +4285,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID990</h5></summary>
+
 <a id="policy-slz-990-oracleaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-990-OracleAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-990-OracleAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 990 - Ensure that Oracle access from the Internet is evaluated and restricted
@@ -3761,9 +4310,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID991</h5></summary>
+
 <a id="policy-slz-991-postgresaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-991-PostgresAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-991-PostgresAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 991 - Ensure that Postgres access from the Internet is evaluated and restricted
@@ -3781,9 +4335,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID992</h5></summary>
+
 <a id="policy-slz-992-redisaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-992-RedisAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-992-RedisAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 992 - Ensure that Redis access from the Internet is evaluated and restricted
@@ -3801,9 +4360,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID993</h5></summary>
+
 <a id="policy-slz-993-winsqlserveraccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-993-WinSQLServerAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-993-WinSQLServerAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 993 - Ensure that Windows SQL Server access from the Internet is evaluated and restricted
@@ -3821,9 +4385,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID994</h5></summary>
+
 <a id="policy-slz-994-telnetaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h3>SLZ-994-TelnetAccessFromInternetEvalutatedAndRestricted</h3></summary>
+<summary><h6>SLZ-994-TelnetAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
 - **Display name:** SLZ - 994 - Ensure that Telnet access from the Internet is evaluated and restricted
@@ -3841,9 +4410,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Security</h4></summary>
+
+<details open>
+<summary><h5>ID1340</h5></summary>
+
 <a id="policy-slz-1340-appservicelatesttls"></a>
 <details open>
-<summary><h3>SLZ-1340-AppServiceLatestTLS</h3></summary>
+<summary><h6>SLZ-1340-AppServiceLatestTLS</h6></summary>
 
 
 - **Display name:** SLZ - 1340 - App Service apps should use the latest tls version
@@ -3861,9 +4440,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1341</h5></summary>
+
 <a id="policy-slz-1341-appserviceslotslatesttls"></a>
 <details open>
-<summary><h3>SLZ-1341-AppServiceSlotsLatestTLS</h3></summary>
+<summary><h6>SLZ-1341-AppServiceSlotsLatestTLS</h6></summary>
 
 
 - **Display name:** SLZ - 1341 - App Service app slots should use the latest TLS version
@@ -3881,9 +4465,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1342</h5></summary>
+
 <a id="policy-slz-1342-functionappslatesttls"></a>
 <details open>
-<summary><h3>SLZ-1342-FunctionAppsLatestTLS</h3></summary>
+<summary><h6>SLZ-1342-FunctionAppsLatestTLS</h6></summary>
 
 
 - **Display name:** SLZ - 1342 - Configure Function apps to use the latest TLS version
@@ -3901,9 +4490,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1343</h5></summary>
+
 <a id="policy-slz-1343-functionappslotslatesttls"></a>
 <details open>
-<summary><h3>SLZ-1343-FunctionAppSlotsLatestTLS</h3></summary>
+<summary><h6>SLZ-1343-FunctionAppSlotsLatestTLS</h6></summary>
 
 
 - **Display name:** SLZ - 1343 - Configure Function app slots to use the latest TLS version
@@ -3921,9 +4515,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1344</h5></summary>
+
 <a id="policy-slz-1344-logicappslatesttls"></a>
 <details open>
-<summary><h3>SLZ-1344-LogicAppsLatestTLS</h3></summary>
+<summary><h6>SLZ-1344-LogicAppsLatestTLS</h6></summary>
 
 
 - **Display name:** SLZ - 1344 - Configure Logic Apps to use the latest TLS version
@@ -3941,9 +4540,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1345</h5></summary>
+
 <a id="policy-slz-1345-redissecureconnections"></a>
 <details open>
-<summary><h3>SLZ-1345-RedisSecureConnections</h3></summary>
+<summary><h6>SLZ-1345-RedisSecureConnections</h6></summary>
 
 
 - **Display name:** SLZ - 1345 - Azure Cache for Redis only secure connections should be enabled
@@ -3961,9 +4565,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1346</h5></summary>
+
 <a id="policy-slz-1346-frontdoortls"></a>
 <details open>
-<summary><h3>SLZ-1346-FrontDoorTLS</h3></summary>
+<summary><h6>SLZ-1346-FrontDoorTLS</h6></summary>
 
 
 - **Display name:** SLZ - 1346 - Azure Front Door Standard and Premium should be running minimum TLS version of 1.2
@@ -3981,9 +4590,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1347</h5></summary>
+
 <a id="policy-slz-1347-eventhubtls"></a>
 <details open>
-<summary><h3>SLZ-1347-EventHubTLS</h3></summary>
+<summary><h6>SLZ-1347-EventHubTLS</h6></summary>
 
 
 - **Display name:** SLZ - 1347 - Event Hub namespaces should have the specified minimum TLS version
@@ -4001,9 +4615,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1348</h5></summary>
+
 <a id="policy-slz-1348-storagetls"></a>
 <details open>
-<summary><h3>SLZ-1348-StorageTLS</h3></summary>
+<summary><h6>SLZ-1348-StorageTLS</h6></summary>
 
 
 - **Display name:** SLZ - 1348 - Azure Storage should have minimum TLS version
@@ -4021,9 +4640,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1349</h5></summary>
+
 <a id="policy-slz-1349-addomainservicestls"></a>
 <details open>
-<summary><h3>SLZ-1349-ADDomainServicesTLS</h3></summary>
+<summary><h6>SLZ-1349-ADDomainServicesTLS</h6></summary>
 
 
 - **Display name:** SLZ - 1349 - Azure Active Directory Domain Services managed domains should use tls 1.2 only mode
@@ -4041,9 +4665,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1350</h5></summary>
+
 <a id="policy-slz-1350-azurecosmostls12"></a>
 <details open>
-<summary><h3>SLZ-1350-AzureCosmosTLS12</h3></summary>
+<summary><h6>SLZ-1350-AzureCosmosTLS12</h6></summary>
 
 
 - **Display name:** SLZ - 1350 - Azure COSMOS Database should be running tls version 1.2 or newer
@@ -4061,9 +4690,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1351</h5></summary>
+
 <a id="policy-slz-1351-sqlmanagedinstancetls12"></a>
 <details open>
-<summary><h3>SLZ-1351-SQLManagedInstanceTLS12</h3></summary>
+<summary><h6>SLZ-1351-SQLManagedInstanceTLS12</h6></summary>
 
 
 - **Display name:** SLZ - 1351 - SQL Managed Instance should have the minimal tls version of 1.2
@@ -4081,9 +4715,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1352</h5></summary>
+
 <a id="policy-slz-1352-arcsqlmanagedinstancetls12"></a>
 <details open>
-<summary><h3>SLZ-1352-ArcSQLManagedInstanceTLS12</h3></summary>
+<summary><h6>SLZ-1352-ArcSQLManagedInstanceTLS12</h6></summary>
 
 
 - **Display name:** SLZ - 1352 - tls protocol 1.2 must be used for Arc SQL managed instances.
@@ -4101,9 +4740,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1353</h5></summary>
+
 <a id="policy-slz-1353-sqldatabasetls12"></a>
 <details open>
-<summary><h3>SLZ-1353-SQLDatabaseTLS12</h3></summary>
+<summary><h6>SLZ-1353-SQLDatabaseTLS12</h6></summary>
 
 
 - **Display name:** SLZ - 1353 - Azure SQL Database should be running tls version 1.2 or newer
@@ -4121,9 +4765,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1354</h5></summary>
+
 <a id="policy-slz-1354-postgresqlflexsslversion"></a>
 <details open>
-<summary><h3>SLZ-1354-PostgreSQLFLEXSSLVersion</h3></summary>
+<summary><h6>SLZ-1354-PostgreSQLFLEXSSLVersion</h6></summary>
 
 
 - **Display name:** SLZ - 1354 - PostgreSQL flexible servers should be running tls version 1.2 or newer
@@ -4141,9 +4790,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1355</h5></summary>
+
 <a id="policy-slz-1355-mariadbtlsversion"></a>
 <details open>
-<summary><h3>SLZ-1355-MariaDBTLSVersion</h3></summary>
+<summary><h6>SLZ-1355-MariaDBTLSVersion</h6></summary>
 
 
 - **Display name:** SLZ - 1355 - Azure MARIA Database should be running tls version 1.2 or newer
@@ -4161,9 +4815,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1356</h5></summary>
+
 <a id="policy-slz-1356-synapsesqltlsversion"></a>
 <details open>
-<summary><h3>SLZ-1356-SynapseSQLTLSVersion</h3></summary>
+<summary><h6>SLZ-1356-SynapseSQLTLSVersion</h6></summary>
 
 
 - **Display name:** SLZ - 1356 - Azure Synapse Workspace SQL Server should be running tls version 1.2 or newer
@@ -4181,9 +4840,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1357</h5></summary>
+
 <a id="policy-slz-1357-azurekubernetesclusterskms"></a>
 <details open>
-<summary><h3>SLZ-1357-AzureKubernetesClustersKMS</h3></summary>
+<summary><h6>SLZ-1357-AzureKubernetesClustersKMS</h6></summary>
 
 
 - **Display name:** SLZ - 1357 - Azure Kubernetes Clusters should enable Key Management Service (KMS)
@@ -4201,9 +4865,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1358</h5></summary>
+
 <a id="policy-slz-1358-aisncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1358-AISNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1358-AISNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1358 - Azure AI Services resources should encrypt data at rest with a customer-managed key (CMK) (only SNC resources)
@@ -4221,9 +4890,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1359</h5></summary>
+
 <a id="policy-slz-1359-automationsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1359-AutomationSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1359-AutomationSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1359 - Azure Automation accounts should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4241,9 +4915,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1360</h5></summary>
+
 <a id="policy-slz-1360-backupvaultsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1360-BackupVaultSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1360-BackupVaultSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1360 - Azure Backup Vaults should use customer-managed keys for encrypting backup data(SNC resources)
@@ -4261,9 +4940,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1361</h5></summary>
+
 <a id="policy-slz-1361-batchsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1361-BatchSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1361-BatchSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1361 - Azure Batch account should use customer-managed keys to encrypt data (only SNC resources)
@@ -4281,9 +4965,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1362</h5></summary>
+
 <a id="policy-slz-1362-loadtestingsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1362-LoadTestingSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1362-LoadTestingSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1362 - Azure load testing resource should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4301,9 +4990,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1363</h5></summary>
+
 <a id="policy-slz-1363-redisenterprisesncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1363-RedisEnterpriseSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1363-RedisEnterpriseSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1363 - Azure Cache for Redis Enterprise should use customer-managed keys for encrypting disk data (only SNC resources)
@@ -4321,9 +5015,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1364</h5></summary>
+
 <a id="policy-slz-1364-cognitivesearchsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1364-CognitiveSearchSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1364-CognitiveSearchSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1364 - Azure Cognitive Search services should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4341,9 +5040,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1365</h5></summary>
+
 <a id="policy-slz-1365-containerinstancesncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1365-ContainerInstanceSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1365-ContainerInstanceSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1365 - Azure Container Instance container group should use customer-managed key for encryption (only SNC resources)
@@ -4361,9 +5065,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1366</h5></summary>
+
 <a id="policy-slz-1366-containerregistrysncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1366-ContainerRegistrySNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1366-ContainerRegistrySNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1366 - Container registries should be encrypted with a customer-managed key (only SNC resources)
@@ -4381,9 +5090,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1367</h5></summary>
+
 <a id="policy-slz-1367-cosmosdbsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1367-CosmosDBSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1367-CosmosDBSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1367 - Azure Cosmos DB accounts should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4401,9 +5115,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1368</h5></summary>
+
 <a id="policy-slz-1368-azuredataexplorersncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1368-AzureDataExplorerSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1368-AzureDataExplorerSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1368 - Azure Data Explorer encryption at rest should use a customer-managed key (only SNC resources)
@@ -4421,9 +5140,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1369</h5></summary>
+
 <a id="policy-slz-1369-azuredatafactoriessncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1369-AzureDataFactoriesSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1369-AzureDataFactoriesSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1369 - Azure data factories should be encrypted with a customer-managed key (only SNC resources)
@@ -4441,9 +5165,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1370</h5></summary>
+
 <a id="policy-slz-1370-elasticsanvolumegroupsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1370-ElasticSanVolumeGroupSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1370-ElasticSanVolumeGroupSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1370 - ElasticSan Volume Group should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4461,9 +5190,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1371</h5></summary>
+
 <a id="policy-slz-1371-eventhubnamespacesncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1371-EventHubNamespaceSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1371-EventHubNamespaceSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1371 - Event Hub namespaces should use a customer-managed key for encryption (only SNC resources)
@@ -4481,9 +5215,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1372</h5></summary>
+
 <a id="policy-slz-1372-fluidrelaysncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1372-FluidRelaySNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1372-FluidRelaySNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1372 - Fluid Relay should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4501,9 +5240,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1373</h5></summary>
+
 <a id="policy-slz-1373-hdinsightsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1373-HDInsightSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1373-HDInsightSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1373 - Azure HDInsight clusters should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4521,9 +5265,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1374</h5></summary>
+
 <a id="policy-slz-1374-healthbotssncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1374-HealthBotsSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1374-HealthBotsSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1374 - Azure Health Bots should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4541,9 +5290,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1375</h5></summary>
+
 <a id="policy-slz-1375-hpccachesncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1375-HPCCacheSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1375-HPCCacheSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1375 - HPC Cache accounts should use customer-managed key for encryption (only SNC resources)
@@ -4561,9 +5315,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1376</h5></summary>
+
 <a id="policy-slz-1376-iothubsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1376-IoTHubSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1376-IoTHubSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1376 - Azure IoT Hub should use customer-managed key to encrypt data at rest (only SNC resources)
@@ -4581,9 +5340,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1378</h5></summary>
+
 <a id="policy-slz-1378-logicappssncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1378-LogicAppsSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1378-LogicAppsSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1378 - Logic Apps Integration Service Environment should be encrypted with customer-managed keys (only SNC resources)
@@ -4601,9 +5365,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1379</h5></summary>
+
 <a id="policy-slz-1379-azuremlsncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1379-AzureMLSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1379-AzureMLSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1379 - Azure Machine Learning workspaces should be encrypted with a customer-managed key (only SNC resources)
@@ -4621,9 +5390,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1380</h5></summary>
+
 <a id="policy-slz-1380-azuresynapseworkspacecmk"></a>
 <details open>
-<summary><h3>SLZ-1380-AzureSynapseWorkspaceCMK</h3></summary>
+<summary><h6>SLZ-1380-AzureSynapseWorkspaceCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1380 - Azure Synapse workspaces should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4641,9 +5415,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1381</h5></summary>
+
 <a id="policy-slz-1381-osanddatadiskssncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1381-OSAndDataDisksSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1381-OSAndDataDisksSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1381 - OS and data disks should be encrypted with a customer-managed key (only SNC resources)
@@ -4661,9 +5440,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1382</h5></summary>
+
 <a id="policy-slz-1382-postgresqlflexibleserversencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1382-PostgreSQLFlexibleServersEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1382-PostgreSQLFlexibleServersEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1382 - PostgreSQL flexible servers should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4681,9 +5465,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1384</h5></summary>
+
 <a id="policy-slz-1384-servicebuspremiumencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-1384-ServiceBusPremiumEncryptionCMK</h3></summary>
+<summary><h6>SLZ-1384-ServiceBusPremiumEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1384 - Service Bus Premium namespaces should use a customer-managed key for encryption (only SNC resources)
@@ -4701,9 +5490,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID1385</h5></summary>
+
 <a id="policy-slz-1385-storageaccountencryptionscopescmk"></a>
 <details open>
-<summary><h3>SLZ-1385-StorageAccountEncryptionScopesCMK</h3></summary>
+<summary><h6>SLZ-1385-StorageAccountEncryptionScopesCMK</h6></summary>
 
 
 - **Display name:** SLZ - 1385 - Storage account encryption scopes should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4721,9 +5515,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID213</h5></summary>
+
 <a id="policy-slz-213-mysqllatesttls"></a>
 <details open>
-<summary><h3>SLZ-213-MySQLLatestTLS</h3></summary>
+<summary><h6>SLZ-213-MySQLLatestTLS</h6></summary>
 
 
 - **Display name:** SLZ - 213 - Ensure 'TLS Version' is set to 'TLSV1.2' for MySQL flexible Database
@@ -4741,9 +5540,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID254</h5></summary>
+
 <a id="policy-slz-254-keyvaultkeysexpirationdateset"></a>
 <details open>
-<summary><h3>SLZ-254-KeyVaultKeysExpirationDateSet</h3></summary>
+<summary><h6>SLZ-254-KeyVaultKeysExpirationDateSet</h6></summary>
 
 
 - **Display name:** SLZ - 254 - Ensure that the Expiration Date is set for all Keys in Key Vaults (RBAC and Non-RBAC)
@@ -4761,9 +5565,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID256</h5></summary>
+
 <a id="policy-slz-256-keyvaultsecretsexpirationdateset"></a>
 <details open>
-<summary><h3>SLZ-256-KeyVaultSecretsExpirationDateSet</h3></summary>
+<summary><h6>SLZ-256-KeyVaultSecretsExpirationDateSet</h6></summary>
 
 
 - **Display name:** SLZ - 256 - Ensure that the Expiration Date is set for all Secrets in Key Vaults (RBAC and Non-RBAC)
@@ -4781,9 +5590,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID257</h5></summary>
+
 <a id="policy-slz-257-keyvaultrecoverable"></a>
 <details open>
-<summary><h3>SLZ-257-KeyVaultRecoverable</h3></summary>
+<summary><h6>SLZ-257-KeyVaultRecoverable</h6></summary>
 
 
 - **Display name:** SLZ - 257 - Ensure the Key Vault is Recoverable
@@ -4801,9 +5615,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID258</h5></summary>
+
 <a id="policy-slz-258-keyvaultrbac"></a>
 <details open>
-<summary><h3>SLZ-258-KeyVaultRBAC</h3></summary>
+<summary><h6>SLZ-258-KeyVaultRBAC</h6></summary>
 
 
 - **Display name:** SLZ - 258 - Enable Role Based Access Control for Azure Key Vault
@@ -4821,9 +5640,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID259</h5></summary>
+
 <a id="policy-slz-259-keyvaultprivateendpoint"></a>
 <details open>
-<summary><h3>SLZ-259-KeyVaultPrivateEndpoint</h3></summary>
+<summary><h6>SLZ-259-KeyVaultPrivateEndpoint</h6></summary>
 
 
 - **Display name:** SLZ - 259 - Ensure that Private Endpoints are Used for Azure Key Vault
@@ -4841,9 +5665,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID260</h5></summary>
+
 <a id="policy-slz-260-keyrotationenabled"></a>
 <details open>
-<summary><h3>SLZ-260-KeyRotationEnabled</h3></summary>
+<summary><h6>SLZ-260-KeyRotationEnabled</h6></summary>
 
 
 - **Display name:** SLZ - 260 - Ensure Automatic Key Rotation is Enabled Within Azure Key Vault for the Supported Services
@@ -4861,9 +5690,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID31</h5></summary>
+
 <a id="policy-slz-31-15-postgresqlsslversion"></a>
 <details open>
-<summary><h3>SLZ-31.15-PostgreSQLSSLVersion</h3></summary>
+<summary><h6>SLZ-31.15-PostgreSQLSSLVersion</h6></summary>
 
 
 - **Display name:** SLZ - 31.15 - PostgreSQL flexible servers should be running tls version 1.2 or newer
@@ -4883,7 +5717,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-31-9-appgatewaytls"></a>
 <details open>
-<summary><h3>SLZ-31.9-AppGatewayTLS</h3></summary>
+<summary><h6>SLZ-31.9-AppGatewayTLS</h6></summary>
 
 
 - **Display name:** SLZ - 31.9 - Application Gateway should be deployed with predefined Microsoft policy that is using latest tls version
@@ -4901,9 +5735,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID35</h5></summary>
+
 <a id="policy-slz-35-1-arcsqltde"></a>
 <details open>
-<summary><h3>SLZ-35.1-ArcSQLTDE</h3></summary>
+<summary><h6>SLZ-35.1-ArcSQLTDE</h6></summary>
 
 
 - **Display name:** SLZ - 35.1 - Transparent Data Encryption must be enabled for Arc SQL managed instances.
@@ -4923,7 +5762,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-35-2-azuresynapsetde"></a>
 <details open>
-<summary><h3>SLZ-35.2-AzureSynapseTDE</h3></summary>
+<summary><h6>SLZ-35.2-AzureSynapseTDE</h6></summary>
 
 
 - **Display name:** SLZ - 35.2 - Azure Synapse Analytics dedicated SQL pools should enable encryption
@@ -4941,9 +5780,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID872</h5></summary>
+
 <a id="policy-slz-872-13-dicomservicesncencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-872.13-DICOMServiceSNCEncryptionCMK</h3></summary>
+<summary><h6>SLZ-872.13-DICOMServiceSNCEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 872.13 - DICOM Service should use a customer-managed key to encrypt data at rest (only SNC resources)
@@ -4963,7 +5807,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-872-27-postgresqlserversencryptioncmk"></a>
 <details open>
-<summary><h3>SLZ-872.27-PostgreSQLServersEncryptionCMK</h3></summary>
+<summary><h6>SLZ-872.27-PostgreSQLServersEncryptionCMK</h6></summary>
 
 
 - **Display name:** SLZ - 872.27 - PostgreSQL servers should use customer-managed keys to encrypt data at rest (only SNC resources)
@@ -4981,9 +5825,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Storage</h4></summary>
+
+<details open>
+<summary><h5>ID177</h5></summary>
+
 <a id="policy-slz-177-storageaccountssecuretransfer"></a>
 <details open>
-<summary><h3>SLZ-177-StorageAccountsSecureTransfer</h3></summary>
+<summary><h6>SLZ-177-StorageAccountsSecureTransfer</h6></summary>
 
 
 - **Display name:** SLZ - 177 - Secure transfer to storage accounts should be enabled
@@ -5001,9 +5855,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID178</h5></summary>
+
 <a id="policy-slz-178-storageaccountsinfrastructureencryption"></a>
 <details open>
-<summary><h3>SLZ-178-StorageAccountsInfrastructureEncryption</h3></summary>
+<summary><h6>SLZ-178-StorageAccountsInfrastructureEncryption</h6></summary>
 
 
 - **Display name:** SLZ - 178 - Storage accounts should have infrastructure encryption
@@ -5021,9 +5880,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID179</h5></summary>
+
 <a id="policy-slz-179-storageaccountsexpirationreminder"></a>
 <details open>
-<summary><h3>SLZ-179-StorageAccountsExpirationReminder</h3></summary>
+<summary><h6>SLZ-179-StorageAccountsExpirationReminder</h6></summary>
 
 
 - **Display name:** SLZ - 179 - Ensure that 'Enable key rotation reminders' is enabled for each Storage Account
@@ -5041,9 +5905,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID183</h5></summary>
+
 <a id="policy-slz-183-storageaccountspublicaccess"></a>
 <details open>
-<summary><h3>SLZ-183-StorageAccountsPublicAccess</h3></summary>
+<summary><h6>SLZ-183-StorageAccountsPublicAccess</h6></summary>
 
 
 - **Display name:** SLZ - 183 - Storage account public access should be disallowed
@@ -5061,9 +5930,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID184</h5></summary>
+
 <a id="policy-slz-184-storageaccountsdefaultnetworkaccessrule"></a>
 <details open>
-<summary><h3>SLZ-184-StorageAccountsDefaultNetworkAccessRule</h3></summary>
+<summary><h6>SLZ-184-StorageAccountsDefaultNetworkAccessRule</h6></summary>
 
 
 - **Display name:** SLZ - 184 - Ensure Default Network Access Rule for Storage Accounts is Set to Deny
@@ -5081,9 +5955,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID185</h5></summary>
+
 <a id="policy-slz-185-storageaccountsallowazureservices"></a>
 <details open>
-<summary><h3>SLZ-185-StorageAccountsAllowAzureServices</h3></summary>
+<summary><h6>SLZ-185-StorageAccountsAllowAzureServices</h6></summary>
 
 
 - **Display name:** SLZ - 185 - Ensure 'Allow Azure services on the trusted services list to access this storage account' is Enabled
@@ -5101,9 +5980,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID186</h5></summary>
+
 <a id="policy-slz-186-storageaccountsprivateendpoints"></a>
 <details open>
-<summary><h3>SLZ-186-StorageAccountsPrivateEndpoints</h3></summary>
+<summary><h6>SLZ-186-StorageAccountsPrivateEndpoints</h6></summary>
 
 
 - **Display name:** SLZ - 186 - Ensure Private Endpoints are used to access Storage Accounts
@@ -5121,9 +6005,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID187</h5></summary>
+
 <a id="policy-slz-187-storageblobsandcontainersoftdelete"></a>
 <details open>
-<summary><h3>SLZ-187-StorageBlobsAndContainerSoftDelete</h3></summary>
+<summary><h6>SLZ-187-StorageBlobsAndContainerSoftDelete</h6></summary>
 
 
 - **Display name:** SLZ - 187 - Azure Storage Blobs and Containers should have Soft Delete enabled (Minimum 30 days)
@@ -5141,9 +6030,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID248</h5></summary>
+
 <a id="policy-slz-248-osanddatadiskscmkencryption"></a>
 <details open>
-<summary><h3>SLZ-248-OSandDataDisksCMKEncryption</h3></summary>
+<summary><h6>SLZ-248-OSandDataDisksCMKEncryption</h6></summary>
 
 
 - **Display name:** SLZ - 248 - Ensure that 'OS and Data' disks are encrypted with Customer Managed Key (CMK) for SNC data
@@ -5161,9 +6055,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID249</h5></summary>
+
 <a id="policy-slz-249-unattacheddiskscmkencryption"></a>
 <details open>
-<summary><h3>SLZ-249-UnattachedDisksCMKEncryption</h3></summary>
+<summary><h6>SLZ-249-UnattachedDisksCMKEncryption</h6></summary>
 
 
 - **Display name:** SLZ - 249 - Ensure that 'Unattached disks' are encrypted with 'Customer Managed Key' (CMK) for SNC data
@@ -5181,9 +6080,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Tagging</h4></summary>
+
+<details open>
+<summary><h5>ID00-NonID-Tags</h5></summary>
+
 <a id="policy-slz-taginheritancefromsub"></a>
 <details open>
-<summary><h3>SLZ-TagInheritanceFromSub</h3></summary>
+<summary><h6>SLZ-TagInheritanceFromSub</h6></summary>
 
 
 - **Display name:** Tag Inheritance
@@ -5203,7 +6112,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-604-checkdatasensitivitytagsonsubscriptions"></a>
 <details open>
-<summary><h3>SLZ-604-CheckDataSensitivityTagsOnSubscriptions</h3></summary>
+<summary><h6>SLZ-604-CheckDataSensitivityTagsOnSubscriptions</h6></summary>
 
 
 - **Display name:** SLZ - 604 - Check ec.DataSensitivityLevel Tag on Subscription
@@ -5223,7 +6132,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-checkenvironmenttagonsubscription"></a>
 <details open>
-<summary><h3>SLZ-CheckEnvironmentTagOnSubscription</h3></summary>
+<summary><h6>SLZ-CheckEnvironmentTagOnSubscription</h6></summary>
 
 
 - **Display name:** SLZ - XXX - Check Environment Tag on Subscription
@@ -5243,7 +6152,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-checkorganizationtagonsubscription"></a>
 <details open>
-<summary><h3>SLZ-CheckOrganizationTagOnSubscription</h3></summary>
+<summary><h6>SLZ-CheckOrganizationTagOnSubscription</h6></summary>
 
 
 - **Display name:** SLZ - XXX - Check Organization Tag on Subscription
@@ -5263,7 +6172,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-878-checkprojecttagonsubscription"></a>
 <details open>
-<summary><h3>SLZ-878-CheckProjectTagOnSubscription</h3></summary>
+<summary><h6>SLZ-878-CheckProjectTagOnSubscription</h6></summary>
 
 
 - **Display name:** SLZ - 878 - Check Project Tag on Subscription
@@ -5281,9 +6190,19 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+</details>
+
+<details open>
+<summary><h4>Web</h4></summary>
+
+<details open>
+<summary><h5>ID261</h5></summary>
+
 <a id="policy-slz-261-appserviceauthentication"></a>
 <details open>
-<summary><h3>SLZ-261-AppServiceAuthentication</h3></summary>
+<summary><h6>SLZ-261-AppServiceAuthentication</h6></summary>
 
 
 - **Display name:** SLZ - 261 - Ensure App Service Authentication is set up for apps in Azure App Service
@@ -5301,9 +6220,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID262</h5></summary>
+
 <a id="policy-slz-262-appserviceslotshttptohttpsredirection"></a>
 <details open>
-<summary><h3>SLZ-262-AppServiceSlotsHTTPtoHTTPSRedirection</h3></summary>
+<summary><h6>SLZ-262-AppServiceSlotsHTTPtoHTTPSRedirection</h6></summary>
 
 
 - **Display name:** SLZ - 262 - Ensure Web App Redirects All HTTP traffic to HTTPS in Azure App Service Slots
@@ -5323,7 +6247,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-262-appservicehttptohttpsredirection"></a>
 <details open>
-<summary><h3>SLZ-262-AppServiceHTTPtoHTTPSRedirection</h3></summary>
+<summary><h6>SLZ-262-AppServiceHTTPtoHTTPSRedirection</h6></summary>
 
 
 - **Display name:** SLZ - 262 - Ensure Web App Redirects All HTTP traffic to HTTPS in Azure App Service
@@ -5341,9 +6265,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID265</h5></summary>
+
 <a id="policy-slz-265-appserviceaadregistration"></a>
 <details open>
-<summary><h3>SLZ-265-AppServiceAADRegistration</h3></summary>
+<summary><h6>SLZ-265-AppServiceAADRegistration</h6></summary>
 
 
 - **Display name:** SLZ - 265 - Ensure that Register with Azure Active Directory is enabled on App Service
@@ -5361,9 +6290,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID267</h5></summary>
+
 <a id="policy-slz-267-appserviceslotslatestpythonversion"></a>
 <details open>
-<summary><h3>SLZ-267-AppServiceSlotsLatestPythonVersion</h3></summary>
+<summary><h6>SLZ-267-AppServiceSlotsLatestPythonVersion</h6></summary>
 
 
 - **Display name:** SLZ - 267 - Ensure that 'Python version' is the Latest Stable Version, if Used to Run the Web App Slots
@@ -5383,7 +6317,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-267-appservicelatestpythonversion"></a>
 <details open>
-<summary><h3>SLZ-267-AppServiceLatestPythonVersion</h3></summary>
+<summary><h6>SLZ-267-AppServiceLatestPythonVersion</h6></summary>
 
 
 - **Display name:** SLZ - 267 - Ensure that 'Python version' is the Latest Stable Version, if Used to Run the Web App
@@ -5401,9 +6335,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID268</h5></summary>
+
 <a id="policy-slz-268-appserviceslotslatestjavaversion"></a>
 <details open>
-<summary><h3>SLZ-268-AppServiceSlotsLatestJavaVersion</h3></summary>
+<summary><h6>SLZ-268-AppServiceSlotsLatestJavaVersion</h6></summary>
 
 
 - **Display name:** SLZ - 268 - Ensure that 'Java version' is the latest, if used to run the Web App for Slots
@@ -5423,7 +6362,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-268-appservicelatestjavaversion"></a>
 <details open>
-<summary><h3>SLZ-268-AppServiceLatestJavaVersion</h3></summary>
+<summary><h6>SLZ-268-AppServiceLatestJavaVersion</h6></summary>
 
 
 - **Display name:** SLZ - 268 - Ensure that 'Java version' is the latest, if used to run the Web App
@@ -5441,9 +6380,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID269</h5></summary>
+
 <a id="policy-slz-269-appserviceslotslatesthttpversion"></a>
 <details open>
-<summary><h3>SLZ-269-AppServiceSlotsLatestHTTPVersion</h3></summary>
+<summary><h6>SLZ-269-AppServiceSlotsLatestHTTPVersion</h6></summary>
 
 
 - **Display name:** SLZ - 269 - Ensure that 'HTTP Version' is the Latest, if Used to Run the Web App for Slots
@@ -5463,7 +6407,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-269-appservicelatesthttpversionwebapp"></a>
 <details open>
-<summary><h3>SLZ-269-AppServiceLatestHTTPVersionWebApp</h3></summary>
+<summary><h6>SLZ-269-AppServiceLatestHTTPVersionWebApp</h6></summary>
 
 
 - **Display name:** SLZ - 269 - Ensure that 'HTTP Version' is the Latest, if Used to Run the Web App
@@ -5483,7 +6427,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-269-appservicelatesthttpversion"></a>
 <details open>
-<summary><h3>SLZ-269-AppServiceLatestHTTPVersion</h3></summary>
+<summary><h6>SLZ-269-AppServiceLatestHTTPVersion</h6></summary>
 
 
 - **Display name:** SLZ - 269 - Ensure that 'HTTP Version' is the Latest, if Used to Run the Function App
@@ -5501,9 +6445,14 @@ Total policy definitions assessed: **255**.
 
 </details>
 
+</details>
+
+<details open>
+<summary><h5>ID270</h5></summary>
+
 <a id="policy-slz-270-appserviceftpdeploymentswebapp"></a>
 <details open>
-<summary><h3>SLZ-270-AppServiceFTPDeploymentsWebApp</h3></summary>
+<summary><h6>SLZ-270-AppServiceFTPDeploymentsWebApp</h6></summary>
 
 
 - **Display name:** SLZ - 270 - Ensure FTP deployments are Disabled
@@ -5523,7 +6472,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-270-appserviceslotsftpdeployments"></a>
 <details open>
-<summary><h3>SLZ-270-AppServiceSlotsFTPDeployments</h3></summary>
+<summary><h6>SLZ-270-AppServiceSlotsFTPDeployments</h6></summary>
 
 
 - **Display name:** SLZ - 270 - Ensure FTP deployments are Disabled for Slots
@@ -5543,7 +6492,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-slz-270-appserviceftpdeployments"></a>
 <details open>
-<summary><h3>SLZ-270-AppServiceFTPDeployments</h3></summary>
+<summary><h6>SLZ-270-AppServiceFTPDeployments</h6></summary>
 
 
 - **Display name:** SLZ - 270 - Ensure FTP deployments are Disabled
@@ -5558,6 +6507,12 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `allowFTPS` (default `False`; true value will force using FTPSOnly).
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+
+</details>
+
+</details>
+
+</details>
 
 </details>
 
