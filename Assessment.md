@@ -555,7 +555,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Microsoft Entra Domain Services instances and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Microsoft Entra Domain Services instances are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.AAD/DomainServices` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -573,7 +573,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Automation Accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Automation Accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Automation/automationAccounts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -591,7 +591,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure subscriptions and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure subscriptions are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -609,7 +609,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure Analysis Services servers and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Analysis Services servers are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.AnalysisServices/servers` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -627,7 +627,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks API Management services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which API Management services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.ApiManagement/service` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -645,7 +645,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which App Service apps are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; Resource ID of the Log Analytics workspace); `policyName` (default `setByPolicy`; Policy name).
 
@@ -663,7 +663,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Application Gateways and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Application Gateways are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/applicationGateways` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -681,7 +681,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure Bastion hosts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Bastion hosts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/bastionHosts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -699,7 +699,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure Batch accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Batch accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Batch/batchAccounts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -717,7 +717,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure AI Search services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure AI Search services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Search/searchServices` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -735,7 +735,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure AI services accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure AI services accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.CognitiveServices/accounts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -753,7 +753,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Data Lake Analytics accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Data Lake Analytics accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.DataLakeAnalytics/accounts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -771,7 +771,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Data Lake Store accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Data Lake Store accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.DataLakeStore/accounts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -789,7 +789,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Event Hubs namespaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Event Hubs namespaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.EventHub/namespaces` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -807,7 +807,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure Firewalls and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Firewalls are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/azurefirewalls` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -825,7 +825,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which App Service apps are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -843,7 +843,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks integration accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which integration accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Logic/integrationAccounts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -861,7 +861,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Key Vaults and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Key Vaults are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.KeyVault/vaults` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -879,7 +879,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Load Balancers and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Load Balancers are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/loadBalancers` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -897,7 +897,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks vaults and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which vaults are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.RecoveryServices/Vaults` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -915,7 +915,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks databases and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which databases are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Sql/managedInstances/databases` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -933,7 +933,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL Managed Instances and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure SQL Managed Instances are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Sql/managedInstances` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -951,7 +951,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL databases and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure SQL databases are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Sql/servers/databases` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -969,7 +969,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks streamingjobs and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which streamingjobs are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.StreamAnalytics/streamingjobs` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -987,7 +987,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks virtual network gateways and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which virtual network gateways are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/virtualNetworkGateways` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's storage account); `policyName` (default `setByPolicy`; policy name).
 
@@ -1005,7 +1005,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks diagnostic settings and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which diagnostic settings are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each affected resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -1023,7 +1023,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks IoT Hubs and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which IoT Hubs are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Devices/IotHubs` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `policyName` (default `setByPolicy`; policy name); `workspaceId` (default `setByPolicy`; workspace id).
 
@@ -1041,7 +1041,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Logic Apps workflows and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Logic Apps workflows are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Logic/workflows` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -1059,7 +1059,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks frontdoors and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which frontdoors are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/frontdoors` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -1077,7 +1077,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks network interfaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which network interfaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/networkInterfaces` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -1095,7 +1095,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Network Security Groups and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Network Security Groups are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/networkSecurityGroups` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -1113,7 +1113,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Power BI dedicated capacities and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Power BI dedicated capacities are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.PowerBIDedicated/capacities` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -1131,7 +1131,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks public IP addresses and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which public IP addresses are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/publicIPAddresses` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -1149,7 +1149,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Service Bus namespaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Service Bus namespaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.ServiceBus/namespaces` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -1167,7 +1167,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks workspaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which workspaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/workspaces` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
@@ -1221,7 +1221,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `profileName` (default `setbypolicy_logAnalytics`; The diagnostic settings profile name); `logAnalytics` (default: none; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `True`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False).
 
@@ -1239,7 +1239,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `logAnalytics` (default: none; Select Log Analytics workspace from dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permissions (o...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `setbypolicy_logAnalytics`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
@@ -1257,7 +1257,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Storage blob services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage blob services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts/blobServices` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `logAnalytics` (default: none; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `blobServicesDiagnosticsLogsToWorkspace`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
@@ -1275,7 +1275,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Storage table services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage table services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts/tableServices` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `logAnalytics` (default: none; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `tableServicesDiagnosticsLogsToWorkspace`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
@@ -1293,7 +1293,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and workspaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage accounts and workspaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `targetStorageAccountName` (default: none; Name of the storage account that should not allow public access); `targetLogAnalyticsWorkspaceName` (default: none; Name of the Log Analytics workspace that should not allow public network access for ingestion and query).
 
@@ -2085,7 +2085,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/loadBalancers` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2427,7 +2427,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Key Vaults, keys, or secrets and makes sure logging for Azure Key Vault is 'Enabled'. In audit mode it shows which vaults, keys, or secrets do not meet the required lifecycle, recovery, RBAC, expiry, private access, or rotation setting.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.KeyVault/vaults` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `requiredRetentionDays` (default `365`; The required resource logs retention in days).
 
@@ -2625,7 +2625,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure web Apps without Application Insights. In audit mode it shows which App Service apps are not compliant with that requirement.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -2643,7 +2643,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure function Apps without Application Insights. In audit mode it shows which App Service apps are not compliant with that requirement.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -2661,7 +2661,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Logic Apps workflows and makes sure logic Apps without Application Insights. In audit mode it shows which Logic Apps workflows are not compliant with that requirement.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Logic/workflows` resource in the subscription.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4101,7 +4101,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks clusters and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which clusters are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure diagnostic settings for the affected resource so the required logs and metrics are sent to the approved Log Analytics workspace. If the resource is managed by Terraform, add the diagnostic setting to Terraform; otherwise create or update it manually or through the operational tooling used for that service. Backfill existing resources with the same standard.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.HDInsight/clusters` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
