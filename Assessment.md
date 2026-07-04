@@ -471,8 +471,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
-
 <a id="policy-c1-slz-198-auditingretentiongreater90days"></a>
 ### C1-SLZ-198-AuditingRetentionGreater90days
 
@@ -488,8 +486,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `retentionDays` (default `90`; The value in days of the retention period (0 indicates unlimited retention)); `storageAccountsResourceGroup` (default: none; Auditing writes database events to an audit log in your Azure Storage account (a storage account will be created in each region where a SQL Server is created that will be shared...).
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
 
 <a id="policy-c1-slz-220-administrativeactivitylogalert"></a>
 ### C1-SLZ-220-AdministrativeActivityLogAlert
@@ -507,8 +503,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-c1-slz-220-policyactivitylogalert"></a>
 ### C1-SLZ-220-PolicyActivityLogAlert
 
@@ -524,8 +518,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationNamePolicy` (default: none; allowed `Microsoft.Authorization/policyAssignments/write`, `Microsoft.Authorization/policyAssignments/delete`; Policy Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-c1-slz-220-securityactivitylogalert"></a>
 ### C1-SLZ-220-SecurityActivityLogAlert
@@ -543,8 +535,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-c1-slz-51-azuredirectorydomainservicesdiagsettingstows"></a>
 ### C1-SLZ-51-AzureDirectoryDomainServicesDiagSettingsToWS
 
@@ -560,8 +550,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-automationaccountdiagsettingstows"></a>
 ### C1-SLZ-51-AutomationAccountDiagSettingsToWS
@@ -579,8 +567,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azureactivitylogsdiagsettingstows"></a>
 ### C1-SLZ-51-AzureActivityLogsDiagSettingsToWS
 
@@ -596,8 +582,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azureanalysisservicediagsettingstows"></a>
 ### C1-SLZ-51-AzureAnalysisServiceDiagSettingsToWS
@@ -615,8 +599,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azureapimanagementservicediagsettingstows"></a>
 ### C1-SLZ-51-AzureAPIManagementServiceDiagSettingsToWS
 
@@ -632,8 +614,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-appservicediagsettingstows"></a>
 ### C1-SLZ-51-AppServiceDiagSettingsToWS
@@ -651,8 +631,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-appgatewaydiagsettingstows"></a>
 ### C1-SLZ-51-AppGatewayDiagSettingsToWS
 
@@ -668,8 +646,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azurebastiondiagsettingstows"></a>
 ### C1-SLZ-51-AzureBastionDiagSettingsToWS
@@ -687,8 +663,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azurebatchdiagsettingstows"></a>
 ### C1-SLZ-51-AzureBatchDiagSettingsToWS
 
@@ -704,8 +678,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azurecongitivesearchdiagsettingstows"></a>
 ### C1-SLZ-51-AzureCongitiveSearchDiagSettingsToWS
@@ -723,8 +695,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azurecongitiveservicesdiagsettingstows"></a>
 ### C1-SLZ-51-AzureCongitiveServicesDiagSettingsToWS
 
@@ -740,8 +710,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azuredatalakeanalyticsdiagsettingstows"></a>
 ### C1-SLZ-51-AzureDatalakeAnalyticsDiagSettingsToWS
@@ -759,8 +727,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azuredatalakestorediagsettingstows"></a>
 ### C1-SLZ-51-AzureDatalakeStoreDiagSettingsToWS
 
@@ -776,8 +742,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azureeventhubdiagsettingstows"></a>
 ### C1-SLZ-51-AzureEventHubDiagSettingsToWS
@@ -795,8 +759,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azurefirewalldiagsettingstows"></a>
 ### C1-SLZ-51-AzureFirewallDiagSettingsToWS
 
@@ -812,8 +774,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azurefunctiondiagsettingstows"></a>
 ### C1-SLZ-51-AzureFunctionDiagSettingsToWS
@@ -831,8 +791,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azureintegrationservicesiagsettingstows"></a>
 ### C1-SLZ-51-AzureIntegrationServicesiagSettingsToWS
 
@@ -848,8 +806,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azurekeyvaultdiagsettingstows"></a>
 ### C1-SLZ-51-AzureKeyVaultDiagSettingsToWS
@@ -867,8 +823,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azureloadbalancerdiagsettingstows"></a>
 ### C1-SLZ-51-AzureLoadBalancerDiagSettingsToWS
 
@@ -884,8 +838,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azurerecoveryservicediagsettingstows"></a>
 ### C1-SLZ-51-AzureRecoveryServiceDiagSettingsToWS
@@ -903,8 +855,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azuresqlmanagedinstancedbdiagsettingstows"></a>
 ### C1-SLZ-51-AzureSQLManagedInstanceDBDiagSettingsToWS
 
@@ -920,8 +870,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azuresqlmanagedinstancediagsettingstows"></a>
 ### C1-SLZ-51-AzureSQLManagedInstanceDiagSettingsToWS
@@ -939,8 +887,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azuresqlserverdiagsettingstows"></a>
 ### C1-SLZ-51-AzureSQLServerDiagSettingsToWS
 
@@ -956,8 +902,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-azurestreamanalyticsdiagsettingstows"></a>
 ### C1-SLZ-51-AzureStreamAnalyticsDiagSettingsToWS
@@ -975,8 +919,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-azurevirtualnetworkdiagsettingstows"></a>
 ### C1-SLZ-51-AzureVirtualNetworkDiagSettingsToWS
 
@@ -992,8 +934,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's storage account); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-cdnandfrontdoordiagsettingstows"></a>
 ### C1-SLZ-51-CdnAndFrontdoorDiagSettingsToWS
@@ -1011,8 +951,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-iotdiagsettingstows"></a>
 ### C1-SLZ-51-IoTDiagSettingsToWS
 
@@ -1028,8 +966,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `policyName` (default `setByPolicy`; policy name); `workspaceId` (default `setByPolicy`; workspace id).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-logicappworkflowsdiagsettingstows"></a>
 ### C1-SLZ-51-LogicAppWorkflowsDiagSettingsToWS
@@ -1047,8 +983,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-networkfrontdoordiagsettingstows"></a>
 ### C1-SLZ-51-NetworkFrontdoorDiagSettingsToWS
 
@@ -1064,8 +998,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-networkinterfacediagsettingstows"></a>
 ### C1-SLZ-51-NetworkInterfaceDiagSettingsToWS
@@ -1083,8 +1015,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-networksecuritygroupsdiagsettingstows"></a>
 ### C1-SLZ-51-NetworkSecurityGroupsDiagSettingsToWS
 
@@ -1100,8 +1030,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-powerbidedicatedcapacitydiagsettingstows"></a>
 ### C1-SLZ-51-PowerBIDedicatedCapacityDiagSettingsToWS
@@ -1119,8 +1047,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-publicipdiagsettingstows"></a>
 ### C1-SLZ-51-PublicIPDiagSettingsToWS
 
@@ -1136,8 +1062,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-51-servicebusnamespacediagsettingstows"></a>
 ### C1-SLZ-51-ServiceBusNamespaceDiagSettingsToWS
@@ -1155,8 +1079,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-51-storageaccountsdiagsettingstows"></a>
 ### C1-SLZ-51-StorageAccountsDiagSettingsToWS
 
@@ -1172,8 +1094,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-171-securitycontactemailadditionaladdress"></a>
 ### C1-SLZ-171-SecurityContactEmailAdditionalAddress
@@ -1191,8 +1111,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-c1-slz-172-alertsnotifysettohigh"></a>
 ### C1-SLZ-172-AlertsNotifySetToHigh
 
@@ -1208,8 +1126,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-c1-slz-27-storageaccountdiagnosticsettingstows"></a>
 ### C1-SLZ-27-StorageAccountDiagnosticSettingsToWS
@@ -1227,8 +1143,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-deprecated"></a>
 ### DEPRECATED
 
@@ -1244,8 +1158,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `logAnalytics` (default: none; Select Log Analytics workspace from dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permissions (o...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `setbypolicy_logAnalytics`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-189-blobservicestoragelogging"></a>
 ### C1-SLZ-189-BlobServiceStorageLogging
@@ -1263,8 +1175,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-190-tableservicestoragelogging"></a>
 ### C1-SLZ-190-TableServiceStorageLogging
 
@@ -1280,8 +1190,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `logAnalytics` (default: none; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `tableServicesDiagnosticsLogsToWorkspace`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-c1-slz-221-activitylogresourcesnotpubliclyaccessible"></a>
 ### C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible
@@ -1299,8 +1207,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-c1-slz-222-storageaccountlogscmk"></a>
 ### C1-SLZ-222-StorageAccountLogsCMK
 
@@ -1316,8 +1222,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `storageAccount` (default: none; Name Storage account).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-denypurviewaccounts"></a>
 ### SLZ-DenyPurviewAccounts
@@ -1335,8 +1239,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
-
 <a id="policy-slz-165-machinesauditperiodsystemupdatescheck"></a>
 ### SLZ-165-MachinesAuditPeriodSystemUpdatesCheck
 
@@ -1352,8 +1254,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires teams to select approved production SKUs in Terraform-managed deployments and budget for higher service tiers where needed.
-
-**Potential issues:** Production SKU checks depend on reliable environment tagging or scoping; otherwise development resources may be incorrectly reported.
 
 <a id="policy-slz-165-2-1-machinesconfigureperiodsystemupdatescheck"></a>
 ### SLZ-165.2.1-MachinesConfigurePeriodSystemUpdatesCheck
@@ -1371,8 +1271,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-165-2-machinesconfigureperiodsystemupdatescheck"></a>
 ### SLZ-165.2-MachinesConfigurePeriodSystemUpdatesCheck
 
@@ -1388,8 +1286,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `assessmentMode` (default `AutomaticByPlatform`; allowed `ImageDefault`, `AutomaticByPlatform`; Assessment mode for the machines.); `osType` (default `Windows`; allowed `Windows`, `Linux`; OS type for the machines.); `locations` (default `[]`; The list of locations from which machines need to be targeted.); `tagValues` (default `object value`; The list of tags that need to matched for getting target machines.); `tagOperator` (default `Any`; allowed `All`, `Any`; Matching condition for resource tags).
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-250-onlyapprovedextensions"></a>
 ### SLZ-250-OnlyApprovedExtensions
@@ -1407,8 +1303,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
 
-**Potential issues:** Guest Configuration can be noisy where VM images, extensions, identities, or egress are not standardized.
-
 <a id="policy-slz-193-sqlserverauditing"></a>
 ### SLZ-193-SQLServerAuditing
 
@@ -1424,8 +1318,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `setting` (default `enabled`; allowed `enabled`, `disabled`; Desired Auditing setting).
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
 
 <a id="policy-slz-194-azuresqldbingressfrom0000"></a>
 ### SLZ-194-AzureSQLDBIngressFrom0000
@@ -1443,8 +1335,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
 
-**Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete.
-
 <a id="policy-slz-195-sqlservertdeencryptionwithcmk"></a>
 ### SLZ-195-SQLServerTDEEncryptionWithCMK
 
@@ -1460,8 +1350,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-196-sqlserveraadadminconfiguration"></a>
 ### SLZ-196-SQLServerAADAdminConfiguration
@@ -1479,8 +1367,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
 
-**Potential issues:** Guest Configuration can be noisy where VM images, extensions, identities, or egress are not standardized.
-
 <a id="policy-slz-197-sqldatabasedataencryption"></a>
 ### SLZ-197-SQLDatabaseDataEncryption
 
@@ -1496,8 +1382,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-204-postgressqlflexibleserversslconnection"></a>
 ### SLZ-204-PostgresSQLFlexibleServerSSLConnection
@@ -1515,8 +1399,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-204-postgressqlserversslconnection"></a>
 ### SLZ-204-PostgresSQLServerSSLConnection
 
@@ -1532,8 +1414,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-205-postgressqlflexibleserver-log-checkpoints"></a>
 ### SLZ-205-PostgresSQLFlexibleServer_log_checkpoints
@@ -1551,8 +1431,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
 
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
-
 <a id="policy-slz-205-postgressqlserver-log-checkpoints"></a>
 ### SLZ-205-PostgresSQLServer_log_checkpoints
 
@@ -1568,8 +1446,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
 
 <a id="policy-slz-206-postgressqlserverlogconnections"></a>
 ### SLZ-206-PostgresSQLServerLogConnections
@@ -1587,8 +1463,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
 
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
-
 <a id="policy-slz-207-postgressqlserverdisconnectionslogging"></a>
 ### SLZ-207-PostgresSQLServerDisconnectionsLogging
 
@@ -1604,8 +1478,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
 
 <a id="policy-slz-208-postgressqlflexibleserverconnectionthrottling"></a>
 ### SLZ-208-PostgresSQLFlexibleServerConnectionThrottling
@@ -1623,8 +1495,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
 
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
-
 <a id="policy-slz-208-postgressqlserverconnectionthrottling"></a>
 ### SLZ-208-PostgresSQLServerConnectionThrottling
 
@@ -1640,8 +1510,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
 
 <a id="policy-slz-210-postgressqlflexibleserverpublicnetworkaccess"></a>
 ### SLZ-210-PostgresSQLFlexibleServerPublicNetworkAccess
@@ -1659,8 +1527,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
 
-**Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete.
-
 <a id="policy-slz-210-postgressqlserverpublicnetworkaccess"></a>
 ### SLZ-210-PostgresSQLServerPublicNetworkAccess
 
@@ -1676,8 +1542,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete.
 
 <a id="policy-slz-212-mysqlsqlserverenforcesslconnection"></a>
 ### SLZ-212-MySQLSQLServerEnforceSSLConnection
@@ -1695,8 +1559,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-214-mysqlsqlserver-audit-log-enabled"></a>
 ### SLZ-214-MySQLSQLServer_audit_log_enabled
 
@@ -1712,8 +1574,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
 
 <a id="policy-slz-215-mysqlsqlserver-audit-log-events"></a>
 ### SLZ-215-MySQLSQLServer_audit_log_events
@@ -1731,8 +1591,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
 
-**Potential issues:** Database settings can be split across server, database, and child configuration resources, so remediation often needs module changes in more than one place.
-
 <a id="policy-slz-216-azurecosmosdbfwlimitsforselectednetwork"></a>
 ### SLZ-216-AzureCosmosDBFWLimitsForSelectedNetwork
 
@@ -1748,8 +1606,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-217-azurecosmosdbprivatelink"></a>
 ### SLZ-217-AzureCosmosDBPrivateLink
@@ -1767,8 +1623,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
 
-**Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete.
-
 <a id="policy-slz-218-azurecosmosdblocalauthenticationdisabled"></a>
 ### SLZ-218-AzureCosmosDBLocalAuthenticationDisabled
 
@@ -1784,8 +1638,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1397-microsoftdefenderforcspm"></a>
 ### SLZ-1397-MicrosoftDefenderForCSPM
@@ -1803,8 +1655,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
-**Potential issues:** Paid Defender plan remediation can have cost impact; confirm the rollout approach before assignment.
-
 <a id="policy-slz-153-defenderforendpoint"></a>
 ### SLZ-153-DefenderForEndpoint
 
@@ -1820,8 +1670,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
 
 <a id="policy-slz-153-defendercloudpricingforserver"></a>
 ### SLZ-153-DefenderCloudPricingForServer
@@ -1839,8 +1687,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
-**Potential issues:** Paid Defender plan remediation can have cost impact; confirm the rollout approach before assignment.
-
 <a id="policy-slz-154-defendercloudpricingforapplicationservices"></a>
 ### SLZ-154-DefenderCloudPricingForApplicationServices
 
@@ -1856,8 +1702,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
 
 <a id="policy-slz-156-defendercloudpricingforazuresqldb"></a>
 ### SLZ-156-DefenderCloudPricingForAzureSQLDB
@@ -1875,8 +1719,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
-
 <a id="policy-slz-157-defendercloudpricingfordbonservers"></a>
 ### SLZ-157-DefenderCloudPricingForDBOnServers
 
@@ -1892,8 +1734,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
 
 <a id="policy-slz-158-defendercloudpricingforopendb"></a>
 ### SLZ-158-DefenderCloudPricingForOpenDB
@@ -1911,8 +1751,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
-
 <a id="policy-slz-159-defendercloudpricingforstorage"></a>
 ### SLZ-159-DefenderCloudPricingForStorage
 
@@ -1928,8 +1766,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Potential issues:** Paid Defender plan remediation can have cost impact; confirm the rollout approach before assignment.
 
 <a id="policy-slz-161-defendercloudpricingforazurecosmosdb"></a>
 ### SLZ-161-DefenderCloudPricingForAzureCosmosDB
@@ -1947,8 +1783,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
-
 <a id="policy-slz-162-defendercloudpricingforkeyvault"></a>
 ### SLZ-162-DefenderCloudPricingForKeyVault
 
@@ -1964,8 +1798,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
 
 <a id="policy-slz-164-defendercloudpricingforresourcemanager"></a>
 ### SLZ-164-DefenderCloudPricingForResourceManager
@@ -1983,8 +1815,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
-
 <a id="policy-slz-168-microsoftdefenderconfigurevmforvulnerability"></a>
 ### SLZ-168-MicrosoftDefenderConfigureVMForVulnerability
 
@@ -2000,8 +1830,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `vaType` (default `mdeTvm`; allowed `default`, `mdeTvm`; Select the vulnerability assessment solution to provision to machines.).
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
-
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
 
 <a id="policy-slz-00-microsoftdefenderforcontainer"></a>
 ### SLZ-00-MicrosoftDefenderForContainer
@@ -2019,8 +1847,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
-**Potential issues:** The checked-in definitions may remediate paid Defender plans if assigned with DeployIfNotExists, which conflicts with an audit-only rollout unless adjusted.
-
 <a id="policy-slz-78-alloweddeploymentregions"></a>
 ### SLZ-78-AllowedDeploymentRegions
 
@@ -2036,8 +1862,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `listOfAllowedLocations` (default: none; allowed `global`, `europe`, `northeurope`, `westeurope`, `francecentral`, `germanywestcentral`, `norwayeast`, `polandcentral`, plus 6 more; The list of locations that can be specified when deploying resources.).
 
 **Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
-
-**Potential issues:** Allowed location policies need regular review as Azure service regional availability changes.
 
 <a id="policy-slz-238-1-apimprodnobasicsku"></a>
 ### SLZ-238.1-ApimProdNoBasicSku
@@ -2055,8 +1879,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-238-10-aksprodnofreetier"></a>
 ### SLZ-238.10-AKSProdNoFreeTier
 
@@ -2072,8 +1894,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-238-11-lbprodnobasicsku"></a>
 ### SLZ-238.11-LBProdNoBasicSku
@@ -2091,8 +1911,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-slz-238-12-vpngwprodnobasictier"></a>
 ### SLZ-238.12-VpnGwProdNoBasicTier
 
@@ -2108,8 +1926,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-238-13-azuresearchprodnofreeorbasicsku"></a>
 ### SLZ-238.13-AzureSearchProdNoFreeOrBasicSku
@@ -2127,8 +1943,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-238-14-signalrprodnofreetier"></a>
 ### SLZ-238.14-SignalRProdNoFreeTier
 
@@ -2144,8 +1958,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-238-2-appconfigprodnofreesku"></a>
 ### SLZ-238.2-AppConfigProdNoFreeSku
@@ -2163,8 +1975,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-238-3-appserviceprodnolowtiersku"></a>
 ### SLZ-238.3-AppServiceProdNoLowTierSku
 
@@ -2180,8 +1990,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-238-4-adxprodnodevelopertier"></a>
 ### SLZ-238.4-ADXProdNoDeveloperTier
@@ -2199,8 +2007,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-238-5-databricksprodnostandardortrialsku"></a>
 ### SLZ-238.5-DatabricksProdNoStandardOrTrialSku
 
@@ -2216,8 +2022,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-238-6-disksprodnostandardhdd"></a>
 ### SLZ-238.6-DisksProdNoStandardHDD
@@ -2235,8 +2039,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-238-7-acrprodnobasicsku"></a>
 ### SLZ-238.7-ACRProdNoBasicSku
 
@@ -2252,8 +2054,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-238-8-eventhubprodnobasicsku"></a>
 ### SLZ-238.8-EventHubProdNoBasicSku
@@ -2271,8 +2071,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-238-9-keyvaultprodnostandardsku"></a>
 ### SLZ-238.9-KeyVaultProdNoStandardSku
 
@@ -2288,8 +2086,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-272-resourcelockformissioncriticalresources"></a>
 ### SLZ-272-ResourceLockForMissionCriticalResources
@@ -2307,8 +2103,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-287-iampermissionsthroughgroups"></a>
 ### SLZ-287-IAMPermissionsThroughGroups
 
@@ -2324,8 +2118,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
 <a id="policy-slz-617-onlyallowedgeolocations"></a>
 ### SLZ-617-OnlyAllowedGeoLocations
@@ -2343,8 +2135,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
 
-**Potential issues:** Allowed location policies need regular review as Azure service regional availability changes.
-
 <a id="policy-385f5831-96d4-41db-9a3c-cd3af78aaae6"></a>
 ### 385f5831-96d4-41db-9a3c-cd3af78aaae6
 
@@ -2360,8 +2150,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None declared.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-331e8ea8-378a-410f-a2e5-ae22f38bb0da"></a>
 ### 331e8ea8-378a-410f-a2e5-ae22f38bb0da
@@ -2379,8 +2167,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-3cf2ab00-13f1-4d0c-8971-2ac904541a7e"></a>
 ### 3cf2ab00-13f1-4d0c-8971-2ac904541a7e
 
@@ -2396,8 +2182,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None declared.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-497dff13-db2a-4c0f-8603-28fa3b331ab6"></a>
 ### 497dff13-db2a-4c0f-8603-28fa3b331ab6
@@ -2415,8 +2199,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-223-logskeyvault"></a>
 ### SLZ-223-logsKeyVault
 
@@ -2432,8 +2214,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `requiredRetentionDays` (default `365`; The required resource logs retention in days).
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-slz-226-logscreatepolicy"></a>
 ### SLZ-226-logsCreatePolicy
@@ -2451,8 +2231,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-227-logsdeletepolicy"></a>
 ### SLZ-227-logsDeletePolicy
 
@@ -2468,8 +2246,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Authorization/policyAssignments/delete`; Policy Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-228-logscreateupdatensg"></a>
 ### SLZ-228-logsCreateUpdateNsg
@@ -2487,8 +2263,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-229-logsdeletensg"></a>
 ### SLZ-229-logsDeleteNsg
 
@@ -2504,8 +2278,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/networkSecurityGroups/delete`; Administrative Operation name for which activity log alert should be configured).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-230-logscreateupdatesecuritysolutions"></a>
 ### SLZ-230-logsCreateUpdateSecuritySolutions
@@ -2523,8 +2295,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-231-logsdeletesecuritysolutions"></a>
 ### SLZ-231-logsDeleteSecuritySolutions
 
@@ -2540,8 +2310,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Security/securitySolutions/delete`; Security Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-232-logscreateupdatesqlserverfirewallrule"></a>
 ### SLZ-232-logsCreateUpdateSqlServerFirewallRule
@@ -2559,8 +2327,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-233-logsdeletesqlserverfirewallrule"></a>
 ### SLZ-233-logsDeleteSqlServerFirewallRule
 
@@ -2576,8 +2342,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Sql/servers/firewallRules/delete`; Security Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-234-logscreateorupdatepubliciprule"></a>
 ### SLZ-234-logsCreateOrUpdatePublicIpRule
@@ -2595,8 +2359,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-235-logsdeletepubliciprule"></a>
 ### SLZ-235-logsDeletePublicIpRule
 
@@ -2612,8 +2374,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/publicIPAddresses/delete`; Security Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-236-1-webappsnoinsights"></a>
 ### SLZ-236.1-webAppsNoInsights
@@ -2631,8 +2391,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-slz-236-2-functionappsnoinsights"></a>
 ### SLZ-236.2-functionAppsNoInsights
 
@@ -2648,8 +2406,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires a known Log Analytics workspace.
-
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
 
 <a id="policy-slz-236-3-logicappsnoinsights"></a>
 ### SLZ-236.3-logicAppsNoInsights
@@ -2667,8 +2423,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-slz-324-logscreatesecuritygroups"></a>
 ### SLZ-324-logsCreateSecurityGroups
 
@@ -2684,8 +2438,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/networkSecurityGroups/securityRules/write`; Security Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-324-logsdeletesecuritygroup"></a>
 ### SLZ-324-logsDeleteSecurityGroup
@@ -2703,8 +2455,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-326-logscreatenetworkgateway"></a>
 ### SLZ-326-logsCreateNetworkGateway
 
@@ -2720,8 +2470,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/virtualNetworkGateways/write`; Security Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-326-logsdeletenetworkgateway"></a>
 ### SLZ-326-logsDeleteNetworkGateway
@@ -2739,8 +2487,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-327-logscreateroutetables"></a>
 ### SLZ-327-logsCreateRouteTables
 
@@ -2756,8 +2502,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/routeTables/write`; Security Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-327-logscreateroutetablesroute"></a>
 ### SLZ-327-logsCreateRouteTablesRoute
@@ -2775,8 +2519,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-327-logsdeletesecuritygroup"></a>
 ### SLZ-327-logsDeleteSecurityGroup
 
@@ -2792,8 +2534,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/routeTables/delete`; Security Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-327-logsdeletesecuritygrouproute"></a>
 ### SLZ-327-logsDeleteSecurityGroupRoute
@@ -2811,8 +2551,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-328-logscreatevirtualnetwork"></a>
 ### SLZ-328-logsCreateVirtualNetwork
 
@@ -2828,8 +2566,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/virtualNetworks/write`; Security Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
 
 <a id="policy-slz-328-logsdeletevirtualnetworks"></a>
 ### SLZ-328-logsDeleteVirtualNetworks
@@ -2847,8 +2583,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
-**Potential issues:** The main risks are missing action groups, disabled alert rules, operation filters that do not match the intended activity, or alerts that notify a mailbox/channel nobody monitors.
-
 <a id="policy-slz-10-6-disablepublicnetworkwebapps"></a>
 ### SLZ-10.6-DisablePublicNetworkWebApps
 
@@ -2864,8 +2598,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-1325-wafonapgt"></a>
 ### SLZ-1325-WAFonAPGT
@@ -2883,8 +2615,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
 
-**Potential issues:** The parameter schema appears malformed in this definition, so validate it before assignment.
-
 <a id="policy-slz-1326-wafskuv2"></a>
 ### SLZ-1326-WAFSkuV2
 
@@ -2900,8 +2630,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
-
-**Potential issues:** The parameter schema appears malformed in this definition, so validate it before assignment.
 
 <a id="policy-slz-1327-wafonfrontdoor"></a>
 ### SLZ-1327-WAFonFrontDoor
@@ -2919,8 +2647,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
 
-**Potential issues:** Some definitions cannot be used as-is for reporting-only assignment.
-
 <a id="policy-slz-1328-wafonfrontdoor-detection"></a>
 ### SLZ-1328-WAFonFrontDoor-Detection
 
@@ -2936,8 +2662,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `modeRequirement` (default `Detection`; allowed `Prevention`, `Detection`; Mode required for all WAF policies).
 
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
-
-**Potential issues:** Some definitions cannot be used as-is for reporting-only assignment.
 
 <a id="policy-slz-1329-disablepublicnetworkfunctionapps"></a>
 ### SLZ-1329-DisablePublicNetworkFunctionApps
@@ -2955,8 +2679,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-1330-privateendpointapi"></a>
 ### SLZ-1330-PrivateEndpointAPI
 
@@ -2972,8 +2694,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete.
 
 <a id="policy-slz-1331-disablepublicaccessapi"></a>
 ### SLZ-1331-DisablePublicAccessAPI
@@ -2991,8 +2711,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
-
 <a id="policy-slz-1331-2-disablepublicaccessapipe"></a>
 ### SLZ-1331.2-DisablePublicAccessAPIPE
 
@@ -3008,8 +2726,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-**Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
 <a id="policy-slz-1332-apiallowedsku"></a>
 ### SLZ-1332-APIAllowedSku
@@ -3027,8 +2743,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires teams to select approved production SKUs in Terraform-managed deployments and budget for higher service tiers where needed.
 
-**Potential issues:** Production SKU checks depend on reliable environment tagging or scoping; otherwise development resources may be incorrectly reported.
-
 <a id="policy-slz-1333-nopubliciponnics"></a>
 ### SLZ-1333-NoPublicIpOnNics
 
@@ -3044,8 +2758,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-1334-kubernetesinternallb"></a>
 ### SLZ-1334-KubernetesInternalLB
@@ -3063,8 +2775,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-1335-nopubliciponaksnodepools"></a>
 ### SLZ-1335-NoPublicIpOnAKSNodePools
 
@@ -3080,8 +2790,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
 <a id="policy-slz-1336-containerappsnopublicna"></a>
 ### SLZ-1336-ContainerAppsNoPublicNA
@@ -3099,8 +2807,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
-
 <a id="policy-slz-1337-containerappdisableexternalnetworkaccess"></a>
 ### SLZ-1337-ContainerAppDisableExternalNetworkAccess
 
@@ -3116,8 +2822,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior. The intended `Audit` default and allowed values are stored under `metadata`, so Azure Policy may not treat them as parameter schema; fix the definition or pass `Audit` explicitly before assignment.
 
 <a id="policy-slz-1338-wafonapgt-detection"></a>
 ### SLZ-1338-WAFonAPGT-Detection
@@ -3135,8 +2839,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
 
-**Potential issues:** Some definitions cannot be used as-is for reporting-only assignment.
-
 <a id="policy-slz-239-rpdaccessdisabledforinternet"></a>
 ### SLZ-239-RPDAccessDisabledForInternet
 
@@ -3152,8 +2854,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-240-sshaccessdisabledforinternet"></a>
 ### SLZ-240-SSHAccessDisabledForInternet
@@ -3171,8 +2871,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-241-udpaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-241-UDPAccessFromInternetEvalutatedAndRestricted
 
@@ -3188,8 +2886,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-242-httpsaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-242-HTTPsAccessFromInternetEvalutatedAndRestricted
@@ -3207,8 +2903,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-244-networkwatcherenabled"></a>
 ### SLZ-244-NetworkWatcherEnabled
 
@@ -3224,8 +2918,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
-
-**Potential issues:** Allowed location policies need regular review as Azure service regional availability changes.
 
 <a id="policy-slz-332-nsgnoingressfrom0000for22or3389"></a>
 ### SLZ-332-NSGNoIngressFrom0000For22or3389
@@ -3243,8 +2935,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-333-nsgnoingressfrom0for22or3389"></a>
 ### SLZ-333-NSGNoIngressFrom0For22or3389
 
@@ -3260,8 +2950,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
 <a id="policy-slz-629-virtualnetworksddosprotection"></a>
 ### SLZ-629-VirtualNetworksDDOSProtection
@@ -3279,8 +2967,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a DDoS Protection plan and consistent virtual network association model.
 
-**Potential issues:** DDoS plan requirements can be expensive and may not fit every subscription without central network architecture decisions.
-
 <a id="policy-slz-983-ftpaccessfrominternetevaluatedandrestricted"></a>
 ### SLZ-983-FTPAccessFromInternetEvaluatedAndRestricted
 
@@ -3296,8 +2982,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `ports` (default `["20", "21"]`; FTP ports to be blocked).
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-984-mongodbaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-984-MongoDBAccessFromInternetEvalutatedAndRestricted
@@ -3315,8 +2999,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-985-cassandraaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-985-CassandraAccessFromInternetEvalutatedAndRestricted
 
@@ -3332,8 +3014,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `ports` (default `["7199", "9160", "8888"]`; Cassandra ports to be blocked).
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-986-elasticsearchaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-986-ElasticsearchAccessFromInternetEvalutatedAndRestricted
@@ -3351,8 +3031,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-987-kafkaaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-987-KafkaAccessFromInternetEvalutatedAndRestricted
 
@@ -3368,8 +3046,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-988-memcachedaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-988-MemcachedAccessFromInternetEvalutatedAndRestricted
@@ -3387,8 +3063,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-989-mysqlaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-989-MySQLAccessFromInternetEvalutatedAndRestricted
 
@@ -3404,8 +3078,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-990-oracleaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-990-OracleAccessFromInternetEvalutatedAndRestricted
@@ -3423,8 +3095,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-991-postgresaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-991-PostgresAccessFromInternetEvalutatedAndRestricted
 
@@ -3440,8 +3110,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-992-redisaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-992-RedisAccessFromInternetEvalutatedAndRestricted
@@ -3459,8 +3127,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-993-winsqlserveraccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-993-WinSQLServerAccessFromInternetEvalutatedAndRestricted
 
@@ -3476,8 +3142,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `ports` (default `["1433", "1434"]`; Windows SQL Server ports to be blocked).
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-994-telnetaccessfrominternetevalutatedandrestricted"></a>
 ### SLZ-994-TelnetAccessFromInternetEvalutatedAndRestricted
@@ -3495,8 +3159,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-1340-appservicelatesttls"></a>
 ### SLZ-1340-AppServiceLatestTLS
 
@@ -3512,8 +3174,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1341-appserviceslotslatesttls"></a>
 ### SLZ-1341-AppServiceSlotsLatestTLS
@@ -3531,8 +3191,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-1342-functionappslatesttls"></a>
 ### SLZ-1342-FunctionAppsLatestTLS
 
@@ -3548,8 +3206,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1343-functionappslotslatesttls"></a>
 ### SLZ-1343-FunctionAppSlotsLatestTLS
@@ -3567,8 +3223,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-1344-logicappslatesttls"></a>
 ### SLZ-1344-LogicAppsLatestTLS
 
@@ -3584,8 +3238,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1345-redissecureconnections"></a>
 ### SLZ-1345-RedisSecureConnections
@@ -3603,8 +3255,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-1346-frontdoortls"></a>
 ### SLZ-1346-FrontDoorTLS
 
@@ -3620,8 +3270,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1347-eventhubtls"></a>
 ### SLZ-1347-EventHubTLS
@@ -3639,8 +3287,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-1348-storagetls"></a>
 ### SLZ-1348-StorageTLS
 
@@ -3656,8 +3302,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tlsVersionRequired` (default `tls1_2`; The TLS version that should be configured on the Storage Account).
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1349-addomainservicestls"></a>
 ### SLZ-1349-ADDomainServicesTLS
@@ -3675,8 +3319,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-1350-azurecosmostls12"></a>
 ### SLZ-1350-AzureCosmosTLS12
 
@@ -3692,8 +3334,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1351-sqlmanagedinstancetls12"></a>
 ### SLZ-1351-SQLManagedInstanceTLS12
@@ -3711,8 +3351,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-1352-arcsqlmanagedinstancetls12"></a>
 ### SLZ-1352-ArcSQLManagedInstanceTLS12
 
@@ -3728,8 +3366,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1353-sqldatabasetls12"></a>
 ### SLZ-1353-SQLDatabaseTLS12
@@ -3747,8 +3383,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-1354-postgresqlflexsslversion"></a>
 ### SLZ-1354-PostgreSQLFLEXSSLVersion
 
@@ -3764,8 +3398,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1355-mariadbtlsversion"></a>
 ### SLZ-1355-MariaDBTLSVersion
@@ -3783,8 +3415,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-1356-synapsesqltlsversion"></a>
 ### SLZ-1356-SynapseSQLTLSVersion
 
@@ -3800,8 +3430,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-1357-azurekubernetesclusterskms"></a>
 ### SLZ-1357-AzureKubernetesClustersKMS
@@ -3819,8 +3447,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1358-aisncencryptioncmk"></a>
 ### SLZ-1358-AISNCEncryptionCMK
 
@@ -3836,8 +3462,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.); `excludedKinds` (default `16 values`; The list of excluded API kinds for customer-managed key, default is the list of API kinds that don't have data stored in Cognitive Services).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1359-automationsncencryptioncmk"></a>
 ### SLZ-1359-AutomationSNCEncryptionCMK
@@ -3855,8 +3479,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1360-backupvaultsncencryptioncmk"></a>
 ### SLZ-1360-BackupVaultSNCEncryptionCMK
 
@@ -3872,8 +3494,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.); `checkInfrastructureEncryption` (default `False`; allowed `True`, `False`; Check if Infrastructure Encryption is enabled on Backup Vaults. For more details refer to https://aka.ms/az-backup-vault-infra-encryption-at-rest-with-cmk.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1361-batchsncencryptioncmk"></a>
 ### SLZ-1361-BatchSNCEncryptionCMK
@@ -3891,8 +3511,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1362-loadtestingsncencryptioncmk"></a>
 ### SLZ-1362-LoadTestingSNCEncryptionCMK
 
@@ -3908,8 +3526,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1363-redisenterprisesncencryptioncmk"></a>
 ### SLZ-1363-RedisEnterpriseSNCEncryptionCMK
@@ -3927,8 +3543,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1364-cognitivesearchsncencryptioncmk"></a>
 ### SLZ-1364-CognitiveSearchSNCEncryptionCMK
 
@@ -3944,8 +3558,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1365-containerinstancesncencryptioncmk"></a>
 ### SLZ-1365-ContainerInstanceSNCEncryptionCMK
@@ -3963,8 +3575,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1366-containerregistrysncencryptioncmk"></a>
 ### SLZ-1366-ContainerRegistrySNCEncryptionCMK
 
@@ -3980,8 +3590,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1367-cosmosdbsncencryptioncmk"></a>
 ### SLZ-1367-CosmosDBSNCEncryptionCMK
@@ -3999,8 +3607,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1368-azuredataexplorersncencryptioncmk"></a>
 ### SLZ-1368-AzureDataExplorerSNCEncryptionCMK
 
@@ -4016,8 +3622,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1369-azuredatafactoriessncencryptioncmk"></a>
 ### SLZ-1369-AzureDataFactoriesSNCEncryptionCMK
@@ -4035,8 +3639,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1370-elasticsanvolumegroupsncencryptioncmk"></a>
 ### SLZ-1370-ElasticSanVolumeGroupSNCEncryptionCMK
 
@@ -4052,8 +3654,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1371-eventhubnamespacesncencryptioncmk"></a>
 ### SLZ-1371-EventHubNamespaceSNCEncryptionCMK
@@ -4071,8 +3671,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1372-fluidrelaysncencryptioncmk"></a>
 ### SLZ-1372-FluidRelaySNCEncryptionCMK
 
@@ -4088,8 +3686,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1373-hdinsightsncencryptioncmk"></a>
 ### SLZ-1373-HDInsightSNCEncryptionCMK
@@ -4107,8 +3703,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
-**Potential issues:** Verbose diagnostic categories can increase Log Analytics ingestion costs, and category names are not identical for all resource API versions.
-
 <a id="policy-slz-1374-healthbotssncencryptioncmk"></a>
 ### SLZ-1374-HealthBotsSNCEncryptionCMK
 
@@ -4124,8 +3718,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1375-hpccachesncencryptioncmk"></a>
 ### SLZ-1375-HPCCacheSNCEncryptionCMK
@@ -4143,8 +3735,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1376-iothubsncencryptioncmk"></a>
 ### SLZ-1376-IoTHubSNCEncryptionCMK
 
@@ -4160,8 +3750,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1378-logicappssncencryptioncmk"></a>
 ### SLZ-1378-LogicAppsSNCEncryptionCMK
@@ -4179,8 +3767,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1379-azuremlsncencryptioncmk"></a>
 ### SLZ-1379-AzureMLSNCEncryptionCMK
 
@@ -4196,8 +3782,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1380-azuresynapseworkspacecmk"></a>
 ### SLZ-1380-AzureSynapseWorkspaceCMK
@@ -4215,8 +3799,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1381-osanddatadiskssncencryptioncmk"></a>
 ### SLZ-1381-OSAndDataDisksSNCEncryptionCMK
 
@@ -4232,8 +3814,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to identify resources included in this policy.); `tagValue` (default `SNC`; Value of the tag to identify resources included in this policy.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1382-postgresqlflexibleserversencryptioncmk"></a>
 ### SLZ-1382-PostgreSQLFlexibleServersEncryptionCMK
@@ -4251,8 +3831,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-1384-servicebuspremiumencryptioncmk"></a>
 ### SLZ-1384-ServiceBusPremiumEncryptionCMK
 
@@ -4268,8 +3846,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-1385-storageaccountencryptionscopescmk"></a>
 ### SLZ-1385-StorageAccountEncryptionScopesCMK
@@ -4287,8 +3863,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-213-mysqllatesttls"></a>
 ### SLZ-213-MySQLLatestTLS
 
@@ -4304,8 +3878,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `minimaltlsVersion` (default `tls1_2`; allowed `tls1_2`, `tls1_3`; Select version minimum tls version Azure Database for MySQL server to enforce).
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-254-keyvaultkeysexpirationdateset"></a>
 ### SLZ-254-KeyVaultKeysExpirationDateSet
@@ -4323,8 +3895,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
-**Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
-
 <a id="policy-slz-256-keyvaultsecretsexpirationdateset"></a>
 ### SLZ-256-KeyVaultSecretsExpirationDateSet
 
@@ -4340,8 +3910,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
-
-**Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
 
 <a id="policy-slz-257-keyvaultrecoverable"></a>
 ### SLZ-257-KeyVaultRecoverable
@@ -4359,8 +3927,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
-**Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
-
 <a id="policy-slz-258-keyvaultrbac"></a>
 ### SLZ-258-KeyVaultRBAC
 
@@ -4376,8 +3942,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
-
-**Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
 
 <a id="policy-slz-259-keyvaultprivateendpoint"></a>
 ### SLZ-259-KeyVaultPrivateEndpoint
@@ -4395,8 +3959,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
 
-**Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete.
-
 <a id="policy-slz-260-keyrotationenabled"></a>
 ### SLZ-260-KeyRotationEnabled
 
@@ -4412,8 +3974,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
-
-**Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
 
 <a id="policy-slz-31-15-postgresqlsslversion"></a>
 ### SLZ-31.15-PostgreSQLSSLVersion
@@ -4431,8 +3991,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-31-9-appgatewaytls"></a>
 ### SLZ-31.9-AppGatewayTLS
 
@@ -4448,8 +4006,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-35-1-arcsqltde"></a>
 ### SLZ-35.1-ArcSQLTDE
@@ -4467,8 +4023,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-35-2-azuresynapsetde"></a>
 ### SLZ-35.2-AzureSynapseTDE
 
@@ -4484,8 +4038,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-872-13-dicomservicesncencryptioncmk"></a>
 ### SLZ-872.13-DICOMServiceSNCEncryptionCMK
@@ -4503,8 +4055,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-872-27-postgresqlserversencryptioncmk"></a>
 ### SLZ-872.27-PostgreSQLServersEncryptionCMK
 
@@ -4520,8 +4070,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-177-storageaccountssecuretransfer"></a>
 ### SLZ-177-StorageAccountsSecureTransfer
@@ -4539,8 +4087,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-178-storageaccountsinfrastructureencryption"></a>
 ### SLZ-178-StorageAccountsInfrastructureEncryption
 
@@ -4556,8 +4102,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-179-storageaccountsexpirationreminder"></a>
 ### SLZ-179-StorageAccountsExpirationReminder
@@ -4575,8 +4119,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
-**Potential issues:** Key Vault controls can conflict with break-glass or migration scenarios if exception handling is not documented.
-
 <a id="policy-slz-183-storageaccountspublicaccess"></a>
 ### SLZ-183-StorageAccountsPublicAccess
 
@@ -4592,8 +4134,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
-
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
 
 <a id="policy-slz-184-storageaccountsdefaultnetworkaccessrule"></a>
 ### SLZ-184-StorageAccountsDefaultNetworkAccessRule
@@ -4611,8 +4151,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
-**Potential issues:** Broad audit results may include intentional edge services; exemptions should be scoped to exact resources and time-bound.
-
 <a id="policy-slz-185-storageaccountsallowazureservices"></a>
 ### SLZ-185-StorageAccountsAllowAzureServices
 
@@ -4628,8 +4166,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
 <a id="policy-slz-186-storageaccountsprivateendpoints"></a>
 ### SLZ-186-StorageAccountsPrivateEndpoints
@@ -4647,8 +4183,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
 
-**Potential issues:** Private endpoint compliance can fail when private DNS, hub routing, or service-specific endpoint support is incomplete.
-
 <a id="policy-slz-187-storageblobsandcontainersoftdelete"></a>
 ### SLZ-187-StorageBlobsAndContainerSoftDelete
 
@@ -4664,8 +4198,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `retentionInDays` (default: none; How long should deleted resources be retained for (minimum 30 days).).
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
 <a id="policy-slz-248-osanddatadiskscmkencryption"></a>
 ### SLZ-248-OSandDataDisksCMKEncryption
@@ -4683,8 +4215,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
-
 <a id="policy-slz-249-unattacheddiskscmkencryption"></a>
 ### SLZ-249-UnattachedDisksCMKEncryption
 
@@ -4700,8 +4230,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-**Potential issues:** CMK policies depend on Key Vault availability, key permissions, key rotation process, and service support by region/SKU.
 
 <a id="policy-slz-taginheritancefromsub"></a>
 ### SLZ-TagInheritanceFromSub
@@ -4719,8 +4247,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-604-checkdatasensitivitytagsonsubscriptions"></a>
 ### SLZ-604-CheckDataSensitivityTagsOnSubscriptions
 
@@ -4736,8 +4262,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tag-TagName2` (default `ec.DataSensitivityLevel`; ec.DataSensitivityLevel tag).
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-checkenvironmenttagonsubscription"></a>
 ### SLZ-CheckEnvironmentTagOnSubscription
@@ -4755,8 +4279,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-checkorganizationtagonsubscription"></a>
 ### SLZ-CheckOrganizationTagOnSubscription
 
@@ -4772,8 +4294,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tag-TagName4` (default `ec.SystemOwner`; Organization tag).
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-878-checkprojecttagonsubscription"></a>
 ### SLZ-878-CheckProjectTagOnSubscription
@@ -4791,8 +4311,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-261-appserviceauthentication"></a>
 ### SLZ-261-AppServiceAuthentication
 
@@ -4808,8 +4326,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
 <a id="policy-slz-262-appserviceslotshttptohttpsredirection"></a>
 ### SLZ-262-AppServiceSlotsHTTPtoHTTPSRedirection
@@ -4827,8 +4343,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
-
 <a id="policy-slz-262-appservicehttptohttpsredirection"></a>
 ### SLZ-262-AppServiceHTTPtoHTTPSRedirection
 
@@ -4844,8 +4358,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
-
-**Potential issues:** Raising protocol versions can break older clients and runtime stacks if compatibility is not tested first.
 
 <a id="policy-slz-265-appserviceaadregistration"></a>
 ### SLZ-265-AppServiceAADRegistration
@@ -4863,8 +4375,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
 
-**Potential issues:** Guest Configuration can be noisy where VM images, extensions, identities, or egress are not standardized.
-
 <a id="policy-slz-267-appserviceslotslatestpythonversion"></a>
 ### SLZ-267-AppServiceSlotsLatestPythonVersion
 
@@ -4880,8 +4390,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `pythonVersion` (default ``; Specify a supported Python version for App Service); `pythonVersion2` (default ``; Specify a supported Python version for App Service); `pythonPrefix` (default `PYTHON|`; Specify a supported Python prefix for App Service).
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
 <a id="policy-slz-267-appservicelatestpythonversion"></a>
 ### SLZ-267-AppServiceLatestPythonVersion
@@ -4899,8 +4407,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
-
 <a id="policy-slz-268-appserviceslotslatestjavaversion"></a>
 ### SLZ-268-AppServiceSlotsLatestJavaVersion
 
@@ -4916,8 +4422,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `javaVersion` (default ``; Specify a supported Java version for App Service).
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
 <a id="policy-slz-268-appservicelatestjavaversion"></a>
 ### SLZ-268-AppServiceLatestJavaVersion
@@ -4935,8 +4439,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
-
 <a id="policy-slz-269-appserviceslotslatesthttpversion"></a>
 ### SLZ-269-AppServiceSlotsLatestHTTPVersion
 
@@ -4952,8 +4454,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-269-appservicelatesthttpversionwebapp"></a>
 ### SLZ-269-AppServiceLatestHTTPVersionWebApp
@@ -4971,8 +4471,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
-
 <a id="policy-slz-269-appservicelatesthttpversion"></a>
 ### SLZ-269-AppServiceLatestHTTPVersion
 
@@ -4988,8 +4486,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
-
-**Potential issues:** Policy results are only useful if tag taxonomy and ownership are agreed before assignment.
 
 <a id="policy-slz-270-appserviceftpdeploymentswebapp"></a>
 ### SLZ-270-AppServiceFTPDeploymentsWebApp
@@ -5007,8 +4503,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
-
 <a id="policy-slz-270-appserviceslotsftpdeployments"></a>
 ### SLZ-270-AppServiceSlotsFTPDeployments
 
@@ -5025,8 +4519,6 @@ Total policy definitions assessed: **255**.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
 
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
-
 <a id="policy-slz-270-appserviceftpdeployments"></a>
 ### SLZ-270-AppServiceFTPDeployments
 
@@ -5042,6 +4534,4 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `allowFTPS` (default `False`; true value will force using FTPSOnly).
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-**Potential issues:** The policy should be validated in a pilot subscription to confirm the field aliases match current resource API behavior.
 
