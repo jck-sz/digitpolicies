@@ -467,9 +467,6 @@ Total policy definitions assessed: **255**.
 <details open>
 <summary><h4>General</h4></summary>
 
-<details open>
-<summary><h5>ID149</h5></summary>
-
 <a id="policy-c1-slz-149-nocustomadministratorroles"></a>
 <details open>
 <summary><h6>C1-SLZ-149-NoCustomAdministratorRoles</h6></summary>
@@ -490,11 +487,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID198</h5></summary>
-
 <a id="policy-c1-slz-198-auditingretentiongreater90days"></a>
 <details open>
 <summary><h6>C1-SLZ-198-AuditingRetentionGreater90days</h6></summary>
@@ -512,8 +504,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `retentionDays` (default `90`; The value in days of the retention period (0 indicates unlimited retention)); `storageAccountsResourceGroup` (default: none; Auditing writes database events to an audit log in your Azure Storage account (a storage account will be created in each region where a SQL Server is created that will be shared...).
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-</details>
 
 </details>
 
@@ -1297,9 +1287,6 @@ Total policy definitions assessed: **255**.
 <details open>
 <summary><h4>Security</h4></summary>
 
-<details open>
-<summary><h5>ID171</h5></summary>
-
 <a id="policy-c1-slz-171-securitycontactemailadditionaladdress"></a>
 <details open>
 <summary><h6>C1-SLZ-171-SecurityContactEmailAdditionalAddress</h6></summary>
@@ -1320,11 +1307,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID172</h5></summary>
-
 <a id="policy-c1-slz-172-alertsnotifysettohigh"></a>
 <details open>
 <summary><h6>C1-SLZ-172-AlertsNotifySetToHigh</h6></summary>
@@ -1342,8 +1324,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-</details>
 
 </details>
 
@@ -1397,9 +1377,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-<details open>
-<summary><h5>ID189</h5></summary>
-
 <a id="policy-c1-slz-189-blobservicestoragelogging"></a>
 <details open>
 <summary><h6>C1-SLZ-189-BlobServiceStorageLogging</h6></summary>
@@ -1419,11 +1396,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires a known Log Analytics workspace.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID190</h5></summary>
 
 <a id="policy-c1-slz-190-tableservicestoragelogging"></a>
 <details open>
@@ -1445,11 +1417,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID221</h5></summary>
-
 <a id="policy-c1-slz-221-activitylogresourcesnotpubliclyaccessible"></a>
 <details open>
 <summary><h6>C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible</h6></summary>
@@ -1469,11 +1436,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires a known Log Analytics workspace.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID222</h5></summary>
 
 <a id="policy-c1-slz-222-storageaccountlogscmk"></a>
 <details open>
@@ -1499,16 +1461,8 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
 <details open>
 <summary><h3>SLZ</h3></summary>
-
-<details open>
-<summary><h4>Analytics</h4></summary>
-
-<details open>
-<summary><h5>ID00-NonID-Purview</h5></summary>
 
 <a id="policy-slz-denypurviewaccounts"></a>
 <details open>
@@ -1527,10 +1481,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-</details>
-
-</details>
 
 </details>
 
@@ -1602,9 +1552,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-<details open>
-<summary><h5>ID250</h5></summary>
-
 <a id="policy-slz-250-onlyapprovedextensions"></a>
 <details open>
 <summary><h6>SLZ-250-OnlyApprovedExtensions</h6></summary>
@@ -1627,13 +1574,8 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
 <details open>
 <summary><h4>Database</h4></summary>
-
-<details open>
-<summary><h5>ID193</h5></summary>
 
 <a id="policy-slz-193-sqlserverauditing"></a>
 <details open>
@@ -1655,11 +1597,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID194</h5></summary>
-
 <a id="policy-slz-194-azuresqldbingressfrom0000"></a>
 <details open>
 <summary><h6>SLZ-194-AzureSQLDBIngressFrom0000</h6></summary>
@@ -1679,11 +1616,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID195</h5></summary>
 
 <a id="policy-slz-195-sqlservertdeencryptionwithcmk"></a>
 <details open>
@@ -1705,11 +1637,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID196</h5></summary>
-
 <a id="policy-slz-196-sqlserveraadadminconfiguration"></a>
 <details open>
 <summary><h6>SLZ-196-SQLServerAADAdminConfiguration</h6></summary>
@@ -1730,11 +1657,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID197</h5></summary>
-
 <a id="policy-slz-197-sqldatabasedataencryption"></a>
 <details open>
 <summary><h6>SLZ-197-SQLDatabaseDataEncryption</h6></summary>
@@ -1752,8 +1674,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-</details>
 
 </details>
 
@@ -1847,9 +1767,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-<details open>
-<summary><h5>ID206</h5></summary>
-
 <a id="policy-slz-206-postgressqlserverlogconnections"></a>
 <details open>
 <summary><h6>SLZ-206-PostgresSQLServerLogConnections</h6></summary>
@@ -1870,11 +1787,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID207</h5></summary>
-
 <a id="policy-slz-207-postgressqlserverdisconnectionslogging"></a>
 <details open>
 <summary><h6>SLZ-207-PostgresSQLServerDisconnectionsLogging</h6></summary>
@@ -1892,8 +1804,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
-
-</details>
 
 </details>
 
@@ -1987,9 +1897,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-<details open>
-<summary><h5>ID212</h5></summary>
-
 <a id="policy-slz-212-mysqlsqlserverenforcesslconnection"></a>
 <details open>
 <summary><h6>SLZ-212-MySQLSQLServerEnforceSSLConnection</h6></summary>
@@ -2009,11 +1916,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID214</h5></summary>
 
 <a id="policy-slz-214-mysqlsqlserver-audit-log-enabled"></a>
 <details open>
@@ -2035,11 +1937,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID215</h5></summary>
-
 <a id="policy-slz-215-mysqlsqlserver-audit-log-events"></a>
 <details open>
 <summary><h6>SLZ-215-MySQLSQLServer_audit_log_events</h6></summary>
@@ -2059,11 +1956,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID216</h5></summary>
 
 <a id="policy-slz-216-azurecosmosdbfwlimitsforselectednetwork"></a>
 <details open>
@@ -2085,11 +1977,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID217</h5></summary>
-
 <a id="policy-slz-217-azurecosmosdbprivatelink"></a>
 <details open>
 <summary><h6>SLZ-217-AzureCosmosDBPrivateLink</h6></summary>
@@ -2109,11 +1996,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID218</h5></summary>
 
 <a id="policy-slz-218-azurecosmosdblocalauthenticationdisabled"></a>
 <details open>
@@ -2137,13 +2019,8 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
 <details open>
 <summary><h4>Defender</h4></summary>
-
-<details open>
-<summary><h5>ID1397</h5></summary>
 
 <a id="policy-slz-1397-microsoftdefenderforcspm"></a>
 <details open>
@@ -2165,11 +2042,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID153.2</h5></summary>
-
 <a id="policy-slz-153-defenderforendpoint"></a>
 <details open>
 <summary><h6>SLZ-153-DefenderForEndpoint</h6></summary>
@@ -2189,11 +2061,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID153</h5></summary>
 
 <a id="policy-slz-153-defendercloudpricingforserver"></a>
 <details open>
@@ -2215,11 +2082,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID154</h5></summary>
-
 <a id="policy-slz-154-defendercloudpricingforapplicationservices"></a>
 <details open>
 <summary><h6>SLZ-154-DefenderCloudPricingForApplicationServices</h6></summary>
@@ -2239,11 +2101,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID156</h5></summary>
 
 <a id="policy-slz-156-defendercloudpricingforazuresqldb"></a>
 <details open>
@@ -2265,11 +2122,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID157</h5></summary>
-
 <a id="policy-slz-157-defendercloudpricingfordbonservers"></a>
 <details open>
 <summary><h6>SLZ-157-DefenderCloudPricingForDBOnServers</h6></summary>
@@ -2289,11 +2141,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID158</h5></summary>
 
 <a id="policy-slz-158-defendercloudpricingforopendb"></a>
 <details open>
@@ -2315,11 +2162,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID159</h5></summary>
-
 <a id="policy-slz-159-defendercloudpricingforstorage"></a>
 <details open>
 <summary><h6>SLZ-159-DefenderCloudPricingForStorage</h6></summary>
@@ -2339,11 +2181,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID161</h5></summary>
 
 <a id="policy-slz-161-defendercloudpricingforazurecosmosdb"></a>
 <details open>
@@ -2365,11 +2202,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID162</h5></summary>
-
 <a id="policy-slz-162-defendercloudpricingforkeyvault"></a>
 <details open>
 <summary><h6>SLZ-162-DefenderCloudPricingForKeyVault</h6></summary>
@@ -2389,11 +2221,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID164</h5></summary>
 
 <a id="policy-slz-164-defendercloudpricingforresourcemanager"></a>
 <details open>
@@ -2415,11 +2242,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID168</h5></summary>
-
 <a id="policy-slz-168-microsoftdefenderconfigurevmforvulnerability"></a>
 <details open>
 <summary><h6>SLZ-168-MicrosoftDefenderConfigureVMForVulnerability</h6></summary>
@@ -2439,11 +2261,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>IDdefender</h5></summary>
 
 <a id="policy-slz-00-microsoftdefenderforcontainer"></a>
 <details open>
@@ -2467,13 +2284,8 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
 <details open>
 <summary><h4>General</h4></summary>
-
-<details open>
-<summary><h5>ID078</h5></summary>
 
 <a id="policy-slz-78-alloweddeploymentregions"></a>
 <details open>
@@ -2492,8 +2304,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `listOfAllowedLocations` (default: none; allowed `global`, `europe`, `northeurope`, `westeurope`, `francecentral`, `germanywestcentral`, `norwayeast`, `polandcentral`, plus 6 more; The list of locations that can be specified when deploying resources.).
 
 **Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
-
-</details>
 
 </details>
 
@@ -2782,9 +2592,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-<details open>
-<summary><h5>ID272</h5></summary>
-
 <a id="policy-slz-272-resourcelockformissioncriticalresources"></a>
 <details open>
 <summary><h6>SLZ-272-ResourceLockForMissionCriticalResources</h6></summary>
@@ -2804,11 +2611,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID287</h5></summary>
 
 <a id="policy-slz-287-iampermissionsthroughgroups"></a>
 <details open>
@@ -2830,11 +2632,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID617</h5></summary>
-
 <a id="policy-slz-617-onlyallowedgeolocations"></a>
 <details open>
 <summary><h6>SLZ-617-OnlyAllowedGeoLocations</h6></summary>
@@ -2852,8 +2649,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `listOfAllowedLocations` (default `14 values`; The list of locations that can be specified when deploying resources.).
 
 **Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
-
-</details>
 
 </details>
 
@@ -2952,9 +2747,6 @@ Total policy definitions assessed: **255**.
 <details open>
 <summary><h4>Monitoring</h4></summary>
 
-<details open>
-<summary><h5>ID223</h5></summary>
-
 <a id="policy-slz-223-logskeyvault"></a>
 <details open>
 <summary><h6>SLZ-223-logsKeyVault</h6></summary>
@@ -2974,11 +2766,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires a known Log Analytics workspace.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID226</h5></summary>
 
 <a id="policy-slz-226-logscreatepolicy"></a>
 <details open>
@@ -3000,11 +2787,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID227</h5></summary>
-
 <a id="policy-slz-227-logsdeletepolicy"></a>
 <details open>
 <summary><h6>SLZ-227-logsDeletePolicy</h6></summary>
@@ -3024,11 +2806,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID228</h5></summary>
 
 <a id="policy-slz-228-logscreateupdatensg"></a>
 <details open>
@@ -3050,11 +2827,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID229</h5></summary>
-
 <a id="policy-slz-229-logsdeletensg"></a>
 <details open>
 <summary><h6>SLZ-229-logsDeleteNsg</h6></summary>
@@ -3074,11 +2846,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID230</h5></summary>
 
 <a id="policy-slz-230-logscreateupdatesecuritysolutions"></a>
 <details open>
@@ -3100,11 +2867,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID231</h5></summary>
-
 <a id="policy-slz-231-logsdeletesecuritysolutions"></a>
 <details open>
 <summary><h6>SLZ-231-logsDeleteSecuritySolutions</h6></summary>
@@ -3124,11 +2886,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID232</h5></summary>
 
 <a id="policy-slz-232-logscreateupdatesqlserverfirewallrule"></a>
 <details open>
@@ -3150,11 +2907,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID233</h5></summary>
-
 <a id="policy-slz-233-logsdeletesqlserverfirewallrule"></a>
 <details open>
 <summary><h6>SLZ-233-logsDeleteSqlServerFirewallRule</h6></summary>
@@ -3174,11 +2926,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID234</h5></summary>
 
 <a id="policy-slz-234-logscreateorupdatepubliciprule"></a>
 <details open>
@@ -3200,11 +2947,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID235</h5></summary>
-
 <a id="policy-slz-235-logsdeletepubliciprule"></a>
 <details open>
 <summary><h6>SLZ-235-logsDeletePublicIpRule</h6></summary>
@@ -3222,8 +2964,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/publicIPAddresses/delete`; Security Operation name for which activity log alert should exist).
 
 **Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
-
-</details>
 
 </details>
 
@@ -3517,9 +3257,6 @@ Total policy definitions assessed: **255**.
 <details open>
 <summary><h4>Network</h4></summary>
 
-<details open>
-<summary><h5>ID10.6</h5></summary>
-
 <a id="policy-slz-10-6-disablepublicnetworkwebapps"></a>
 <details open>
 <summary><h6>SLZ-10.6-DisablePublicNetworkWebApps</h6></summary>
@@ -3539,11 +3276,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1325</h5></summary>
 
 <a id="policy-slz-1325-wafonapgt"></a>
 <details open>
@@ -3565,11 +3297,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1326</h5></summary>
-
 <a id="policy-slz-1326-wafskuv2"></a>
 <details open>
 <summary><h6>SLZ-1326-WAFSkuV2</h6></summary>
@@ -3589,11 +3316,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1327</h5></summary>
 
 <a id="policy-slz-1327-wafonfrontdoor"></a>
 <details open>
@@ -3615,11 +3337,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1328</h5></summary>
-
 <a id="policy-slz-1328-wafonfrontdoor-detection"></a>
 <details open>
 <summary><h6>SLZ-1328-WAFonFrontDoor-Detection</h6></summary>
@@ -3639,11 +3356,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1329</h5></summary>
 
 <a id="policy-slz-1329-disablepublicnetworkfunctionapps"></a>
 <details open>
@@ -3665,11 +3377,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1330</h5></summary>
-
 <a id="policy-slz-1330-privateendpointapi"></a>
 <details open>
 <summary><h6>SLZ-1330-PrivateEndpointAPI</h6></summary>
@@ -3687,8 +3394,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
-
-</details>
 
 </details>
 
@@ -3737,9 +3442,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-<details open>
-<summary><h5>ID1332</h5></summary>
-
 <a id="policy-slz-1332-apiallowedsku"></a>
 <details open>
 <summary><h6>SLZ-1332-APIAllowedSku</h6></summary>
@@ -3759,11 +3461,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires teams to select approved production SKUs in Terraform-managed deployments and budget for higher service tiers where needed.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1333</h5></summary>
 
 <a id="policy-slz-1333-nopubliciponnics"></a>
 <details open>
@@ -3785,11 +3482,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1334</h5></summary>
-
 <a id="policy-slz-1334-kubernetesinternallb"></a>
 <details open>
 <summary><h6>SLZ-1334-KubernetesInternalLB</h6></summary>
@@ -3809,11 +3501,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1335</h5></summary>
 
 <a id="policy-slz-1335-nopubliciponaksnodepools"></a>
 <details open>
@@ -3835,11 +3522,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1336</h5></summary>
-
 <a id="policy-slz-1336-containerappsnopublicna"></a>
 <details open>
 <summary><h6>SLZ-1336-ContainerAppsNoPublicNA</h6></summary>
@@ -3859,11 +3541,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1337</h5></summary>
 
 <a id="policy-slz-1337-containerappdisableexternalnetworkaccess"></a>
 <details open>
@@ -3885,11 +3562,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1338</h5></summary>
-
 <a id="policy-slz-1338-wafonapgt-detection"></a>
 <details open>
 <summary><h6>SLZ-1338-WAFonAPGT-Detection</h6></summary>
@@ -3909,11 +3581,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID239</h5></summary>
 
 <a id="policy-slz-239-rpdaccessdisabledforinternet"></a>
 <details open>
@@ -3935,11 +3602,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID240</h5></summary>
-
 <a id="policy-slz-240-sshaccessdisabledforinternet"></a>
 <details open>
 <summary><h6>SLZ-240-SSHAccessDisabledForInternet</h6></summary>
@@ -3959,11 +3621,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID241</h5></summary>
 
 <a id="policy-slz-241-udpaccessfrominternetevalutatedandrestricted"></a>
 <details open>
@@ -3985,11 +3642,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID242</h5></summary>
-
 <a id="policy-slz-242-httpsaccessfrominternetevalutatedandrestricted"></a>
 <details open>
 <summary><h6>SLZ-242-HTTPsAccessFromInternetEvalutatedAndRestricted</h6></summary>
@@ -4009,11 +3661,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID244</h5></summary>
 
 <a id="policy-slz-244-networkwatcherenabled"></a>
 <details open>
@@ -4035,11 +3682,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID332</h5></summary>
-
 <a id="policy-slz-332-nsgnoingressfrom0000for22or3389"></a>
 <details open>
 <summary><h6>SLZ-332-NSGNoIngressFrom0000For22or3389</h6></summary>
@@ -4059,11 +3701,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID333</h5></summary>
 
 <a id="policy-slz-333-nsgnoingressfrom0for22or3389"></a>
 <details open>
@@ -4085,11 +3722,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID629</h5></summary>
-
 <a id="policy-slz-629-virtualnetworksddosprotection"></a>
 <details open>
 <summary><h6>SLZ-629-VirtualNetworksDDOSProtection</h6></summary>
@@ -4109,11 +3741,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires a DDoS Protection plan and consistent virtual network association model.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID983</h5></summary>
 
 <a id="policy-slz-983-ftpaccessfrominternetevaluatedandrestricted"></a>
 <details open>
@@ -4135,11 +3762,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID984</h5></summary>
-
 <a id="policy-slz-984-mongodbaccessfrominternetevalutatedandrestricted"></a>
 <details open>
 <summary><h6>SLZ-984-MongoDBAccessFromInternetEvalutatedAndRestricted</h6></summary>
@@ -4159,11 +3781,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID985</h5></summary>
 
 <a id="policy-slz-985-cassandraaccessfrominternetevalutatedandrestricted"></a>
 <details open>
@@ -4185,11 +3802,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID986</h5></summary>
-
 <a id="policy-slz-986-elasticsearchaccessfrominternetevalutatedandrestricted"></a>
 <details open>
 <summary><h6>SLZ-986-ElasticsearchAccessFromInternetEvalutatedAndRestricted</h6></summary>
@@ -4209,11 +3821,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID987</h5></summary>
 
 <a id="policy-slz-987-kafkaaccessfrominternetevalutatedandrestricted"></a>
 <details open>
@@ -4235,11 +3842,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID988</h5></summary>
-
 <a id="policy-slz-988-memcachedaccessfrominternetevalutatedandrestricted"></a>
 <details open>
 <summary><h6>SLZ-988-MemcachedAccessFromInternetEvalutatedAndRestricted</h6></summary>
@@ -4259,11 +3861,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID989</h5></summary>
 
 <a id="policy-slz-989-mysqlaccessfrominternetevalutatedandrestricted"></a>
 <details open>
@@ -4285,11 +3882,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID990</h5></summary>
-
 <a id="policy-slz-990-oracleaccessfrominternetevalutatedandrestricted"></a>
 <details open>
 <summary><h6>SLZ-990-OracleAccessFromInternetEvalutatedAndRestricted</h6></summary>
@@ -4309,11 +3901,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID991</h5></summary>
 
 <a id="policy-slz-991-postgresaccessfrominternetevalutatedandrestricted"></a>
 <details open>
@@ -4335,11 +3922,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID992</h5></summary>
-
 <a id="policy-slz-992-redisaccessfrominternetevalutatedandrestricted"></a>
 <details open>
 <summary><h6>SLZ-992-RedisAccessFromInternetEvalutatedAndRestricted</h6></summary>
@@ -4360,11 +3942,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID993</h5></summary>
-
 <a id="policy-slz-993-winsqlserveraccessfrominternetevalutatedandrestricted"></a>
 <details open>
 <summary><h6>SLZ-993-WinSQLServerAccessFromInternetEvalutatedAndRestricted</h6></summary>
@@ -4384,11 +3961,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID994</h5></summary>
 
 <a id="policy-slz-994-telnetaccessfrominternetevalutatedandrestricted"></a>
 <details open>
@@ -4412,13 +3984,8 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
 <details open>
 <summary><h4>Security</h4></summary>
-
-<details open>
-<summary><h5>ID1340</h5></summary>
 
 <a id="policy-slz-1340-appservicelatesttls"></a>
 <details open>
@@ -4440,11 +4007,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1341</h5></summary>
-
 <a id="policy-slz-1341-appserviceslotslatesttls"></a>
 <details open>
 <summary><h6>SLZ-1341-AppServiceSlotsLatestTLS</h6></summary>
@@ -4464,11 +4026,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1342</h5></summary>
 
 <a id="policy-slz-1342-functionappslatesttls"></a>
 <details open>
@@ -4490,11 +4047,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1343</h5></summary>
-
 <a id="policy-slz-1343-functionappslotslatesttls"></a>
 <details open>
 <summary><h6>SLZ-1343-FunctionAppSlotsLatestTLS</h6></summary>
@@ -4514,11 +4066,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1344</h5></summary>
 
 <a id="policy-slz-1344-logicappslatesttls"></a>
 <details open>
@@ -4540,11 +4087,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1345</h5></summary>
-
 <a id="policy-slz-1345-redissecureconnections"></a>
 <details open>
 <summary><h6>SLZ-1345-RedisSecureConnections</h6></summary>
@@ -4564,11 +4106,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1346</h5></summary>
 
 <a id="policy-slz-1346-frontdoortls"></a>
 <details open>
@@ -4590,11 +4127,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1347</h5></summary>
-
 <a id="policy-slz-1347-eventhubtls"></a>
 <details open>
 <summary><h6>SLZ-1347-EventHubTLS</h6></summary>
@@ -4614,11 +4146,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1348</h5></summary>
 
 <a id="policy-slz-1348-storagetls"></a>
 <details open>
@@ -4640,11 +4167,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1349</h5></summary>
-
 <a id="policy-slz-1349-addomainservicestls"></a>
 <details open>
 <summary><h6>SLZ-1349-ADDomainServicesTLS</h6></summary>
@@ -4664,11 +4186,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1350</h5></summary>
 
 <a id="policy-slz-1350-azurecosmostls12"></a>
 <details open>
@@ -4690,11 +4207,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1351</h5></summary>
-
 <a id="policy-slz-1351-sqlmanagedinstancetls12"></a>
 <details open>
 <summary><h6>SLZ-1351-SQLManagedInstanceTLS12</h6></summary>
@@ -4714,11 +4226,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1352</h5></summary>
 
 <a id="policy-slz-1352-arcsqlmanagedinstancetls12"></a>
 <details open>
@@ -4740,11 +4247,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1353</h5></summary>
-
 <a id="policy-slz-1353-sqldatabasetls12"></a>
 <details open>
 <summary><h6>SLZ-1353-SQLDatabaseTLS12</h6></summary>
@@ -4764,11 +4266,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1354</h5></summary>
 
 <a id="policy-slz-1354-postgresqlflexsslversion"></a>
 <details open>
@@ -4790,11 +4287,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1355</h5></summary>
-
 <a id="policy-slz-1355-mariadbtlsversion"></a>
 <details open>
 <summary><h6>SLZ-1355-MariaDBTLSVersion</h6></summary>
@@ -4814,11 +4306,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1356</h5></summary>
 
 <a id="policy-slz-1356-synapsesqltlsversion"></a>
 <details open>
@@ -4840,11 +4327,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1357</h5></summary>
-
 <a id="policy-slz-1357-azurekubernetesclusterskms"></a>
 <details open>
 <summary><h6>SLZ-1357-AzureKubernetesClustersKMS</h6></summary>
@@ -4864,11 +4346,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1358</h5></summary>
 
 <a id="policy-slz-1358-aisncencryptioncmk"></a>
 <details open>
@@ -4890,11 +4367,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1359</h5></summary>
-
 <a id="policy-slz-1359-automationsncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1359-AutomationSNCEncryptionCMK</h6></summary>
@@ -4914,11 +4386,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1360</h5></summary>
 
 <a id="policy-slz-1360-backupvaultsncencryptioncmk"></a>
 <details open>
@@ -4940,11 +4407,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1361</h5></summary>
-
 <a id="policy-slz-1361-batchsncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1361-BatchSNCEncryptionCMK</h6></summary>
@@ -4964,11 +4426,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1362</h5></summary>
 
 <a id="policy-slz-1362-loadtestingsncencryptioncmk"></a>
 <details open>
@@ -4990,11 +4447,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1363</h5></summary>
-
 <a id="policy-slz-1363-redisenterprisesncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1363-RedisEnterpriseSNCEncryptionCMK</h6></summary>
@@ -5014,11 +4466,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1364</h5></summary>
 
 <a id="policy-slz-1364-cognitivesearchsncencryptioncmk"></a>
 <details open>
@@ -5040,11 +4487,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1365</h5></summary>
-
 <a id="policy-slz-1365-containerinstancesncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1365-ContainerInstanceSNCEncryptionCMK</h6></summary>
@@ -5064,11 +4506,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1366</h5></summary>
 
 <a id="policy-slz-1366-containerregistrysncencryptioncmk"></a>
 <details open>
@@ -5090,11 +4527,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1367</h5></summary>
-
 <a id="policy-slz-1367-cosmosdbsncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1367-CosmosDBSNCEncryptionCMK</h6></summary>
@@ -5114,11 +4546,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1368</h5></summary>
 
 <a id="policy-slz-1368-azuredataexplorersncencryptioncmk"></a>
 <details open>
@@ -5140,11 +4567,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1369</h5></summary>
-
 <a id="policy-slz-1369-azuredatafactoriessncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1369-AzureDataFactoriesSNCEncryptionCMK</h6></summary>
@@ -5164,11 +4586,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1370</h5></summary>
 
 <a id="policy-slz-1370-elasticsanvolumegroupsncencryptioncmk"></a>
 <details open>
@@ -5190,11 +4607,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1371</h5></summary>
-
 <a id="policy-slz-1371-eventhubnamespacesncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1371-EventHubNamespaceSNCEncryptionCMK</h6></summary>
@@ -5214,11 +4626,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1372</h5></summary>
 
 <a id="policy-slz-1372-fluidrelaysncencryptioncmk"></a>
 <details open>
@@ -5240,11 +4647,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1373</h5></summary>
-
 <a id="policy-slz-1373-hdinsightsncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1373-HDInsightSNCEncryptionCMK</h6></summary>
@@ -5264,11 +4666,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires a known Log Analytics workspace.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1374</h5></summary>
 
 <a id="policy-slz-1374-healthbotssncencryptioncmk"></a>
 <details open>
@@ -5290,11 +4687,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1375</h5></summary>
-
 <a id="policy-slz-1375-hpccachesncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1375-HPCCacheSNCEncryptionCMK</h6></summary>
@@ -5314,11 +4706,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1376</h5></summary>
 
 <a id="policy-slz-1376-iothubsncencryptioncmk"></a>
 <details open>
@@ -5340,11 +4727,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1378</h5></summary>
-
 <a id="policy-slz-1378-logicappssncencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1378-LogicAppsSNCEncryptionCMK</h6></summary>
@@ -5364,11 +4746,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1379</h5></summary>
 
 <a id="policy-slz-1379-azuremlsncencryptioncmk"></a>
 <details open>
@@ -5390,11 +4767,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1380</h5></summary>
-
 <a id="policy-slz-1380-azuresynapseworkspacecmk"></a>
 <details open>
 <summary><h6>SLZ-1380-AzureSynapseWorkspaceCMK</h6></summary>
@@ -5414,11 +4786,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1381</h5></summary>
 
 <a id="policy-slz-1381-osanddatadiskssncencryptioncmk"></a>
 <details open>
@@ -5440,11 +4807,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1382</h5></summary>
-
 <a id="policy-slz-1382-postgresqlflexibleserversencryptioncmk"></a>
 <details open>
 <summary><h6>SLZ-1382-PostgreSQLFlexibleServersEncryptionCMK</h6></summary>
@@ -5464,11 +4826,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID1384</h5></summary>
 
 <a id="policy-slz-1384-servicebuspremiumencryptioncmk"></a>
 <details open>
@@ -5490,11 +4847,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID1385</h5></summary>
-
 <a id="policy-slz-1385-storageaccountencryptionscopescmk"></a>
 <details open>
 <summary><h6>SLZ-1385-StorageAccountEncryptionScopesCMK</h6></summary>
@@ -5514,11 +4866,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID213</h5></summary>
 
 <a id="policy-slz-213-mysqllatesttls"></a>
 <details open>
@@ -5540,11 +4887,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID254</h5></summary>
-
 <a id="policy-slz-254-keyvaultkeysexpirationdateset"></a>
 <details open>
 <summary><h6>SLZ-254-KeyVaultKeysExpirationDateSet</h6></summary>
@@ -5564,11 +4906,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID256</h5></summary>
 
 <a id="policy-slz-256-keyvaultsecretsexpirationdateset"></a>
 <details open>
@@ -5590,11 +4927,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID257</h5></summary>
-
 <a id="policy-slz-257-keyvaultrecoverable"></a>
 <details open>
 <summary><h6>SLZ-257-KeyVaultRecoverable</h6></summary>
@@ -5614,11 +4946,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID258</h5></summary>
 
 <a id="policy-slz-258-keyvaultrbac"></a>
 <details open>
@@ -5640,11 +4967,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID259</h5></summary>
-
 <a id="policy-slz-259-keyvaultprivateendpoint"></a>
 <details open>
 <summary><h6>SLZ-259-KeyVaultPrivateEndpoint</h6></summary>
@@ -5665,11 +4987,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID260</h5></summary>
-
 <a id="policy-slz-260-keyrotationenabled"></a>
 <details open>
 <summary><h6>SLZ-260-KeyRotationEnabled</h6></summary>
@@ -5687,8 +5004,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
-
-</details>
 
 </details>
 
@@ -5832,9 +5147,6 @@ Total policy definitions assessed: **255**.
 <details open>
 <summary><h4>Storage</h4></summary>
 
-<details open>
-<summary><h5>ID177</h5></summary>
-
 <a id="policy-slz-177-storageaccountssecuretransfer"></a>
 <details open>
 <summary><h6>SLZ-177-StorageAccountsSecureTransfer</h6></summary>
@@ -5854,11 +5166,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID178</h5></summary>
 
 <a id="policy-slz-178-storageaccountsinfrastructureencryption"></a>
 <details open>
@@ -5880,11 +5187,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID179</h5></summary>
-
 <a id="policy-slz-179-storageaccountsexpirationreminder"></a>
 <details open>
 <summary><h6>SLZ-179-StorageAccountsExpirationReminder</h6></summary>
@@ -5904,11 +5206,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID183</h5></summary>
 
 <a id="policy-slz-183-storageaccountspublicaccess"></a>
 <details open>
@@ -5930,11 +5227,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID184</h5></summary>
-
 <a id="policy-slz-184-storageaccountsdefaultnetworkaccessrule"></a>
 <details open>
 <summary><h6>SLZ-184-StorageAccountsDefaultNetworkAccessRule</h6></summary>
@@ -5954,11 +5246,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID185</h5></summary>
 
 <a id="policy-slz-185-storageaccountsallowazureservices"></a>
 <details open>
@@ -5980,11 +5267,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID186</h5></summary>
-
 <a id="policy-slz-186-storageaccountsprivateendpoints"></a>
 <details open>
 <summary><h6>SLZ-186-StorageAccountsPrivateEndpoints</h6></summary>
@@ -6004,11 +5286,6 @@ Total policy definitions assessed: **255**.
 **Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
 
 </details>
-
-</details>
-
-<details open>
-<summary><h5>ID187</h5></summary>
 
 <a id="policy-slz-187-storageblobsandcontainersoftdelete"></a>
 <details open>
@@ -6030,11 +5307,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID248</h5></summary>
-
 <a id="policy-slz-248-osanddatadiskscmkencryption"></a>
 <details open>
 <summary><h6>SLZ-248-OSandDataDisksCMKEncryption</h6></summary>
@@ -6055,11 +5327,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-</details>
-
-<details open>
-<summary><h5>ID249</h5></summary>
-
 <a id="policy-slz-249-unattacheddiskscmkencryption"></a>
 <details open>
 <summary><h6>SLZ-249-UnattachedDisksCMKEncryption</h6></summary>
@@ -6077,8 +5344,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Name parameter.).
 
 **Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
-
-</details>
 
 </details>
 
@@ -6197,9 +5462,6 @@ Total policy definitions assessed: **255**.
 <details open>
 <summary><h4>Web</h4></summary>
 
-<details open>
-<summary><h5>ID261</h5></summary>
-
 <a id="policy-slz-261-appserviceauthentication"></a>
 <details open>
 <summary><h6>SLZ-261-AppServiceAuthentication</h6></summary>
@@ -6217,8 +5479,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
-
-</details>
 
 </details>
 
@@ -6267,9 +5527,6 @@ Total policy definitions assessed: **255**.
 
 </details>
 
-<details open>
-<summary><h5>ID265</h5></summary>
-
 <a id="policy-slz-265-appserviceaadregistration"></a>
 <details open>
 <summary><h6>SLZ-265-AppServiceAADRegistration</h6></summary>
@@ -6287,8 +5544,6 @@ Total policy definitions assessed: **255**.
 **Parameters or variables to specify or consider:** None.
 
 **Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
-
-</details>
 
 </details>
 
