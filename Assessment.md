@@ -472,6 +472,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-149-NoCustomAdministratorRoles</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** C1 - SLZ - 149 - Ensure That No Custom Administrator Roles Exists
 - **Folder:** `C1/General/ID149`
 - **Affected Azure resource types:** `Microsoft.Authorization/roleDefinitions`
@@ -479,11 +480,11 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks custom Role definitions in Azure and makes sure that the only custom roles match the allowed custom roles defined in the policy definition. In audit mode it will show which custom roles are not compliant, i.e. not in the list of allowed role names.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Authorization/roleDefinitions` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Make sure that the only Custom Policies in the subscription are the ones defined in the tfvars associated with the Policy definition.
 
-**Parameters or variables to specify or consider:** `allowedCustomRolesNames` (default `11 values`; List of allowed custom roles (role ids) for subscription administrators).
+**Parameters or variables to specify or consider:** `QRA Policy Contributor` and `QRA Business Audit`
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Maintain the custom role names in each of the .tfvar files in the repository
 
 </details>
 
@@ -492,6 +493,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-198-AuditingRetentionGreater90days</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 198 - Ensure that 'Auditing' Retention is 'greater than 90 days'
 - **Folder:** `C1/General/ID198`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`, `Microsoft.Sql/servers/auditingSettings`, `Microsoft.Resources/deployments`
@@ -499,9 +501,10 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL servers and Azure SQL server auditing settings and makes sure 'Auditing' Retention is 'greater than 90 days'. In audit mode it shows which Azure SQL servers and Azure SQL server auditing settings do not have that database setting configured as required.
 
-**How to align the environment:** Update database modules for `Microsoft.Sql/servers`, `Microsoft.Sql/servers/auditingSettings`, `Microsoft.Resources/deployments` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
+**How to align the environment:** Update Terraform modules for `Microsoft.Sql/servers`, (if applicable) to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
 
-**Parameters or variables to specify or consider:** `retentionDays` (default `90`; The value in days of the retention period (0 indicates unlimited retention)); `storageAccountsResourceGroup` (default: none; Auditing writes database events to an audit log in your Azure Storage account (a storage account will be created in each region where a SQL Server is created that will be shared...).
+**Parameters or variables to specify or consider:** `retentionDays` (default `90`; The value in days of the retention period (0 indicates unlimited retention)); `storageAccountsResourceGroup` (default: none);
+Auditing writes database events to an audit log in your Azure Storage account (a storage account will be created in each region where a SQL Server is created that will be shared...).
 
 **Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
 
@@ -515,18 +518,20 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-220-AdministrativeActivityLogAlert</h6></summary>
 
 
+- **Applicable:** Potentially Yes
 - **Display name:** C1 - SLZ - 220 - An activity log alert should exist for specific Administrative operations
 - **Folder:** `C1/General/ID220`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for administrative operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
+**Breakdown of what the policy does:** The policy makes sure an Azure Monitor activity log alert exists for the specified administrative operations (default: none - to be set; need to align with Security and Engineering). In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for administrative operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert for administrative operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process. Set tfvars to the designed operation names
 
-**Parameters or variables to specify or consider:** `operationNameAdministrative` (default: none; allowed `Microsoft.Sql/servers/firewallRules/write`, `Microsoft.Sql/servers/firewallRules/delete`, `Microsoft.Network/networkSecurityGroups/write`, `Microsoft.Network/networkSecurityGroups/delete`, `Microsoft.ClassicNetwork/networkSecurityGroups/write`, `Microsoft.ClassicNetwork/networkSecurityGroups/delete`, `Microsoft.Network/networkSecurityGroups/securityRules/write`, `Microsoft.Network/networkSecurityGroups/securityRules/delete`, plus 2 more; Administrative Operation name for which activity log alert should be configured).
+**Parameters or variables to specify or consider:** `operationNameAdministrative` (default: none; allowed `Microsoft.Sql/servers/firewallRules/write`, `Microsoft.Sql/servers/firewallRules/delete`, `Microsoft.Network/networkSecurityGroups/write`, `Microsoft.Network/networkSecurityGroups/delete`, `Microsoft.ClassicNetwork/networkSecurityGroups/write`, `Microsoft.ClassicNetwork/networkSecurityGroups/delete`, `Microsoft.Network/networkSecurityGroups/securityRules/write`, `Microsoft.Network/networkSecurityGroups/securityRules/delete`, `Microsoft.ClassicNetwork/networkSecurityGroups/securityRules/write`,`Microsoft.ClassicNetwork/networkSecurityGroups/securityRules/delete`; 
+Administrative Operation name for which activity log alert should be configured).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Someone needs to read the alerts or ServiceNow integration should be set up, otherwise it's pointless.
 
 </details>
 
@@ -535,18 +540,19 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-220-PolicyActivityLogAlert</h6></summary>
 
 
+- **Applicable:** Potentially yes
 - **Display name:** C1 - SLZ - 220 - An activity log alert should exist for specific Policy operations
 - **Folder:** `C1/General/ID220`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
 - **Cost impact:** Yes - Azure Monitor activity log alert rules and action processing.
 
-**Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for policy assignment create, update, or delete operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
+**Breakdown of what the policy does:** The policy makes sure an Azure Monitor activity log alert exists for policy assignment create, update, or delete operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for policy assignment create, update, or delete operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for policy assignment create, update, or delete operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process. Specify the operation names in tfvars.
 
 **Parameters or variables to specify or consider:** `operationNamePolicy` (default: none; allowed `Microsoft.Authorization/policyAssignments/write`, `Microsoft.Authorization/policyAssignments/delete`; Policy Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires either manual/scheduled human activity or ServiceNow integration for alerts.
 
 </details>
 
@@ -555,6 +561,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-220-SecurityActivityLogAlert</h6></summary>
 
 
+- **Applicable:** Potentially yes
 - **Display name:** C1 - SLZ - 220 - An activity log alert should exist for specific Security operations
 - **Folder:** `C1/General/ID220`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -562,11 +569,11 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for security operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for security operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for security operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process. Specify the operations in tfvars.
 
 **Parameters or variables to specify or consider:** `operationNameSecurity` (default: none; allowed `Microsoft.Security/policies/write`, `Microsoft.Security/securitySolutions/write`, `Microsoft.Security/securitySolutions/delete`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires either manual/scheduled human activity or ServiceNow integration for alerts.
 
 </details>
 
@@ -585,16 +592,17 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureDirectoryDomainServicesDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Active Directory Domain Services to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.AAD/DomainServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.AAD/DomainServices/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
-**Breakdown of what the policy does:** The policy checks Microsoft Entra Domain Services instances and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Microsoft Entra Domain Services instances are missing the expected diagnostic settings or are sending them to the wrong workspace.
+**Breakdown of what the policy does:** The policy checks Microsoft Entra Domain Services instances and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Microsoft Entra Domain Services instances (in our case probably just 1) are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
 **How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.AAD/DomainServices` resource in the subscription.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -605,6 +613,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AutomationAccountDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** Unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Automation Account to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Automation/automationAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Automation/automationAccounts/providers/diagnosticSettings`
@@ -614,7 +623,7 @@ Total policy definitions assessed: **255**.
 
 **How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Automation/automationAccounts` resource in the subscription.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -625,6 +634,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureActivityLogsDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Activity logs to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/diagnosticSettings`
@@ -634,7 +644,7 @@ Total policy definitions assessed: **255**.
 
 **How to align the environment:** Make sure diagnostic settings are enabled for the subscription.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -645,6 +655,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureAnalysisServiceDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Analysis Services to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.AnalysisServices/servers`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.AnalysisServices/servers/providers/diagnosticSettings`
@@ -652,9 +663,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure Analysis Services servers and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Analysis Services servers are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.AnalysisServices/servers` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.AnalysisServices/servers` resource in the subscription. Configure in the Terraform module, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -665,6 +676,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureAPIManagementServiceDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure API Management Service to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.ApiManagement/service/providers/diagnosticSettings`
@@ -674,7 +686,7 @@ Total policy definitions assessed: **255**.
 
 **How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.ApiManagement/service` resource in the subscription.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -685,6 +697,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AppServiceDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure App service to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Web/sites/providers/diagnosticSettings`
@@ -692,7 +705,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which App Service apps are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription. Configure in the Terraform module, if applicable.
 
 **Parameters or variables to specify or consider:** `workspaceId` (default: none; Resource ID of the Log Analytics workspace); `policyName` (default `setByPolicy`; Policy name).
 
@@ -705,6 +718,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AppGatewayDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Application Gateway to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/applicationGateways/providers/diagnosticSettings`
@@ -712,9 +726,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Application Gateways and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Application Gateways are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/applicationGateways` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/applicationGateways` resource in the subscription. Configure in the Terraform module if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -725,6 +739,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureBastionDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Bastion to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Network/bastionHosts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/bastionHosts/providers/diagnosticSettings`
@@ -732,11 +747,11 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure Bastion hosts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Bastion hosts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/bastionHosts` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each Bastion host. This one might need to be manually configured when a Bastion host is automatically created by Azure, when e.g. Infra needs to investigate issues with a specific VM. Operation procedure to be discussed.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
-**Operational impact:** Requires a known Log Analytics workspace.
+**Operational impact:** Requires a known Log Analytics workspace and potentially an operational procedure post-Bastion deployment.
 
 </details>
 
@@ -745,6 +760,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureBatchDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Batch to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Batch/batchAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Batch/batchAccounts/providers/diagnosticSettings`
@@ -752,9 +768,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure Batch accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Batch accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Batch/batchAccounts` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Batch/batchAccounts` resource in the subscription. Ideally set up in Terraform module used for Azure Batch accounts creation.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -765,6 +781,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureCongitiveSearchDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Cognitive Search to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Search/searchServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Search/searchServices/providers/diagnosticSettings`
@@ -774,7 +791,7 @@ Total policy definitions assessed: **255**.
 
 **How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Search/searchServices` resource in the subscription.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -785,6 +802,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureCongitiveServicesDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Cognitive Services to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.CognitiveServices/accounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.CognitiveServices/accounts/providers/diagnosticSettings`
@@ -794,7 +812,7 @@ Total policy definitions assessed: **255**.
 
 **How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.CognitiveServices/accounts` resource in the subscription.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -805,6 +823,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureDatalakeAnalyticsDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Datalake Analytics to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.DataLakeAnalytics/accounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.DataLakeAnalytics/accounts/providers/diagnosticSettings`
@@ -812,9 +831,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Data Lake Analytics accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Data Lake Analytics accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.DataLakeAnalytics/accounts` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.DataLakeAnalytics/accounts` resource in the subscription. Ideally configure in Terraform module for DataLake Analytics, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -825,6 +844,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureDatalakeStoreDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Datalake Store to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.DataLakeStore/accounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.DataLakeStore/accounts/providers/diagnosticSettings`
@@ -832,9 +852,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Data Lake Store accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Data Lake Store accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.DataLakeStore/accounts` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.DataLakeStore/accounts` resource in the subscription. Ideally configure in Terraform module for DataLake, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -845,6 +865,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureEventHubDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Event Hub to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.EventHub/namespaces/providers/diagnosticSettings`
@@ -852,9 +873,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Event Hubs namespaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Event Hubs namespaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.EventHub/namespaces` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.EventHub/namespaces` resource in the subscription. Ideally configure in Terraform module for EventHub, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -865,6 +886,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureFirewallDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Firewall to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Network/azurefirewalls`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/azurefirewalls/providers/diagnosticSettings`
@@ -872,9 +894,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure Firewalls and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure Firewalls are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/azurefirewalls` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/azurefirewalls` resource in the subscription. Ideally configure in Terraform module for Azure Firewall.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -885,6 +907,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureFunctionDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Function App to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Web/sites/providers/diagnosticSettings`
@@ -892,9 +915,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which App Service apps are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription. Ideally configure in Terraform module for Azure Functions, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -905,6 +928,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureIntegrationServicesiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Integration Services to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Logic/integrationAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Logic/integrationAccounts/providers/diagnosticSettings`
@@ -912,9 +936,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks integration accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which integration accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Logic/integrationAccounts` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Logic/integrationAccounts` resource in the subscription. Ideally configure in Terraform module for Azure Integration Services, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -925,6 +949,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureKeyVaultDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Key Vaults to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.KeyVault/vaults/providers/diagnosticSettings`
@@ -932,9 +957,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Key Vaults and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Key Vaults are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.KeyVault/vaults` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.KeyVault/vaults` resource in the subscription. Ideally configure in Terraform module for Key Vaults.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -945,6 +970,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureLoadBalancerDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Loadbalancers to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Network/loadBalancers`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/loadBalancers/providers/diagnosticSettings`
@@ -952,9 +978,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Load Balancers and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Load Balancers are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/loadBalancers` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/loadBalancers` resource in the subscription. Ideally configure in Terraform module for Azure Loadbalancers, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -965,6 +991,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureRecoveryServiceDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Recovery Service to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.RecoveryServices/Vaults`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.RecoveryServices/Vaults/providers/diagnosticSettings`
@@ -972,9 +999,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks vaults and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which vaults are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.RecoveryServices/Vaults` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.RecoveryServices/Vaults` resource in the subscription. Ideally configure in Terraform module for Azure Recovery Services Vault, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -985,6 +1012,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureSQLManagedInstanceDBDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure SQL Managed Instance Database to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Sql/managedInstances/databases`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Sql/managedInstances/databases/providers/diagnosticSettings`
@@ -992,9 +1020,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks databases and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which databases are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Sql/managedInstances/databases` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Sql/managedInstances/databases` resource in the subscription. Ideally configure in Terraform module for Azure SQL Managed Instance Database, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1005,6 +1033,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureSQLManagedInstanceDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure SQL Managed Instance to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Sql/managedInstances`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Sql/managedInstances/providers/diagnosticSettings`
@@ -1012,9 +1041,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL Managed Instances and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure SQL Managed Instances are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Sql/managedInstances` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Sql/managedInstances` resource in the subscription. Ideally configure in Terraform module for Azure SQL Managed Instance, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1025,6 +1054,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureSQLServerDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure SQL Server to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Sql/servers/databases`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Sql/servers/databases/providers/diagnosticSettings`
@@ -1032,9 +1062,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL databases and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Azure SQL databases are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Sql/servers/databases` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Sql/servers/databases` resource in the subscription. Ideally configure in Terraform module for Azure SQL Server, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1045,6 +1075,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureStreamAnalyticsDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Stream Analytics to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.StreamAnalytics/streamingjobs`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.StreamAnalytics/streamingjobs/providers/diagnosticSettings`
@@ -1052,9 +1083,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks streamingjobs and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which streamingjobs are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.StreamAnalytics/streamingjobs` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.StreamAnalytics/streamingjobs` resource in the subscription. Ideally configure in Terraform module for Azure Stream Analytics, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1065,6 +1096,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-AzureVirtualNetworkDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Azure Virtual Network to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworkGateways`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/virtualNetworkGateways/providers/diagnosticSettings`
@@ -1072,9 +1104,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks virtual network gateways and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which virtual network gateways are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/virtualNetworkGateways` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/virtualNetworkGateways` resource in the subscription. Ideally configure in Terraform module for Virtual Network, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's storage account); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of storage account); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1085,6 +1117,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-CdnAndFrontdoorDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Enable logging by category group for Front Door and CDN profiles (microsoft.cdn/profiles) to Log Analytics
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Insights/diagnosticSettings`
@@ -1092,9 +1125,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks diagnostic settings and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which diagnostic settings are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each affected resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each affected resource in the subscription. Ideally configure in Terraform module for Azure Front Door and CDN profiles, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1105,6 +1138,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-IoTDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for IoT (Internet of Things) Hub to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Devices/IotHubs`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Devices/IotHubs/providers/diagnosticSettings`
@@ -1112,7 +1146,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks IoT Hubs and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which IoT Hubs are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Devices/IotHubs` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Devices/IotHubs` resource in the subscription. Ideally configure in Terraform module for IoT Hub, if applicable.
 
 **Parameters or variables to specify or consider:** `policyName` (default `setByPolicy`; policy name); `workspaceId` (default `setByPolicy`; workspace id).
 
@@ -1125,6 +1159,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-LogicAppWorkflowsDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Logic App Workflows to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Logic/workflows`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Logic/workflows/providers/diagnosticSettings`
@@ -1132,9 +1167,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Logic Apps workflows and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Logic Apps workflows are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Logic/workflows` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Logic/workflows` resource in the subscription. Ideally configure in Terraform module for Logic App Workflows, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1145,6 +1180,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-NetworkFrontdoorDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Network Frontdoor to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Network/frontdoors`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/frontdoors/providers/diagnosticSettings`
@@ -1152,9 +1188,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks frontdoors and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which frontdoors are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/frontdoors` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/frontdoors` resource in the subscription. Ideally configure in Terraform module for Network Frontdoor, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1165,6 +1201,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-NetworkInterfaceDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Network Interface to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Network/networkInterfaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/networkInterfaces/providers/diagnosticSettings`
@@ -1172,9 +1209,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks network interfaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which network interfaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/networkInterfaces` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/networkInterfaces` resource in the subscription. Requires code modification in multiple repositories to include this setting.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1185,6 +1222,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-NetworkSecurityGroupsDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Network Security Groups to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/networkSecurityGroups/providers/diagnosticSettings`
@@ -1192,9 +1230,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Network Security Groups and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Network Security Groups are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/networkSecurityGroups` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/networkSecurityGroups` resource in the subscription. Ideally configure in Terraform module for NSG, if applicable (*as far as I remember we are not using any and rely on Firewall instead but I might be wrong*).
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1205,6 +1243,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-PowerBIDedicatedCapacityDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for PowerBI Dedicated Capacity to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.PowerBIDedicated/capacities`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.PowerBIDedicated/capacities/providers/diagnosticSettings`
@@ -1212,9 +1251,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Power BI dedicated capacities and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Power BI dedicated capacities are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.PowerBIDedicated/capacities` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.PowerBIDedicated/capacities` resource in the subscription. Ideally configure in Terraform module for PowerBI, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1225,6 +1264,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-PublicIPDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Public IP Address to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Network/publicIPAddresses`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Network/publicIPAddresses/providers/diagnosticSettings`
@@ -1232,9 +1272,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks public IP addresses and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which public IP addresses are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/publicIPAddresses` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/publicIPAddresses` resource in the subscription. Requires code modification in multiple repositories.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1245,6 +1285,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-ServiceBusNamespaceDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Service Bus Namespace to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.ServiceBus/namespaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.ServiceBus/namespaces/providers/diagnosticSettings`
@@ -1252,9 +1293,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Service Bus namespaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Service Bus namespaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.ServiceBus/namespaces` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.ServiceBus/namespaces` resource in the subscription. Ideally configure in Terraform module for Service Bus, if applicable.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1265,6 +1306,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-51-StorageAccountsDiagSettingsToWS</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** C1 - SLZ - 51 - Configure diagnostic settings for Storage Accounts to Log Analytics workspace
 - **Folder:** `C1/Monitoring/ID051-SLZ-Monitor`
 - **Affected Azure resource types:** `Microsoft.Storage/workspaces`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/workspaces/blobServices/providers/diagnosticSettings`, `Microsoft.Storage/workspaces/fileServices/providers/diagnosticSettings`, `Microsoft.Storage/workspaces/tableServices/providers/diagnosticSettings`, `Microsoft.Storage/workspaces/queueServices/providers/diagnosticSettings`, `Microsoft.Storage/workspaces/providers/diagnosticSettings`
@@ -1272,9 +1314,9 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks workspaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which workspaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/workspaces` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/workspaces` resource in the subscription. Ideally configure in Terraform module for Storage Accounts. AFAIR requires code modification in multiple repositories.
 
-**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of Landing Zone's log analytics workspace); `policyName` (default `setByPolicy`; policy name).
+**Parameters or variables to specify or consider:** `workspaceId` (default: none; ID of log analytics workspace); `policyName` (default `setByPolicy`; policy name).
 
 **Operational impact:** Requires a known Log Analytics workspace.
 
@@ -1292,6 +1334,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-171-SecurityContactEmailAdditionalAddress</h6></summary>
 
 
+- **Applicable:** Yes?
 - **Display name:** C1 - SLZ - 171 - Ensure 'Additional email addresses' is Configured with a Security Contact Email
 - **Folder:** `C1/Security/ID171`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/securityContacts`
@@ -1303,7 +1346,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `emailSecurityContact` (default `ec-digit-csirc@ec.europa.eu`; Provide email addresses (semi-colon separated) for Defender for Cloud contact details); `minimalSeverity` (default `High`; allowed `High`, `Medium`, `Low`; Defines the minimal alert severity which will be sent as email notifications).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires email address associated with the subscription/tenant... Not sure how/if we can do it. Also high potential for a lot of spam.
 
 </details>
 
@@ -1312,6 +1355,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-172-AlertsNotifySetToHigh</h6></summary>
 
 
+- **Applicable:** Yes?
 - **Display name:** C1 - SLZ - 172 - Ensure That 'Notify about alerts with the following severity' is Set to 'High'
 - **Folder:** `C1/Security/ID172`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/securityContacts`
@@ -1323,7 +1367,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Associated with C1-SLZ-171, check the comments there.
 
 </details>
 
@@ -1340,6 +1384,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-27-StorageAccountDiagnosticSettingsToWS</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** C1 - SLZ - 27 - Configure diagnostic settings for Storage Accounts to Log Analytics workspace
 - **Folder:** `C1/Storage/ID027`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/providers/diagnosticSettings`
@@ -1347,11 +1392,11 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Storage accounts and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage accounts are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts` resource in the subscription. Ideally part of the Terraform module.
 
-**Parameters or variables to specify or consider:** `profileName` (default `setbypolicy_logAnalytics`; The diagnostic settings profile name); `logAnalytics` (default: none; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `True`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False).
+**Parameters or variables to specify or consider:** `profileName` (default `setbypolicy_logAnalytics`; The diagnostic settings profile name); `logAnalytics` (default: none; Select Log Analytics workspace from the dropdown list. ...); `metricsEnabled` (default `True`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False).
 
-**Operational impact:** Requires a known Log Analytics workspace.
+**Operational impact:** Requires a known Log Analytics workspace. WI associated with the Storage Account deployment must have the 'Log Analytics Contributor' role, in order to set it up. 
 
 </details>
 
@@ -1360,6 +1405,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>DEPRECATED</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 27 - Configure diagnostic settings for Storage Accounts to Log Analytics workspace
 - **Folder:** `C1/Storage/ID027`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/providers/diagnosticSettings`, `Microsoft.Storage/storageAccounts/blobServices/providers/diagnosticSettings`, `Microsoft.Storage/storageAccounts/fileServices/providers/diagnosticSettings`, `Microsoft.Storage/storageAccounts/queueServices/providers/diagnosticSettings`, `Microsoft.Storage/storageAccounts/tableServices/providers/diagnosticSettings`
@@ -1382,6 +1428,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-189-BlobServiceStorageLogging</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 189 - Ensure Storage Logging is Enabled for Blob Service for 'Read', 'Write', and 'Delete' Requests
 - **Folder:** `C1/Storage/ID189`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/blobServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/blobServices/providers/diagnosticSettings`
@@ -1389,7 +1436,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Storage blob services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage blob services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts/blobServices` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts/blobServices` resource in the subscription. Align the Terraform module. Might require changes in multiple repositories (blob storage created not using the module).
 
 **Parameters or variables to specify or consider:** `logAnalytics` (default: none; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `blobServicesDiagnosticsLogsToWorkspace`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
@@ -1402,6 +1449,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-190-TableServiceStorageLogging</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1 - SLZ - 190 - Ensure Storage Logging is Enabled for Table Service for 'Read', 'Write', and 'Delete' Requests
 - **Folder:** `C1/Storage/ID190`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/tableServices`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Storage/storageAccounts/tableServices/providers/diagnosticSettings`
@@ -1409,7 +1457,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Storage table services and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage table services are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts/tableServices` resource in the subscription.
+**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts/tableServices` resource in the subscription. Modify the Terraform module as required.
 
 **Parameters or variables to specify or consider:** `logAnalytics` (default: none; Select Log Analytics workspace from the dropdown list. If this workspace is outside of the scope of the assignment you must manually grant 'Log Analytics Contributor' permission...); `metricsEnabled` (default `False`; allowed `True`, `False`; Whether to enable metrics stream to the Log Analytics workspace - True or False); `profileName` (default `tableServicesDiagnosticsLogsToWorkspace`; The diagnostic settings profile name); `logsEnabled` (default `True`; allowed `True`, `False`; Whether to enable logs stream to the Log Analytics workspace - True or False).
 
@@ -1422,12 +1470,13 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** C1 - SLZ - 221 - Ensure Activity Log Storage and LAW are not Publicly Accessible
 - **Folder:** `C1/Storage/ID221`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.OperationalInsights/workspaces`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
-**Breakdown of what the policy does:** The policy checks Storage accounts and workspaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Storage accounts and workspaces are missing the expected diagnostic settings or are sending them to the wrong workspace.
+**Breakdown of what the policy does:** The policy checks Storage accounts and workspaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows if the configured LAW and Storage account which holds the logs, has public access enabled.
 
 **How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts` resource in the subscription.
 
@@ -1442,6 +1491,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>C1-SLZ-222-StorageAccountLogsCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** C1-SLZ - 222 - Ensure the storage account containing the container with activity logs is encrypted with Customer Managed Key
 - **Folder:** `C1/Storage/ID222`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Keyvault`
@@ -1453,7 +1503,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `storageAccount` (default: none; Name Storage account).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources. Not sure if we are going to use Storage Account for activity logs?
 
 </details>
 
@@ -1469,18 +1519,19 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-DenyPurviewAccounts</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - Deny purview accounts
 - **Folder:** `SLZ/Analytics/ID00-NonID-Purview`
 - **Affected Azure resource types:** `Microsoft.Purview/accounts`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Microsoft Purview account deployments and makes sure they follow the allowed landing-zone stance for Purview. In audit mode it shows which Purview accounts are present and therefore need review or an approved exception.
+**Breakdown of what the policy does:** The policy checks Microsoft Purview account deployments. In audit mode it shows which Purview accounts are present and therefore need review or an approved exception.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Purview/accounts` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Do not use Pureview accounts.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Unknown project scope
 
 </details>
 
@@ -1495,10 +1546,11 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-165-MachinesAuditPeriodSystemUpdatesCheck</h6></summary>
 
 
+- **Applicable:** Yes [Requires further analysis]
 - **Display name:** SLZ - 165 - Machines should be configured to periodically check for missing system updates
 - **Folder:** `SLZ/Compute/ID165`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.HybridCompute/machines`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Unknown - Need to check the required Azure service SKU/tier and also impact on the service used for system updates.
 
 **Breakdown of what the policy does:** The policy checks virtual machines and makes sure they are configured to periodically check for missing system updates. In audit mode it shows which machines are not reporting the expected update-assessment configuration.
 
@@ -1515,18 +1567,19 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-165.2.1-MachinesConfigurePeriodSystemUpdatesCheck</h6></summary>
 
 
+- **Applicable:** Yes [requires further analysis]
 - **Display name:** SLZ - 165.2.1 - Configure periodic checking for missing system updates on azure LINUX virtual machines
 - **Folder:** `SLZ/Compute/ID165`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks virtual machines and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which virtual machines still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** ?
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Compute/virtualMachines` in the resource deployment module.
+**How to align the environment:** ?
 
 **Parameters or variables to specify or consider:** `assessmentMode` (default `AutomaticByPlatform`; allowed `ImageDefault`, `AutomaticByPlatform`; Assessment mode for the machines.); `osType` (default `Linux`; allowed `Windows`, `Linux`; OS type for the machines.); `locations` (default `[]`; The list of locations from which machines need to be targeted.); `tagValues` (default `object value`; The list of tags that need to matched for getting target machines.); `tagOperator` (default `Any`; allowed `All`, `Any`; Matching condition for resource tags).
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** ?
 
 </details>
 
@@ -1535,18 +1588,19 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-165.2-MachinesConfigurePeriodSystemUpdatesCheck</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 165.2.2 - Configure periodic checking for missing system updates on azure WINDOWS virtual machines
 - **Folder:** `SLZ/Compute/ID165`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks virtual machines and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which virtual machines still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** ?
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Compute/virtualMachines` in the resource deployment module.
+**How to align the environment:** ?
 
 **Parameters or variables to specify or consider:** `assessmentMode` (default `AutomaticByPlatform`; allowed `ImageDefault`, `AutomaticByPlatform`; Assessment mode for the machines.); `osType` (default `Windows`; allowed `Windows`, `Linux`; OS type for the machines.); `locations` (default `[]`; The list of locations from which machines need to be targeted.); `tagValues` (default `object value`; The list of tags that need to matched for getting target machines.); `tagOperator` (default `Any`; allowed `All`, `Any`; Matching condition for resource tags).
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** ?
 
 </details>
 
@@ -1557,6 +1611,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-250-OnlyApprovedExtensions</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** SLZ - 250 - Ensure that Only Approved Extensions Are Installed
 - **Folder:** `SLZ/Compute/ID250`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines/extensions`
@@ -1568,7 +1623,7 @@ Total policy definitions assessed: **255**.
 
 **Parameters or variables to specify or consider:** `approvedExtensions` (default `36 values`; The list of approved extension types that can be installed. Example: AzureDiskEncryption).
 
-**Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
+**Operational impact:** Make sure that users and admins are aware of the configured limitations, in case the policy effect is set to `Deny`
 
 </details>
 
@@ -1582,6 +1637,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-193-SQLServerAuditing</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 193 - Auditing on SQL server should be enabled
 - **Folder:** `SLZ/Database/ID193`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`, `Microsoft.Sql/servers/auditingSettings`
@@ -1589,7 +1645,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL servers and Azure SQL server auditing settings and makes sure auditing on SQL server should be enabled. In audit mode it shows which Azure SQL servers and Azure SQL server auditing settings do not have that database setting configured as required.
 
-**How to align the environment:** Update database modules for `Microsoft.Sql/servers`, `Microsoft.Sql/servers/auditingSettings` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
+**How to align the environment:** Update Terraform modules for `Microsoft.Sql/servers`, to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
 
 **Parameters or variables to specify or consider:** `setting` (default `enabled`; allowed `enabled`, `disabled`; Desired Auditing setting).
 
@@ -1602,14 +1658,15 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-194-AzureSQLDBIngressFrom0000</h6></summary>
 
 
+- **Applicable:** Yes
 - **Display name:** SLZ - 194 - Ensure no Azure SQL Databases allow ingress from 0.0.0.0/0 (ANY IP)
 - **Folder:** `SLZ/Database/ID194`
 - **Affected Azure resource types:** `Microsoft.Sql/servers/firewallRules`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
 
-**Breakdown of what the policy does:** The policy checks Azure SQL server firewall rules and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which Azure SQL server firewall rules are missing the required private connectivity.
+**Breakdown of what the policy does:** The policy checks Azure SQL Server firewall rules and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which Azure SQL server firewall rules are missing the required private connectivity.
 
-**How to align the environment:** Change deployment modules for `Microsoft.Sql/servers/firewallRules` to use private endpoints/private link and disable or avoid unsupported public access paths.
+**How to align the environment:** Change deployment modules for `Microsoft.Sql/servers/firewallRules` to use private endpoints/private link and disable or avoid public access paths.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -1622,14 +1679,15 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-195-SQLServerTDEEncryptionWithCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 195 - Ensure SQL server's Transparent Data Encryption (TDE) protector is encrypted with Customer-managed key
 - **Folder:** `SLZ/Database/ID195`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`, `Microsoft.Sql/servers/encryptionProtector`
-- **Cost impact:** Yes - higher approved Azure service SKU/tier.
+- **Cost impact:** Potentially yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL servers and encryption protector and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure SQL servers and encryption protector are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Sql/servers`, `Microsoft.Sql/servers/encryptionProtector` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Sql/servers` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
@@ -1642,6 +1700,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-196-SQLServerAADAdminConfiguration</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 196 - Ensure that Azure Active Directory Admin is Configured for SQL Servers
 - **Folder:** `SLZ/Database/ID196`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`
@@ -1649,11 +1708,11 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL servers and makes sure azure Active Directory Admin is Configured for SQL Servers. In audit mode it shows which Azure SQL servers do not have that database setting configured as required.
 
-**How to align the environment:** Ensure VM identities, Guest Configuration extensions, package reachability, and update-assessment settings are present through VM baseline modules.
+**How to align the environment:** Align in the Terraform module for SQL Server, if applicable.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
+**Operational impact:** Entra Domain Services used for SQL Admin authentication.
 
 </details>
 
@@ -1662,6 +1721,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-197-SQLDatabaseDataEncryption</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 197 - Ensure that 'Data encryption' is set to 'On' on a SQL Database
 - **Folder:** `SLZ/Database/ID197`
 - **Affected Azure resource types:** `Microsoft.Sql/servers/databases`, `Microsoft.Sql/servers/databases/transparentDataEncryption`
@@ -1669,7 +1729,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure SQL databases and Azure SQL database TDE settings and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure SQL databases and Azure SQL database TDE settings are still using an unsupported encryption setup or are missing the expected encryption setting.
 
-**How to align the environment:** Configure `Microsoft.Sql/servers/databases`, `Microsoft.Sql/servers/databases/transparentDataEncryption` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Sql/servers/databases` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform module if applicable.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -1685,6 +1745,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-204-PostgresSQLFlexibleServerSSLConnection</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 204 - Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server FLEXIBLE
 - **Folder:** `SLZ/Database/ID204`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations`
@@ -1692,11 +1753,11 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL flexible servers and PostgreSQL flexible server configuration settings and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Database for PostgreSQL flexible servers and PostgreSQL flexible server configuration settings still allow the older or less secure protocol setting.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations` in the resource deployment module.
+**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations` in the Terraform module if applicable.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires Terraform module for the service
 
 </details>
 
@@ -1705,6 +1766,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-204-PostgresSQLServerSSLConnection</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 204 - Ensure 'Enforce SSL connection' is set to 'ENABLED' for PostgreSQL Database Server SINGLE
 - **Folder:** `SLZ/Database/ID204`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`
@@ -1730,6 +1792,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-205-PostgresSQLFlexibleServer_log_checkpoints</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 205 - Ensure Server Parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Flexible Server
 - **Folder:** `SLZ/Database/ID205`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations`
@@ -1750,6 +1813,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-205-PostgresSQLServer_log_checkpoints</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 205 - Ensure Server Parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server
 - **Folder:** `SLZ/Database/ID205`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations`
@@ -1772,6 +1836,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-206-PostgresSQLServerLogConnections</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 206 - Log connections should be enabled for PostgreSQL database servers
 - **Folder:** `SLZ/Database/ID206`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations`
@@ -1792,6 +1857,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-207-PostgresSQLServerDisconnectionsLogging</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 207 - Disconnections should be logged for PostgreSQL database servers.
 - **Folder:** `SLZ/Database/ID207`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations`
@@ -1815,6 +1881,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-208-PostgresSQLFlexibleServerConnectionThrottling</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 208 - Connection throttling should be enabled for PostgreSQL database servers FLEXIBLE
 - **Folder:** `SLZ/Database/ID208`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations`
@@ -1835,6 +1902,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-208-PostgresSQLServerConnectionThrottling</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 208 - Connection throttling should be enabled for PostgreSQL database servers
 - **Folder:** `SLZ/Database/ID208`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations`
@@ -1860,6 +1928,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-210-PostgresSQLFlexibleServerPublicNetworkAccess</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 210 - Public network access should be disabled for PostgreSQL flexible servers
 - **Folder:** `SLZ/Database/ID210`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`
@@ -1880,6 +1949,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-210-PostgresSQLServerPublicNetworkAccess</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 210 - Public network access should be disabled for PostgreSQL servers
 - **Folder:** `SLZ/Database/ID210`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`
@@ -1902,6 +1972,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-212-MySQLSQLServerEnforceSSLConnection</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 212 - Ensure 'Enforce SSL connection' is set to 'Enabled' for Standard MySQL Database Server
 - **Folder:** `SLZ/Database/ID212`
 - **Affected Azure resource types:** `Microsoft.DBforMySQL/servers`
@@ -1922,6 +1993,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-214-MySQLSQLServer_audit_log_enabled</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 214 - Ensure server parameter 'audit_log_enabled' is set to 'ON' for MySQL Database Server
 - **Folder:** `SLZ/Database/ID214`
 - **Affected Azure resource types:** `Microsoft.DBforMySQL/flexibleServers`, `Microsoft.DBforMySQL/flexibleServers/configurations`
@@ -1942,6 +2014,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-215-MySQLSQLServer_audit_log_events</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 215 - Ensure server parameter 'audit_log_events' has 'CONNECTION' set for MySQL Database Server
 - **Folder:** `SLZ/Database/ID215`
 - **Affected Azure resource types:** `Microsoft.DBforMySQL/flexibleServers`, `Microsoft.DBforMySQL/flexibleServers/configurations`
@@ -1962,6 +2035,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-216-AzureCosmosDBFWLimitsForSelectedNetwork</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 216 - Ensure That 'Firewalls & Networks' Is Limited to use selected Networks Instead of All Networks
 - **Folder:** `SLZ/Database/ID216`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
@@ -1982,6 +2056,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-217-AzureCosmosDBPrivateLink</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 217 - CosmosDB accounts should use private link
 - **Folder:** `SLZ/Database/ID217`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
@@ -2002,6 +2077,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-218-AzureCosmosDBLocalAuthenticationDisabled</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 218 - Cosmos DB database accounts should have local authentication methods disabled
 - **Folder:** `SLZ/Database/ID218`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
@@ -2027,6 +2103,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1397-MicrosoftDefenderForCSPM</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1397 - Configure Microsoft Defender for CSPM
 - **Folder:** `SLZ/Defender/ID1397`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2047,6 +2124,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-153-DefenderForEndpoint</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 153 - Configure Microsoft Defender Endpoint Integration
 - **Folder:** `SLZ/Defender/ID153.2`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/settings`
@@ -2067,6 +2145,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-153-DefenderCloudPricingForServer</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 153 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Servers
 - **Folder:** `SLZ/Defender/ID153`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2087,6 +2166,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-154-DefenderCloudPricingForApplicationServices</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 154 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Application Services
 - **Folder:** `SLZ/Defender/ID154`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2107,6 +2187,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-156-DefenderCloudPricingForAzureSQLDB</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 156 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (Azure SQL Databases)
 - **Folder:** `SLZ/Defender/ID156`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2127,6 +2208,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-157-DefenderCloudPricingForDBOnServers</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 157 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (SQL servers on machines)
 - **Folder:** `SLZ/Defender/ID157`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2147,6 +2229,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-158-DefenderCloudPricingForOpenDB</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 158 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for OpenDB (Open-source relational db)
 - **Folder:** `SLZ/Defender/ID158`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2167,6 +2250,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-159-DefenderCloudPricingForStorage</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 159 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Storage
 - **Folder:** `SLZ/Defender/ID159`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2187,6 +2271,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-161-DefenderCloudPricingForAzureCosmosDB</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 161 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (Azure Cosmos Db)
 - **Folder:** `SLZ/Defender/ID161`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2207,6 +2292,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-162-DefenderCloudPricingForKeyVault</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 162 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Key Vaults
 - **Folder:** `SLZ/Defender/ID162`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2227,6 +2313,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-164-DefenderCloudPricingForResourceManager</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 164 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Resource Manager
 - **Folder:** `SLZ/Defender/ID164`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2247,6 +2334,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-168-MicrosoftDefenderConfigureVMForVulnerability</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 168 - Configure machines to receive a vulnerability assessment provider
 - **Folder:** `SLZ/Defender/ID168`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.HybridCompute/machines`, `Microsoft.Security/assessments`, `Microsoft.Compute/virtualMachines/providers/serverVulnerabilityAssessments`, `Microsoft.HybridCompute/machines/providers/serverVulnerabilityAssessments`
@@ -2267,6 +2355,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-00-MicrosoftDefenderForContainer</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 00 - Configure Microsoft Defender for CONTAINERS
 - **Folder:** `SLZ/Defender/IDdefender`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
@@ -2292,6 +2381,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-78-AllowedDeploymentRegions</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 78 - Designate allowed resource deployment region
 - **Folder:** `SLZ/General/ID078`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
@@ -2315,6 +2405,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.1-ApimProdNoBasicSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.1 - Ensure API Management in PROD does not use Basic or Consumption SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
@@ -2335,6 +2426,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.10-AKSProdNoFreeTier</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.10 - Ensure AKS in PROD does not use Free tier
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
@@ -2355,6 +2447,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.11-LBProdNoBasicSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.11 - Ensure Load Balancer in PROD does not use Basic SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Network/loadBalancers`
@@ -2375,6 +2468,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.12-VpnGwProdNoBasicTier</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.12 - Ensure VPN Gateway in PROD does not use Basic tier
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworkGateways`
@@ -2395,6 +2489,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.13-AzureSearchProdNoFreeOrBasicSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.13 - Ensure Azure Cognitive Search in PROD does not use Free or Basic SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Search/searchServices`
@@ -2415,6 +2510,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.14-SignalRProdNoFreeTier</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.14 - Ensure Azure SignalR in PROD does not use Free tier
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.SignalRService/SignalR`
@@ -2435,6 +2531,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.2-AppConfigProdNoFreeSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.2 - Ensure App Configuration in PROD does not use Free SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.AppConfiguration/configurationStores`
@@ -2455,6 +2552,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.3-AppServiceProdNoLowTierSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.3 - Ensure App Service Plan in PROD does not use Free, Shared, or Basic SKUs
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Web/serverfarms`
@@ -2475,6 +2573,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.4-ADXProdNoDeveloperTier</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.4 - Ensure Azure Data Explorer in PROD does not use Developer Tier
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Kusto/clusters`
@@ -2495,6 +2594,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.5-DatabricksProdNoStandardOrTrialSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.5 - Ensure Azure Databricks in PROD does not use Standard or Trial SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Databricks/workspaces`
@@ -2515,6 +2615,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.6-DisksProdNoStandardHDD</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.6 - Ensure Disks in PROD are not using Standard HDD (Standard_LRS)
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Compute/disks`
@@ -2535,6 +2636,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.7-ACRProdNoBasicSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.7 - Ensure ACR in PROD does not use Basic SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.ContainerRegistry/registries`
@@ -2555,6 +2657,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.8-EventHubProdNoBasicSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.8 - Ensure Event Hubs in PROD do not use Basic SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`
@@ -2575,6 +2678,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-238.9-KeyVaultProdNoStandardSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 238.9 - Ensure Key Vault in PROD does not use Standard SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
@@ -2597,6 +2701,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-272-ResourceLockForMissionCriticalResources</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 272 - Ensure that Resource Locks are set for Mission-Critical
 - **Folder:** `SLZ/General/ID272`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions/resourceGroups`, `Microsoft.Authorization/locks`
@@ -2617,6 +2722,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-287-IAMPermissionsThroughGroups</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 287 - Ensure IAM Users Receive Permissions Only Through Groups
 - **Folder:** `SLZ/General/ID287`
 - **Affected Azure resource types:** `Microsoft.Authorization/roleAssignments`
@@ -2637,6 +2743,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-617-OnlyAllowedGeoLocations</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 617 - Only allowed geo locations
 - **Folder:** `SLZ/General/ID617`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
@@ -2665,6 +2772,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>385f5831-96d4-41db-9a3c-cd3af78aaae6</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 01 Guest Configuration - Guest Configuration assignments on Windows
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration`
@@ -2685,6 +2793,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>331e8ea8-378a-410f-a2e5-ae22f38bb0da</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 02 Guest Configuration - Guest Configuration assignments on Linux
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration`
@@ -2705,6 +2814,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>3cf2ab00-13f1-4d0c-8971-2ac904541a7e</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 03 Guest Configuration - Add system-assigned on VMs with no identities
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
@@ -2725,6 +2835,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>497dff13-db2a-4c0f-8603-28fa3b331ab6</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 04 Guest Configuration - Add system-assigned on VMs with User-Assigned identities
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
@@ -2752,6 +2863,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-223-logsKeyVault</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 223 - Ensure that logging for Azure Key Vault is 'Enabled'
 - **Folder:** `SLZ/Monitoring/ID223`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`, `Microsoft.Insights/diagnosticSettings`
@@ -2772,6 +2884,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-226-logsCreatePolicy</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 226 - Ensure that Activity Log Alert exists for Create Policy Assignment
 - **Folder:** `SLZ/Monitoring/ID226`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2792,6 +2905,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-227-logsDeletePolicy</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 227 - Ensure that Activity Log Alert exists for Delete Policy Assignment
 - **Folder:** `SLZ/Monitoring/ID227`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2812,6 +2926,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-228-logsCreateUpdateNsg</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 228 - Ensure that Activity Log Alert exists for Create or Update Network Security Group
 - **Folder:** `SLZ/Monitoring/ID228`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2832,6 +2947,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-229-logsDeleteNsg</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 229 - Ensure that Activity Log Alert exists for Delete Network Security Group
 - **Folder:** `SLZ/Monitoring/ID229`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2852,6 +2968,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-230-logsCreateUpdateSecuritySolutions</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 230 - Ensure that Activity Log Alert exists for Create or Update Security Solution
 - **Folder:** `SLZ/Monitoring/ID230`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2872,6 +2989,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-231-logsDeleteSecuritySolutions</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 231 - Ensure that Activity Log Alert exists for Delete Security Solution
 - **Folder:** `SLZ/Monitoring/ID231`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2892,6 +3010,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-232-logsCreateUpdateSqlServerFirewallRule</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 232 - Ensure that Activity Log Alert exists for Create or Update SQL Server Firewall Rule
 - **Folder:** `SLZ/Monitoring/ID232`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2912,6 +3031,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-233-logsDeleteSqlServerFirewallRule</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 233 - Ensure that Activity Log Alert exists for Delete SQL Server Firewall Rule
 - **Folder:** `SLZ/Monitoring/ID233`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2932,6 +3052,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-234-logsCreateOrUpdatePublicIpRule</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 234 - Ensure that Activity Log Alert exists for Create or Update Public IP Address rule
 - **Folder:** `SLZ/Monitoring/ID234`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2952,6 +3073,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-235-logsDeletePublicIpRule</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 235 - Ensure that Activity Log Alert exists for Delete Public IP Address rule
 - **Folder:** `SLZ/Monitoring/ID235`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2975,6 +3097,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-236.1-webAppsNoInsights</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 236.1 - Audit Web Apps without Application Insights
 - **Folder:** `SLZ/Monitoring/ID236`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
@@ -2995,6 +3118,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-236.2-functionAppsNoInsights</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 236.2 - Audit Function Apps without Application Insights
 - **Folder:** `SLZ/Monitoring/ID236`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
@@ -3015,6 +3139,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-236.3-logicAppsNoInsights</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 236.3 - Audit Logic Apps without Application Insights
 - **Folder:** `SLZ/Monitoring/ID236`
 - **Affected Azure resource types:** `Microsoft.Logic/workflows`
@@ -3040,6 +3165,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-324-logsCreateSecurityGroups</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 324 - Ensure a log metric filter and alarm exist for Create security group changes
 - **Folder:** `SLZ/Monitoring/ID324`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3060,6 +3186,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-324-logsDeleteSecurityGroup</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 324 - Ensure a log metric filter and alarm exist for Delete security group changes
 - **Folder:** `SLZ/Monitoring/ID324`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3085,6 +3212,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-326-logsCreateNetworkGateway</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 326 - Ensure a log metric filter and alarm exist for Create Network Gateway
 - **Folder:** `SLZ/Monitoring/ID326`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3105,6 +3233,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-326-logsDeleteNetworkGateway</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 326 - Ensure a log metric filter and alarm exist for Delete Network Gateway
 - **Folder:** `SLZ/Monitoring/ID326`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3130,6 +3259,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-327-logsCreateRouteTables</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Create Route Tables
 - **Folder:** `SLZ/Monitoring/ID327`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3150,6 +3280,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-327-logsCreateRouteTablesRoute</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Create Route Tables Route
 - **Folder:** `SLZ/Monitoring/ID327`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3170,6 +3301,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-327-logsDeleteSecurityGroup</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Delete Route Tables
 - **Folder:** `SLZ/Monitoring/ID327`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3190,6 +3322,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-327-logsDeleteSecurityGroupRoute</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Delete Route Tables Route
 - **Folder:** `SLZ/Monitoring/ID327`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3215,6 +3348,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-328-logsCreateVirtualNetwork</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 328 - Ensure a log metric filter and alarm exist for Create Virtual Networks
 - **Folder:** `SLZ/Monitoring/ID328`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3235,6 +3369,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-328-logsDeleteVirtualNetworks</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 328 - Ensure a log metric filter and alarm exist for Delete Virtual Networks
 - **Folder:** `SLZ/Monitoring/ID328`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3262,6 +3397,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-10.6-DisablePublicNetworkWebApps</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 10.6 - Public Network Access Control for Web Apps
 - **Folder:** `SLZ/Network/ID10.6`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
@@ -3282,6 +3418,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1325-WAFonAPGT</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1325 - Web Application Firewall (WAF) Must Be Enabled on Application Gateways
 - **Folder:** `SLZ/Network/ID1325`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`
@@ -3302,6 +3439,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1326-WAFSkuV2</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1326 - Application Gateway Must Use WAF_v2 SKU
 - **Folder:** `SLZ/Network/ID1326`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`
@@ -3322,6 +3460,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1327-WAFonFrontDoor</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1327 - Azure CDN profiles of type Front Door should have a Web Application Firewall configured
 - **Folder:** `SLZ/Network/ID1327`
 - **Affected Azure resource types:** `Microsoft.Cdn/profiles`, `Microsoft.Cdn/profiles/securityPolicies`
@@ -3342,6 +3481,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1328-WAFonFrontDoor-Detection</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1328 - Web Application Firewall (WAF) should use the specified mode for Azure Front Door Service
 - **Folder:** `SLZ/Network/ID1328`
 - **Affected Azure resource types:** `Microsoft.Network/frontdoorwebapplicationfirewallpolicies`
@@ -3362,6 +3502,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1329-DisablePublicNetworkFunctionApps</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1329 - Public Network Access Control for Function Apps
 - **Folder:** `SLZ/Network/ID1329`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
@@ -3382,6 +3523,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1330-PrivateEndpointAPI</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1330 - Ensure Private Endpoint for Azure API Management Services
 - **Folder:** `SLZ/Network/ID1330`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
@@ -3405,6 +3547,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1331-DisablePublicAccessAPI</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1331 - Ensure Public network access must be Disabled
 - **Folder:** `SLZ/Network/ID1331`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
@@ -3425,6 +3568,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1331.2-DisablePublicAccessAPIPE</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1331.2 - Ensure Public network access must be Disabled for API management with Private Endpoints
 - **Folder:** `SLZ/Network/ID1331`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
@@ -3447,6 +3591,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1332-APIAllowedSku</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1332 - Enforce Allowed SKUs for Azure API Management Service
 - **Folder:** `SLZ/Network/ID1332`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
@@ -3467,6 +3612,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1333-NoPublicIpOnNics</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1333 - Network Interfaces Should Not Have Public IPs
 - **Folder:** `SLZ/Network/ID1333`
 - **Affected Azure resource types:** `Microsoft.Network/networkInterfaces`
@@ -3487,6 +3633,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1334-KubernetesInternalLB</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1334 - Kubernetes Clusters Should Use Internal Load Balancers
 - **Folder:** `SLZ/Network/ID1334`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
@@ -3507,6 +3654,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1335-NoPublicIpOnAKSNodePools</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1335 - Prevent Public IP on AKS Node Pools
 - **Folder:** `SLZ/Network/ID1335`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
@@ -3527,6 +3675,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1336-ContainerAppsNoPublicNA</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1336 - Container Apps Environment Should Disable Public Network Access
 - **Folder:** `SLZ/Network/ID1336`
 - **Affected Azure resource types:** `Microsoft.App/managedEnvironments`
@@ -3547,6 +3696,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1337-ContainerAppDisableExternalNetworkAccess</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1337 - Container Apps Should Disable External Network Access
 - **Folder:** `SLZ/Network/ID1337`
 - **Affected Azure resource types:** `Microsoft.App/containerApps`
@@ -3567,6 +3717,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1338-WAFonAPGT-Detection</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1338 - Web Application Firewall (WAF) should use the specified mode for Application Gateway
 - **Folder:** `SLZ/Network/ID1338`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGatewayWebApplicationFirewallPolicies`
@@ -3587,6 +3738,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-239-RPDAccessDisabledForInternet</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 239 - Ensure that RDP access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID239`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3607,6 +3759,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-240-SSHAccessDisabledForInternet</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 240 - Ensure that SSH access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID240`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3627,6 +3780,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-241-UDPAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 241 - Ensure that UDP access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID241`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3647,6 +3801,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-242-HTTPsAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 242 - Ensure that HTTP access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID242`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3667,6 +3822,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-244-NetworkWatcherEnabled</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 244 - Ensure that Network Watcher is 'Enabled'
 - **Folder:** `SLZ/Network/ID244`
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworks`, `Microsoft.Network/networkWatchers`
@@ -3687,6 +3843,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-332-NSGNoIngressFrom0000For22or3389</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 332 - Ensure no security groups allow ingress from 0.0.0.0/0 to remote server administration ports
 - **Folder:** `SLZ/Network/ID332`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3707,6 +3864,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-333-NSGNoIngressFrom0For22or3389</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 333 - Ensure no security groups allow ingress from ::/0 to remote server administration ports
 - **Folder:** `SLZ/Network/ID333`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3727,6 +3885,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-629-VirtualNetworksDDOSProtection</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 629 - Enforce DDoS Protection
 - **Folder:** `SLZ/Network/ID629`
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworks`, `Microsoft.Resources/deployments`
@@ -3747,6 +3906,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-983-FTPAccessFromInternetEvaluatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 983 - Ensure that FTP access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID983`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
@@ -3767,6 +3927,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-984-MongoDBAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 984 - Ensure that MongoDB access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID984`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
@@ -3787,6 +3948,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-985-CassandraAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 985 - Ensure that Cassandra access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID985`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
@@ -3807,6 +3969,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-986-ElasticsearchAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 986 - Ensure that Elasticsearch/Kibana  access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID986`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
@@ -3827,6 +3990,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-987-KafkaAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 987 - Ensure that Kafka access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID987`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3847,6 +4011,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-988-MemcachedAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 988 - Ensure that Memcached access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID988`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3867,6 +4032,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-989-MySQLAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 989 - Ensure that MySQL access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID989`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3887,6 +4053,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-990-OracleAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 990 - Ensure that Oracle access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID990`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
@@ -3907,6 +4074,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-991-PostgresAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 991 - Ensure that Postgres access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID991`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3927,6 +4095,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-992-RedisAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 992 - Ensure that Redis access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID992`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3947,6 +4116,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-993-WinSQLServerAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 993 - Ensure that Windows SQL Server access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID993`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
@@ -3967,6 +4137,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-994-TelnetAccessFromInternetEvalutatedAndRestricted</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 994 - Ensure that Telnet access from the Internet is evaluated and restricted
 - **Folder:** `SLZ/Network/ID994`
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
@@ -3992,6 +4163,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1340-AppServiceLatestTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1340 - App Service apps should use the latest tls version
 - **Folder:** `SLZ/Security/ID1340`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -4012,6 +4184,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1341-AppServiceSlotsLatestTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1341 - App Service app slots should use the latest TLS version
 - **Folder:** `SLZ/Security/ID1341`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
@@ -4032,6 +4205,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1342-FunctionAppsLatestTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1342 - Configure Function apps to use the latest TLS version
 - **Folder:** `SLZ/Security/ID1342`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -4052,6 +4226,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1343-FunctionAppSlotsLatestTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1343 - Configure Function app slots to use the latest TLS version
 - **Folder:** `SLZ/Security/ID1343`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
@@ -4072,6 +4247,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1344-LogicAppsLatestTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1344 - Configure Logic Apps to use the latest TLS version
 - **Folder:** `SLZ/Security/ID1344`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -4092,6 +4268,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1345-RedisSecureConnections</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1345 - Azure Cache for Redis only secure connections should be enabled
 - **Folder:** `SLZ/Security/ID1345`
 - **Affected Azure resource types:** `Microsoft.Cache/redis`
@@ -4112,6 +4289,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1346-FrontDoorTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1346 - Azure Front Door Standard and Premium should be running minimum TLS version of 1.2
 - **Folder:** `SLZ/Security/ID1346`
 - **Affected Azure resource types:** `Microsoft.Cdn/profiles/customDomains`
@@ -4132,6 +4310,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1347-EventHubTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1347 - Event Hub namespaces should have the specified minimum TLS version
 - **Folder:** `SLZ/Security/ID1347`
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`
@@ -4152,6 +4331,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1348-StorageTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1348 - Azure Storage should have minimum TLS version
 - **Folder:** `SLZ/Security/ID1348`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
@@ -4172,6 +4352,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1349-ADDomainServicesTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1349 - Azure Active Directory Domain Services managed domains should use tls 1.2 only mode
 - **Folder:** `SLZ/Security/ID1349`
 - **Affected Azure resource types:** `Microsoft.AAD/domainServices`
@@ -4192,6 +4373,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1350-AzureCosmosTLS12</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1350 - Azure COSMOS Database should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1350`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
@@ -4212,6 +4394,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1351-SQLManagedInstanceTLS12</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1351 - SQL Managed Instance should have the minimal tls version of 1.2
 - **Folder:** `SLZ/Security/ID1351`
 - **Affected Azure resource types:** `Microsoft.Sql/managedInstances`
@@ -4232,6 +4415,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1352-ArcSQLManagedInstanceTLS12</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1352 - tls protocol 1.2 must be used for Arc SQL managed instances.
 - **Folder:** `SLZ/Security/ID1352`
 - **Affected Azure resource types:** `Microsoft.AzureArcData/sqlmanagedinstances`
@@ -4252,6 +4436,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1353-SQLDatabaseTLS12</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1353 - Azure SQL Database should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1353`
 - **Affected Azure resource types:** `Microsoft.Sql/servers`
@@ -4272,6 +4457,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1354-PostgreSQLFLEXSSLVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1354 - PostgreSQL flexible servers should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1354`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/flexibleServers/configurations`
@@ -4292,6 +4478,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1355-MariaDBTLSVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1355 - Azure MARIA Database should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1355`
 - **Affected Azure resource types:** `Microsoft.DBForMariaDB/servers`
@@ -4312,6 +4499,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1356-SynapseSQLTLSVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1356 - Azure Synapse Workspace SQL Server should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID1356`
 - **Affected Azure resource types:** `Microsoft.Synapse/workspaces/dedicatedSQLminimaltlsSettings`
@@ -4332,6 +4520,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1357-AzureKubernetesClustersKMS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1357 - Azure Kubernetes Clusters should enable Key Management Service (KMS)
 - **Folder:** `SLZ/Security/ID1357`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
@@ -4352,6 +4541,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1358-AISNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1358 - Azure AI Services resources should encrypt data at rest with a customer-managed key (CMK) (only SNC resources)
 - **Folder:** `SLZ/Security/ID1358`
 - **Affected Azure resource types:** `Microsoft.CognitiveServices/accounts`
@@ -4372,6 +4562,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1359-AutomationSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1359 - Azure Automation accounts should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1359`
 - **Affected Azure resource types:** `Microsoft.Automation/automationAccounts`
@@ -4392,6 +4583,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1360-BackupVaultSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1360 - Azure Backup Vaults should use customer-managed keys for encrypting backup data(SNC resources)
 - **Folder:** `SLZ/Security/ID1360`
 - **Affected Azure resource types:** `Microsoft.DataProtection/backupvaults`
@@ -4412,6 +4604,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1361-BatchSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1361 - Azure Batch account should use customer-managed keys to encrypt data (only SNC resources)
 - **Folder:** `SLZ/Security/ID1361`
 - **Affected Azure resource types:** `Microsoft.Batch/batchAccounts`
@@ -4432,6 +4625,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1362-LoadTestingSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1362 - Azure load testing resource should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1362`
 - **Affected Azure resource types:** `Microsoft.LoadTestService/loadtests`
@@ -4452,6 +4646,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1363-RedisEnterpriseSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1363 - Azure Cache for Redis Enterprise should use customer-managed keys for encrypting disk data (only SNC resources)
 - **Folder:** `SLZ/Security/ID1363`
 - **Affected Azure resource types:** `Microsoft.Cache/redisEnterprise`
@@ -4472,6 +4667,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1364-CognitiveSearchSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1364 - Azure Cognitive Search services should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1364`
 - **Affected Azure resource types:** `Microsoft.Search/searchServices`
@@ -4492,6 +4688,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1365-ContainerInstanceSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1365 - Azure Container Instance container group should use customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1365`
 - **Affected Azure resource types:** `Microsoft.ContainerInstance/containerGroups`
@@ -4512,6 +4709,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1366-ContainerRegistrySNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1366 - Container registries should be encrypted with a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1366`
 - **Affected Azure resource types:** `Microsoft.ContainerRegistry/registries`
@@ -4532,6 +4730,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1367-CosmosDBSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1367 - Azure Cosmos DB accounts should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1367`
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
@@ -4552,6 +4751,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1368-AzureDataExplorerSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1368 - Azure Data Explorer encryption at rest should use a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1368`
 - **Affected Azure resource types:** `Microsoft.Kusto/Clusters`
@@ -4572,6 +4772,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1369-AzureDataFactoriesSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1369 - Azure data factories should be encrypted with a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1369`
 - **Affected Azure resource types:** `Microsoft.DataFactory/factories`
@@ -4592,6 +4793,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1370-ElasticSanVolumeGroupSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1370 - ElasticSan Volume Group should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1370`
 - **Affected Azure resource types:** `Microsoft.ElasticSan/elasticSans/volumeGroups`
@@ -4612,6 +4814,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1371-EventHubNamespaceSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1371 - Event Hub namespaces should use a customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1371`
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`, `Microsoft.Keyvault`
@@ -4632,6 +4835,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1372-FluidRelaySNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1372 - Fluid Relay should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1372`
 - **Affected Azure resource types:** `Microsoft.FluidRelay/fluidRelayServers`
@@ -4652,6 +4856,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1373-HDInsightSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1373 - Azure HDInsight clusters should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1373`
 - **Affected Azure resource types:** `Microsoft.HDInsight/clusters`
@@ -4672,6 +4877,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1374-HealthBotsSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1374 - Azure Health Bots should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1374`
 - **Affected Azure resource types:** `Microsoft.HealthBot/healthBots`
@@ -4692,6 +4898,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1375-HPCCacheSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1375 - HPC Cache accounts should use customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1375`
 - **Affected Azure resource types:** `Microsoft.StorageCache/caches`
@@ -4712,6 +4919,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1376-IoTHubSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1376 - Azure IoT Hub should use customer-managed key to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1376`
 - **Affected Azure resource types:** `Microsoft.Devices/IotHubs`
@@ -4732,6 +4940,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1378-LogicAppsSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1378 - Logic Apps Integration Service Environment should be encrypted with customer-managed keys (only SNC resources)
 - **Folder:** `SLZ/Security/ID1378`
 - **Affected Azure resource types:** `Microsoft.Logic/integrationServiceEnvironments`
@@ -4752,6 +4961,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1379-AzureMLSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1379 - Azure Machine Learning workspaces should be encrypted with a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1379`
 - **Affected Azure resource types:** `Microsoft.MachineLearningServices/workspaces`
@@ -4772,6 +4982,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1380-AzureSynapseWorkspaceCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1380 - Azure Synapse workspaces should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1380`
 - **Affected Azure resource types:** `Microsoft.Synapse/workspaces`
@@ -4792,6 +5003,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1381-OSAndDataDisksSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1381 - OS and data disks should be encrypted with a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1381`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, `Microsoft.Compute/images`
@@ -4812,6 +5024,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1382-PostgreSQLFlexibleServersEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1382 - PostgreSQL flexible servers should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1382`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`
@@ -4832,6 +5045,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1384-ServiceBusPremiumEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1384 - Service Bus Premium namespaces should use a customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1384`
 - **Affected Azure resource types:** `Microsoft.ServiceBus/namespaces`, `Microsoft.Keyvault`
@@ -4852,6 +5066,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-1385-StorageAccountEncryptionScopesCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 1385 - Storage account encryption scopes should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1385`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/encryptionScopes`
@@ -4872,6 +5087,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-213-MySQLLatestTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 213 - Ensure 'TLS Version' is set to 'TLSV1.2' for MySQL flexible Database
 - **Folder:** `SLZ/Security/ID213`
 - **Affected Azure resource types:** `Microsoft.DBforMySQL/servers`
@@ -4892,6 +5108,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-254-KeyVaultKeysExpirationDateSet</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 254 - Ensure that the Expiration Date is set for all Keys in Key Vaults (RBAC and Non-RBAC)
 - **Folder:** `SLZ/Security/ID254`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults/keys`
@@ -4912,6 +5129,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-256-KeyVaultSecretsExpirationDateSet</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 256 - Ensure that the Expiration Date is set for all Secrets in Key Vaults (RBAC and Non-RBAC)
 - **Folder:** `SLZ/Security/ID256`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults/secrets`
@@ -4932,6 +5150,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-257-KeyVaultRecoverable</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 257 - Ensure the Key Vault is Recoverable
 - **Folder:** `SLZ/Security/ID257`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
@@ -4952,6 +5171,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-258-KeyVaultRBAC</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 258 - Enable Role Based Access Control for Azure Key Vault
 - **Folder:** `SLZ/Security/ID258`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
@@ -4972,6 +5192,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-259-KeyVaultPrivateEndpoint</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 259 - Ensure that Private Endpoints are Used for Azure Key Vault
 - **Folder:** `SLZ/Security/ID259`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
@@ -4992,6 +5213,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-260-KeyRotationEnabled</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 260 - Ensure Automatic Key Rotation is Enabled Within Azure Key Vault for the Supported Services
 - **Folder:** `SLZ/Security/ID260`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults/keys`
@@ -5015,6 +5237,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-31.15-PostgreSQLSSLVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 31.15 - PostgreSQL flexible servers should be running tls version 1.2 or newer
 - **Folder:** `SLZ/Security/ID31`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/servers/configurations`
@@ -5035,6 +5258,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-31.9-AppGatewayTLS</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 31.9 - Application Gateway should be deployed with predefined Microsoft policy that is using latest tls version
 - **Folder:** `SLZ/Security/ID31`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`
@@ -5060,6 +5284,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-35.1-ArcSQLTDE</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 35.1 - Transparent Data Encryption must be enabled for Arc SQL managed instances.
 - **Folder:** `SLZ/Security/ID35`
 - **Affected Azure resource types:** `Microsoft.AzureArcData/sqlmanagedinstances`
@@ -5080,6 +5305,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-35.2-AzureSynapseTDE</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 35.2 - Azure Synapse Analytics dedicated SQL pools should enable encryption
 - **Folder:** `SLZ/Security/ID35`
 - **Affected Azure resource types:** `Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption`
@@ -5105,6 +5331,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-872.13-DICOMServiceSNCEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 872.13 - DICOM Service should use a customer-managed key to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID872`
 - **Affected Azure resource types:** `Microsoft.HealthcareApis/workspaces/dicomservices`
@@ -5125,6 +5352,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-872.27-PostgreSQLServersEncryptionCMK</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 872.27 - PostgreSQL servers should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID872`
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/keys`
@@ -5152,6 +5380,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-177-StorageAccountsSecureTransfer</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 177 - Secure transfer to storage accounts should be enabled
 - **Folder:** `SLZ/Storage/ID177`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
@@ -5172,6 +5401,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-178-StorageAccountsInfrastructureEncryption</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 178 - Storage accounts should have infrastructure encryption
 - **Folder:** `SLZ/Storage/ID178`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
@@ -5192,6 +5422,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-179-StorageAccountsExpirationReminder</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 179 - Ensure that 'Enable key rotation reminders' is enabled for each Storage Account
 - **Folder:** `SLZ/Storage/ID179`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
@@ -5212,6 +5443,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-183-StorageAccountsPublicAccess</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 183 - Storage account public access should be disallowed
 - **Folder:** `SLZ/Storage/ID183`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
@@ -5232,6 +5464,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-184-StorageAccountsDefaultNetworkAccessRule</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 184 - Ensure Default Network Access Rule for Storage Accounts is Set to Deny
 - **Folder:** `SLZ/Storage/ID184`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
@@ -5252,6 +5485,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-185-StorageAccountsAllowAzureServices</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 185 - Ensure 'Allow Azure services on the trusted services list to access this storage account' is Enabled
 - **Folder:** `SLZ/Storage/ID185`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
@@ -5272,6 +5506,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-186-StorageAccountsPrivateEndpoints</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 186 - Ensure Private Endpoints are used to access Storage Accounts
 - **Folder:** `SLZ/Storage/ID186`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Storage/storageAccounts/privateEndpointConnections`, `Microsoft.Resources/deployments`, `Microsoft.Network/privateEndpoints`
@@ -5292,6 +5527,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-187-StorageBlobsAndContainerSoftDelete</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 187 - Azure Storage Blobs and Containers should have Soft Delete enabled (Minimum 30 days)
 - **Folder:** `SLZ/Storage/ID187`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/blobServices`
@@ -5312,6 +5548,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-248-OSandDataDisksCMKEncryption</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 248 - Ensure that 'OS and Data' disks are encrypted with Customer Managed Key (CMK) for SNC data
 - **Folder:** `SLZ/Storage/ID248`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, `Microsoft.Compute/galleries/images/versions`, `Microsoft.Compute/images`
@@ -5332,6 +5569,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-249-UnattachedDisksCMKEncryption</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 249 - Ensure that 'Unattached disks' are encrypted with 'Customer Managed Key' (CMK) for SNC data
 - **Folder:** `SLZ/Storage/ID249`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
@@ -5360,6 +5598,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-TagInheritanceFromSub</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** Tag Inheritance
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
@@ -5380,6 +5619,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-604-CheckDataSensitivityTagsOnSubscriptions</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 604 - Check ec.DataSensitivityLevel Tag on Subscription
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
@@ -5400,6 +5640,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-CheckEnvironmentTagOnSubscription</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - XXX - Check Environment Tag on Subscription
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
@@ -5420,6 +5661,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-CheckOrganizationTagOnSubscription</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - XXX - Check Organization Tag on Subscription
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
@@ -5440,6 +5682,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-878-CheckProjectTagOnSubscription</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 878 - Check Project Tag on Subscription
 - **Folder:** `SLZ/Tagging/ID00-NonID-Tags`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
@@ -5467,6 +5710,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-261-AppServiceAuthentication</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 261 - Ensure App Service Authentication is set up for apps in Azure App Service
 - **Folder:** `SLZ/Web/ID261`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -5490,6 +5734,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-262-AppServiceSlotsHTTPtoHTTPSRedirection</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 262 - Ensure Web App Redirects All HTTP traffic to HTTPS in Azure App Service Slots
 - **Folder:** `SLZ/Web/ID262`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`
@@ -5510,6 +5755,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-262-AppServiceHTTPtoHTTPSRedirection</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 262 - Ensure Web App Redirects All HTTP traffic to HTTPS in Azure App Service
 - **Folder:** `SLZ/Web/ID262`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
@@ -5532,6 +5778,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-265-AppServiceAADRegistration</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 265 - Ensure that Register with Azure Active Directory is enabled on App Service
 - **Folder:** `SLZ/Web/ID265`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -5555,6 +5802,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-267-AppServiceSlotsLatestPythonVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 267 - Ensure that 'Python version' is the Latest Stable Version, if Used to Run the Web App Slots
 - **Folder:** `SLZ/Web/ID267`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
@@ -5575,6 +5823,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-267-AppServiceLatestPythonVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 267 - Ensure that 'Python version' is the Latest Stable Version, if Used to Run the Web App
 - **Folder:** `SLZ/Web/ID267`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -5600,6 +5849,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-268-AppServiceSlotsLatestJavaVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 268 - Ensure that 'Java version' is the latest, if used to run the Web App for Slots
 - **Folder:** `SLZ/Web/ID268`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
@@ -5620,6 +5870,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-268-AppServiceLatestJavaVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 268 - Ensure that 'Java version' is the latest, if used to run the Web App
 - **Folder:** `SLZ/Web/ID268`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -5645,6 +5896,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-269-AppServiceSlotsLatestHTTPVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 269 - Ensure that 'HTTP Version' is the Latest, if Used to Run the Web App for Slots
 - **Folder:** `SLZ/Web/ID269`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
@@ -5665,6 +5917,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-269-AppServiceLatestHTTPVersionWebApp</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 269 - Ensure that 'HTTP Version' is the Latest, if Used to Run the Web App
 - **Folder:** `SLZ/Web/ID269`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -5685,6 +5938,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-269-AppServiceLatestHTTPVersion</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 269 - Ensure that 'HTTP Version' is the Latest, if Used to Run the Function App
 - **Folder:** `SLZ/Web/ID269`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -5710,6 +5964,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-270-AppServiceFTPDeploymentsWebApp</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 270 - Ensure FTP deployments are Disabled
 - **Folder:** `SLZ/Web/ID270`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -5730,6 +5985,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-270-AppServiceSlotsFTPDeployments</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 270 - Ensure FTP deployments are Disabled for Slots
 - **Folder:** `SLZ/Web/ID270`
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
@@ -5750,6 +6006,7 @@ Total policy definitions assessed: **255**.
 <summary><h6>SLZ-270-AppServiceFTPDeployments</h6></summary>
 
 
+- **Applicable:** unknown
 - **Display name:** SLZ - 270 - Ensure FTP deployments are Disabled
 - **Folder:** `SLZ/Web/ID270`
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
@@ -5772,4 +6029,3 @@ Total policy definitions assessed: **255**.
 </details>
 
 </details>
-
