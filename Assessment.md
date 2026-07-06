@@ -1733,7 +1733,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Terraform module changes required if applicable.
 
 </details>
 
@@ -1778,7 +1778,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires PostgreSQL server modules
 
 </details>
 
@@ -1800,11 +1800,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL single servers and PostgreSQL server configuration settings and makes sure server Parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Flexible Server. In audit mode it shows which Azure Database for PostgreSQL single servers and PostgreSQL server configuration settings do not have that database setting configured as required.
 
-**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
+**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/servers` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
+**Operational impact:** Requires PostgreSQL server modules
 
 </details>
 
@@ -1821,11 +1821,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL flexible servers and PostgreSQL flexible server configuration settings and makes sure server Parameter 'log_checkpoints' is set to 'ON' for PostgreSQL Database Server. In audit mode it shows which Azure Database for PostgreSQL flexible servers and PostgreSQL flexible server configuration settings do not have that database setting configured as required.
 
-**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
+**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/flexibleservers` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
+**Operational impact:** Requires PostgreSQL server modules
 
 </details>
 
@@ -1844,11 +1844,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL single servers and PostgreSQL server configuration settings and makes sure log connections should be enabled for PostgreSQL database servers. In audit mode it shows which Azure Database for PostgreSQL single servers and PostgreSQL server configuration settings do not have that database setting configured as required.
 
-**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
+**How to align the environment:** Update Terraform modules for `Microsoft.DBforPostgreSQL/servers` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
+**Operational impact:** Requires PostgreSQL server modules
 
 </details>
 
@@ -1865,11 +1865,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL single servers and PostgreSQL server configuration settings and makes sure disconnections should be logged for PostgreSQL database servers. In audit mode it shows which Azure Database for PostgreSQL single servers and PostgreSQL server configuration settings do not have that database setting configured as required.
 
-**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
+**How to align the environment:** Update Terraform modules for `Microsoft.DBforPostgreSQL/servers` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
+**Operational impact:** None
 
 </details>
 
@@ -1889,11 +1889,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL flexible servers and PostgreSQL flexible server configuration settings and makes sure connection throttling should be enabled for PostgreSQL database servers FLEXIBLE. In audit mode it shows which Azure Database for PostgreSQL flexible servers and PostgreSQL flexible server configuration settings do not have that database setting configured as required.
 
-**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/flexibleservers`, `Microsoft.DBforPostgreSQL/flexibleservers/configurations` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
+**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/flexibleservers` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
+**Operational impact:** RRequires PostgreSQL server modules
 
 </details>
 
@@ -1910,11 +1910,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL single servers and PostgreSQL server configuration settings and makes sure connection throttling should be enabled for PostgreSQL database servers. In audit mode it shows which Azure Database for PostgreSQL single servers and PostgreSQL server configuration settings do not have that database setting configured as required.
 
-**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/configurations` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
+**How to align the environment:** Update database modules for `Microsoft.DBforPostgreSQL/servers` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
+**Operational impact:** Requires PostgreSQL server modules
 
 </details>
 
@@ -1936,11 +1936,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL flexible servers and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which Azure Database for PostgreSQL flexible servers are missing the required private connectivity.
 
-**How to align the environment:** Change deployment modules for `Microsoft.DBforPostgreSQL/flexibleServers` to use private endpoints/private link and disable or avoid unsupported public access paths.
+**How to align the environment:** Change Terraform modules for `Microsoft.DBforPostgreSQL/flexibleServers` to use private endpoints/private link and disable or avoid unsupported public access paths.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
+**Operational impact:** Requires PostgreSQL server modules
 
 </details>
 
@@ -1957,11 +1957,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL single servers and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which Azure Database for PostgreSQL single servers are missing the required private connectivity.
 
-**How to align the environment:** Change deployment modules for `Microsoft.DBforPostgreSQL/servers` to use private endpoints/private link and disable or avoid unsupported public access paths.
+**How to align the environment:** Change Terraform modules for `Microsoft.DBforPostgreSQL/servers` to use private endpoints/private link and disable or avoid unsupported public access paths.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
+**Operational impact:** Requires PostgreSQL server modules
 
 </details>
 
@@ -1984,7 +1984,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires MySQL Terraform modules
 
 </details>
 
@@ -2001,11 +2001,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for MySQL flexible servers and MySQL flexible server configuration settings and makes sure server parameter 'audit_log_enabled' is set to 'ON' for MySQL Database Server. In audit mode it shows which Azure Database for MySQL flexible servers and MySQL flexible server configuration settings do not have that database setting configured as required.
 
-**How to align the environment:** Update database modules for `Microsoft.DBforMySQL/flexibleServers`, `Microsoft.DBforMySQL/flexibleServers/configurations` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
+**How to align the environment:** Update database modules for `Microsoft.DBforMySQL/flexibleServers` to set the required audit, logging, authentication, firewall, TLS, encryption, or private access configuration.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
+**Operational impact:** Requires MySQL Terraform modules
 
 </details>
 
@@ -2026,7 +2026,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires database server modules to set audit, encryption, TLS, firewall, authentication, or logging options consistently.
+**Operational impact:** Requires MySQL Terraform modules
 
 </details>
 
@@ -2047,7 +2047,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires CosmosDB Terraform module
 
 </details>
 
@@ -2068,7 +2068,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
+**Operational impact:** Requires CosmosDB Terraform module
 
 </details>
 
@@ -2089,7 +2089,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires CosmosDB Terraform module
 
 </details>
 
@@ -2103,19 +2103,23 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-1397-MicrosoftDefenderForCSPM</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 1397 - Configure Microsoft Defender for CSPM
 - **Folder:** `SLZ/Defender/ID1397`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
-**Parameters or variables to specify or consider:** `isSensitiveDataDiscoveryEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Sensitive Data Discovery add-on feature); `isContainerRegistriesVulnerabilityAssessmentsEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Container Registries Vulnerability Assessments add-on feature); `isAgentlessDiscoveryForKubernetesEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Agentless Discovery for Kubernetes add-on feature); `isAgentlessVmScanningEnabled` (default `false`; allowed `true`, `false`; Enable or disable the Agentless VM Scanning add-on feature); `isEntraPermissionsManagementEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Permissions Management add-on feature).
+**Parameters or variables to specify or consider:** `isSensitiveDataDiscoveryEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Sensitive Data Discovery add-on feature); 
+`isContainerRegistriesVulnerabilityAssessmentsEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Container Registries Vulnerability Assessments add-on feature); 
+`isAgentlessDiscoveryForKubernetesEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Agentless Discovery for Kubernetes add-on feature); 
+`isAgentlessVmScanningEnabled` (default `false`; allowed `true`, `false`; Enable or disable the Agentless VM Scanning add-on feature); 
+`isEntraPermissionsManagementEnabled` (default `true`; allowed `true`, `false`; Enable or disable the Permissions Management add-on feature).
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** Requires Policy tfvars alignment with the desired configuration of Defender
 
 </details>
 
@@ -2124,19 +2128,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-153-DefenderForEndpoint</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 153 - Configure Microsoft Defender Endpoint Integration
 - **Folder:** `SLZ/Defender/ID153.2`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/settings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** None (?)
 
 </details>
 
@@ -2145,19 +2149,22 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-153-DefenderCloudPricingForServer</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 153 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Servers
 - **Folder:** `SLZ/Defender/ID153`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
-**Parameters or variables to specify or consider:** `subPlan` (default `P2`; allowed `P1`, `P2`; Select a Defender for Servers plan); `isAgentlessVmScanningEnabled` (default `false`; allowed `true`, `false`; Enable or disable the Agentless VM Scanning add-on feature); `isMdeDesignatedSubscriptionEnabled` (default `false`; allowed `true`, `false`; Enable or disable the MDE Designated Subscription add-on feature).
+**Parameters or variables to specify or consider:** 
+`subPlan` (default `P2`; allowed `P1`, `P2`; Select a Defender for Servers plan); 
+`isAgentlessVmScanningEnabled` (default `false`; allowed `true`, `false`; Enable or disable the Agentless VM Scanning add-on feature); 
+`isMdeDesignatedSubscriptionEnabled` (default `false`; allowed `true`, `false`; Enable or disable the MDE Designated Subscription add-on feature).
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** Requires Policy tfvars alignment with the desired configuration of Defender
 
 </details>
 
@@ -2170,15 +2177,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 154 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Application Services
 - **Folder:** `SLZ/Defender/ID154`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** None, other than designed security baseline for Defender
 
 </details>
 
@@ -2191,15 +2198,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 156 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (Azure SQL Databases)
 - **Folder:** `SLZ/Defender/ID156`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** None, other than designed security baseline for Defender
 
 </details>
 
@@ -2212,15 +2219,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 157 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (SQL servers on machines)
 - **Folder:** `SLZ/Defender/ID157`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** None, other than designed security baseline for Defender
 
 </details>
 
@@ -2233,15 +2240,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 158 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for OpenDB (Open-source relational db)
 - **Folder:** `SLZ/Defender/ID158`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** None, other than designed security baseline for Defender
 
 </details>
 
@@ -2250,19 +2257,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-159-DefenderCloudPricingForStorage</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 159 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Storage
 - **Folder:** `SLZ/Defender/ID159`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** None, other than designed security baseline for Defender
 
 </details>
 
@@ -2275,15 +2282,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 161 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Databases (Azure Cosmos Db)
 - **Folder:** `SLZ/Defender/ID161`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** None, other than designed security baseline for Defender
 
 </details>
 
@@ -2296,15 +2303,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 162 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Key Vaults
 - **Folder:** `SLZ/Defender/ID162`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** None, other than designed security baseline for Defender
 
 </details>
 
@@ -2317,15 +2324,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 164 - Configure Microsoft Defender for Cloud princing tier for Microsoft Defender for Resource Manager
 - **Folder:** `SLZ/Defender/ID164`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** None, other than designed security baseline for Defender
 
 </details>
 
@@ -2334,19 +2341,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-168-MicrosoftDefenderConfigureVMForVulnerability</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 168 - Configure machines to receive a vulnerability assessment provider
 - **Folder:** `SLZ/Defender/ID168`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.HybridCompute/machines`, `Microsoft.Security/assessments`, `Microsoft.Compute/virtualMachines/providers/serverVulnerabilityAssessments`, `Microsoft.HybridCompute/machines/providers/serverVulnerabilityAssessments`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** `vaType` (default `mdeTvm`; allowed `default`, `mdeTvm`; Select the vulnerability assessment solution to provision to machines.).
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** Unknown
 
 </details>
 
@@ -2355,19 +2362,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-00-MicrosoftDefenderForContainer</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 00 - Configure Microsoft Defender for CONTAINERS
 - **Folder:** `SLZ/Defender/IDdefender`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Security/pricings`
-- **Cost impact:** Yes [High impact] - paid Microsoft Defender for Cloud plan or add-on.
+- **Cost impact:** Yes - paid Microsoft Defender for Cloud plan or add-on.
 
 **Breakdown of what the policy does:** The policy checks subscription-level Microsoft Defender for Cloud configuration and makes sure the required Defender plan, pricing tier, integration, or add-on is configured as expected. In audit mode it shows which subscriptions are missing the expected Defender configuration.
 
-**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope through the security baseline process, or document an approved exception.
+**How to align the environment:** Enable the required Microsoft Defender for Cloud plan or pricing setting at subscription scope with the designed security baseline, or document an approved exception.
 
 **Parameters or variables to specify or consider:** `isContainerRegistriesVulnerabilityAssessmentsEnabled` (default `true`; allowed `true`, `false`; Controls the container registries vulnerability assessments add-on).
 
-**Operational impact:** Requires subscription security-plan ownership, budgeting, and a rollout decision for Defender plans before compliance can be restored.
+**Operational impact:** Unknown, probably Terraform module change required for building or deploying containers - to be investigated
 
 </details>
 
@@ -2381,7 +2388,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-78-AllowedDeploymentRegions</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 78 - Designate allowed resource deployment region
 - **Folder:** `SLZ/General/ID078`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
@@ -2393,7 +2400,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** `listOfAllowedLocations` (default: none; allowed `global`, `europe`, `northeurope`, `westeurope`, `francecentral`, `germanywestcentral`, `norwayeast`, `polandcentral`, plus 6 more; The list of locations that can be specified when deploying resources.).
 
-**Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
+**Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions. Need to verify against the design, for allowed locations.
 
 </details>
 
@@ -2405,11 +2412,11 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-238.1-ApimProdNoBasicSku</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 238.1 - Ensure API Management in PROD does not use Basic or Consumption SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes  - higher Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
@@ -2417,7 +2424,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and design alignment, to make sure that Prod resources will not use the Basic or Consumption SKUs.
 
 </details>
 
@@ -2426,11 +2433,11 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-238.10-AKSProdNoFreeTier</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 238.10 - Ensure AKS in PROD does not use Free tier
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
@@ -2438,7 +2445,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and potentially Terraform module changes.
 
 </details>
 
