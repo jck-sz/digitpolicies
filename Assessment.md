@@ -482,7 +482,7 @@ Total policy definitions assessed: **255**.
 
 **Breakdown of what the policy does:** The policy checks custom Role definitions in Azure and makes sure that the only custom roles match the allowed custom roles defined in the policy definition. In audit mode it will show which custom roles are not compliant, i.e. not in the list of allowed role names.
 
-**How to align the environment:** Make sure that the only Custom Policies in the subscription are the ones defined in the tfvars associated with the Policy definition.
+**How to align the environment:** Make sure that the only custom roles in the subscription are the ones defined in the tfvars associated with the Policy definition.
 
 **Parameters or variables to specify or consider:** `QRA Policy Contributor` and `QRA Business Audit`
 
@@ -915,7 +915,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Insights/diagnosticSettings`, `Microsoft.Web/sites/providers/diagnosticSettings`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
-**Breakdown of what the policy does:** The policy checks App Service apps and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which App Service apps are missing the expected diagnostic settings or are sending them to the wrong workspace.
+**Breakdown of what the policy does:** The policy checks Function Apps and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows which Function Apps are missing the expected diagnostic settings or are sending them to the wrong workspace.
 
 **How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription. Ideally configure in Terraform module for Azure Functions, if applicable.
 
@@ -1499,13 +1499,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks the named storage account and audits it when the encryption key source is not `Microsoft.Keyvault`. In audit mode it shows if the storage account that contains activity logs is not using customer-managed key encryption.
+**Breakdown of what the policy does:** The policy checks the named storage account and audits it when the storage account that contains activity logs is not using customer-managed key encryption.
 
 **How to align the environment:** Configure the target storage account in Terraform to use customer-managed key encryption.
 
 **Parameters or variables to specify or consider:** `storageAccount` (default: none; Name Storage account).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources. Not sure if we are going to use Storage Account for activity logs?
+**Operational impact:** Requires the activity-log storage account module to use CMK and the exisiting storage account identity to have access to the key. Not sure if we are going to use Storage Account for activity logs?
 
 </details>
 
@@ -1691,9 +1691,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Sql/servers` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires the SQL Server module to set the TDE protector to a customer-managed key and verify Key Vault access for the server identity.
 
 </details>
 
@@ -2784,7 +2784,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Applicable:** Likely No
 - **Display name:** SLZ - 01 Guest Configuration - Guest Configuration assignments on Windows
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
-- **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration`
+- **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy is a prerequisite for all the Guest Configuration policies. It installs the Guest Configuration VM extension when in DeployIfNotExist effect mode.
@@ -2805,7 +2805,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Applicable:** Likely no
 - **Display name:** SLZ - 02 Guest Configuration - Guest Configuration assignments on Linux
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
-- **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration`
+- **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`
 - **Cost impact:** No
 
 **Breakdown of what the policy does:** The policy is a prerequisite for all the Guest Configuration policies. It installs the Guest Configuration VM extension when in DeployIfNotExist effect mode.
@@ -3410,7 +3410,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 10.6 - Public Network Access Control for Web Apps
 - **Folder:** `SLZ/Network/ID10.6`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
-- **Cost impact:** Yes - WAF-capable Application Gateway or Front Door SKU.
+- **Cost impact:** No direct policy cost; remediation may add private endpoint, firewall, VPN, or controlled ingress costs.
 
 **Breakdown of what the policy does:** The policy checks App Service apps and makes sure public network access or public IP exposure is disabled or limited to the approved access pattern. In audit mode it shows which App Service apps still allow public access and need review.
 
@@ -3515,9 +3515,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 1329 - Public Network Access Control for Function Apps
 - **Folder:** `SLZ/Network/ID1329`
 - **Affected Azure resource types:** `Microsoft.Web/sites`
-- **Cost impact:** Yes - WAF-capable Application Gateway or Front Door SKU.
+- **Cost impact:** No direct policy cost; remediation may add private endpoint, firewall, VPN, or controlled ingress costs.
 
-**Breakdown of what the policy does:** The policy checks App Service apps and makes sure public network access or public IP exposure is disabled or limited to the approved access pattern. In audit mode it shows which App Service apps still allow public access and need review.
+**Breakdown of what the policy does:** The policy checks Function Apps and makes sure public network access or public IP exposure is disabled or limited to the approved access pattern. In audit mode it shows which Function Apps still allow public access and need review.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Web/sites`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
@@ -4541,7 +4541,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires AKS module support for KMS and a Key Vault/key that the cluster identity can reach; check cluster version and region support is availble.
 
 </details>
 
@@ -4560,9 +4560,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.CognitiveServices/accounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.); `excludedKinds` (default `16 values`; The list of excluded API kinds for customer-managed key, default is the list of API kinds that don't have data stored in Cognitive Services).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.); `excludedKinds` (default `16 values`; The list of excluded API kinds for customer-managed key, default is the list of API kinds that don't have data stored in Cognitive Services).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Only relevent for Azure AI services that store data and are tagged SNC; module needs CMK fields and Key Vault access.
 
 </details>
 
@@ -4581,9 +4581,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Automation/automationAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources. Not sure if we need it in our use case.
+**Operational impact:** Requires Automation Account module CMK support if we use SNC-tagged Automation accounts. Not sure if we need it in our use case.
 
 </details>
 
@@ -4602,9 +4602,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.DataProtection/backupvaults` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.); `checkInfrastructureEncryption` (default `False`; allowed `True`, `False`; Check if Infrastructure Encryption is enabled on Backup Vaults. For more details refer to https://aka.ms/az-backup-vault-infra-encryption-at-rest-with-cmk.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.); `checkInfrastructureEncryption` (default `False`; allowed `True`, `False`; Check if Infrastructure Encryption is enabled on Backup Vaults. For more details refer to https://aka.ms/az-backup-vault-infra-encryption-at-rest-with-cmk.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Needs Backup Vault encryption settings decided up front where requried; existing vaults may need remediation before updates are allowed.
 
 </details>
 
@@ -4623,9 +4623,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Batch/batchAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires the Batch module to wire the CMK key reference and account identity access to Key Vault.
 
 </details>
 
@@ -4644,9 +4644,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.LoadTestService/loadtests` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Only matters if Azure Load Testing is used; module needs CMK support and a Key Vault key reference.
 
 </details>
 
@@ -4665,9 +4665,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Cache/redisEnterprise` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Redis Enterprise module and SKU alignment, plus a Key Vault key reference where SNC tagging applies.
 
 </details>
 
@@ -4686,9 +4686,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Search/searchServices` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Search service module support for CMK and Key Vault access; some API kinds are excluded by the policy.
 
 </details>
 
@@ -4707,9 +4707,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.ContainerInstance/containerGroups` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Container Instance module support for encryption properties; may not be applicable if ACI is not used for SNC workloads.
 
 </details>
 
@@ -4728,9 +4728,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.ContainerRegistry/registries` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires ACR module to use Premium/CMK settings and Key Vault access; Basic or Standard registries would need SKU alignment.
 
 </details>
 
@@ -4749,9 +4749,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.DocumentDB/databaseAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Cosmos DB account module to include CMK settings and Key Vault access; this should be validated before rollout.
 
 </details>
 
@@ -4770,9 +4770,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Kusto/Clusters` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Kusto cluster module CMK settings and managed identity access to the selected Key Vault key.
 
 </details>
 
@@ -4791,9 +4791,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.DataFactory/factories` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Data Factory module to enable CMK and user-assigned identity where the service is used for SNC workloads.
 
 </details>
 
@@ -4812,9 +4812,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.ElasticSan/elasticSans/volumeGroups` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Only matters if Elastic SAN volume groups are deployed; module needs CMK settings and Key Vault access.
 
 </details>
 
@@ -4826,16 +4826,16 @@ Administrative Operation name for which activity log alert should be configured)
 - **Applicable:** unknown
 - **Display name:** SLZ - 1371 - Event Hub namespaces should use a customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1371`
-- **Affected Azure resource types:** `Microsoft.EventHub/namespaces`, `Microsoft.Keyvault`
+- **Affected Azure resource types:** `Microsoft.EventHub/namespaces`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** Checks if Azure Event Hubs are using customer-managed keys for data at rest encryption. Choosing to encrypt data using customer-managed keys enables you to assign, rotate, disable, and revoke access to the keys that Event Hub will use to encrypt data in the namespace. Note that Event Hub only supports encryption with customer-managed keys for namespaces in dedicated clusters.
 
-**How to align the environment:** Configure `Microsoft.EventHub/namespaces`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.EventHub/namespaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Event Hub namespace design to use dedicated clusters where CMK is needed; this is a SKU/design decision, not just a parameter flip.
 
 </details>
 
@@ -4854,9 +4854,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.FluidRelay/fluidRelayServers` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Only matters if Fluid Relay is used; module needs CMK configration and Key Vault access.
 
 </details>
 
@@ -4875,9 +4875,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.HDInsight/clusters` in Terraform to use the required customer-managed key or encryption setting, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires HDInsight module to pass the disk encryption key and identity during cluster build; retrofit may be painful.
 
 </details>
 
@@ -4896,7 +4896,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.HealthBot/healthBots` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
 **Operational impact:** Key management etc.
 
@@ -4917,9 +4917,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.StorageCache/caches` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Only matters if HPC Cache is used; module needs CMK settings and Key Vault access.
 
 </details>
 
@@ -4938,9 +4938,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Devices/IotHubs` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Customer-managed keys must be set during IoT Hub creation; existing hubs may need rebuild or manual migration if this becomes required.
 
 </details>
 
@@ -4959,9 +4959,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Logic/integrationServiceEnvironments` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Only applies to Integration Service Environments; module needs CMK support if we still deploy ISE.
 
 </details>
 
@@ -4980,9 +4980,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.MachineLearningServices/workspaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires ML workspace module to define CMK, identity, and dependent storage/key access where used.
 
 </details>
 
@@ -5001,9 +5001,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Synapse/workspaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Synapse workspace module to configure workspace CMK and managed identity; may affect workspace provisioning flow.
 
 </details>
 
@@ -5024,7 +5024,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to identify resources included in this policy.); `tagValue` (default `SNC`; Value of the tag to identify resources included in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires VM/VMSS/disk modules to use Disk Encryption Sets for SNC resources and keep image/disk defaults consistant.
 
 </details>
 
@@ -5043,9 +5043,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.DBforPostgreSQL/flexibleServers` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires PostgreSQL Flexible Server module to set CMK/key identity where supported; existing servers may need migration planning.
 
 </details>
 
@@ -5057,16 +5057,16 @@ Administrative Operation name for which activity log alert should be configured)
 - **Applicable:** unknown
 - **Display name:** SLZ - 1384 - Service Bus Premium namespaces should use a customer-managed key for encryption (only SNC resources)
 - **Folder:** `SLZ/Security/ID1384`
-- **Affected Azure resource types:** `Microsoft.ServiceBus/namespaces`, `Microsoft.Keyvault`
+- **Affected Azure resource types:** `Microsoft.ServiceBus/namespaces`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** Checks if Azure Service Bus is encrypted at rest with customer-managed keys. Choosing to encrypt data using customer-managed keys enables you to assign, rotate, disable, and revoke access to the keys that Service Bus will use to encrypt data in your namespace. Note that Service Bus only supports encryption with customer-managed keys for premium namespaces.
 
-**How to align the environment:** Configure `Microsoft.ServiceBus/namespaces`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.ServiceBus/namespaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Only works for Premium namespaces; module has to select Premium and set CMK/key identity when SNC applies.
 
 </details>
 
@@ -5085,9 +5085,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.Storage/storageAccounts/encryptionScopes` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires storage account module to define encryption scopes with CMK and avoid scope missmatch when teams store SNC data.
 
 </details>
 
@@ -5305,7 +5305,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Arc SQL MI deployment path to enable TDE and carry the setting in GitOps/Terraform where we manage it.
 
 </details>
 
@@ -5326,7 +5326,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires Synapse SQL pool deployment defaults to keep TDE on; possible query/performance impact should be understood.
 
 </details>
 
@@ -5350,9 +5350,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.HealthcareApis/workspaces/dicomservices` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Probaly not relevant unless Health Data Services/DICOM is deployed; module would need CMK settings and Key Vault access.
 
 </details>
 
@@ -5371,9 +5371,9 @@ Administrative Operation name for which activity log alert should be configured)
 
 **How to align the environment:** Configure `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/keys` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
-**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
+**Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag used to include resources in this policy.); `tagValue` (default `SNC`; Value of the tag used to include resources in this policy.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires legacy PostgreSQL server module/key resource alignment if any single servers remain; otherwise probably obsolete.
 
 </details>
 
@@ -5422,7 +5422,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires storage account module default for infrastructure encryption; may need recreation for accounts where the setting cannot be changed.
 
 </details>
 
@@ -5569,7 +5569,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Name parameter.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires VM/VMSS/disk modules to attach Disk Encryption Sets for SNC-tagged disks; watch for drift on disks created outside modules.
 
 </details>
 
