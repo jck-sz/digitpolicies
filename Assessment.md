@@ -526,7 +526,7 @@ Auditing writes database events to an audit log in your Azure Storage account (a
 
 **Breakdown of what the policy does:** The policy makes sure an Azure Monitor activity log alert exists for the specified administrative operations (default: none - to be set; need to align with Security and Engineering). In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert for administrative operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process. Set tfvars to the designed operation names
+**How to align the environment:** Create an Azure Monitor activity log alert for administrative operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group. Set tfvars to the designed operation names
 
 **Parameters or variables to specify or consider:** `operationNameAdministrative` (default: none; allowed `Microsoft.Sql/servers/firewallRules/write`, `Microsoft.Sql/servers/firewallRules/delete`, `Microsoft.Network/networkSecurityGroups/write`, `Microsoft.Network/networkSecurityGroups/delete`, `Microsoft.ClassicNetwork/networkSecurityGroups/write`, `Microsoft.ClassicNetwork/networkSecurityGroups/delete`, `Microsoft.Network/networkSecurityGroups/securityRules/write`, `Microsoft.Network/networkSecurityGroups/securityRules/delete`, `Microsoft.ClassicNetwork/networkSecurityGroups/securityRules/write`,`Microsoft.ClassicNetwork/networkSecurityGroups/securityRules/delete`; 
 Administrative Operation name for which activity log alert should be configured).
@@ -548,7 +548,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy makes sure an Azure Monitor activity log alert exists for policy assignment create, update, or delete operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for policy assignment create, update, or delete operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process. Specify the operation names in tfvars.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for policy assignment create, update, or delete operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group. Specify the operation names in tfvars.
 
 **Parameters or variables to specify or consider:** `operationNamePolicy` (default: none; allowed `Microsoft.Authorization/policyAssignments/write`, `Microsoft.Authorization/policyAssignments/delete`; Policy Operation name for which activity log alert should exist).
 
@@ -569,7 +569,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for security operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for security operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process. Specify the operations in tfvars.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for security operations. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group. Specify the operations in tfvars.
 
 **Parameters or variables to specify or consider:** `operationNameSecurity` (default: none; allowed `Microsoft.Security/policies/write`, `Microsoft.Security/securitySolutions/write`, `Microsoft.Security/securitySolutions/delete`; Security Operation name for which activity log alert should exist).
 
@@ -1342,7 +1342,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Microsoft Defender for Cloud security contact settings and makes sure 'Additional email addresses' is Configured with a Security Contact Email. In audit mode it shows which subscriptions do not have the required security contact or notification setting configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `emailSecurityContact` (default `ec-digit-csirc@ec.europa.eu`; Provide email addresses (semi-colon separated) for Defender for Cloud contact details); `minimalSeverity` (default `High`; allowed `High`, `Medium`, `Low`; Defines the minimal alert severity which will be sent as email notifications).
 
@@ -1363,7 +1363,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Microsoft Defender for Cloud security contact settings and makes sure 'Notify about alerts with the following severity' is Set to 'High'. In audit mode it shows which subscriptions do not have the required security contact or notification setting configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -2420,7 +2420,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2441,7 +2441,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2466,7 +2466,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires a known Log Analytics workspace.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2483,11 +2483,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2504,11 +2504,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2525,11 +2525,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2542,15 +2542,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 238.2 - Ensure App Configuration in PROD does not use Free SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.AppConfiguration/configurationStores`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2563,15 +2563,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 238.3 - Ensure App Service Plan in PROD does not use Free, Shared, or Basic SKUs
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Web/serverfarms`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2588,11 +2588,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2605,15 +2605,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 238.5 - Ensure Azure Databricks in PROD does not use Standard or Trial SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Databricks/workspaces`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2622,7 +2622,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-238.6-DisksProdNoStandardHDD</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 238.6 - Ensure Disks in PROD are not using Standard HDD (Standard_LRS)
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Compute/disks`
@@ -2630,11 +2630,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2647,15 +2647,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 238.7 - Ensure ACR in PROD does not use Basic SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.ContainerRegistry/registries`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2668,15 +2668,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 238.8 - Ensure Event Hubs in PROD do not use Basic SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2685,19 +2685,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-238.9-KeyVaultProdNoStandardSku</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 238.9 - Ensure Key Vault in PROD does not use Standard SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -2708,7 +2708,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-272-ResourceLockForMissionCriticalResources</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Potentially Yes
 - **Display name:** SLZ - 272 - Ensure that Resource Locks are set for Mission-Critical
 - **Folder:** `SLZ/General/ID272`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions/resourceGroups`, `Microsoft.Authorization/locks`
@@ -2716,11 +2716,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default: none; The Tag name to audit against (i.e. Environment, CostCenter, etc.)); `tagValue` (default: none; Value of the tag to audit against (i.e. Prod/UAT/TEST, 12345, etc.)).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and Resource Locks in the TF modules based on the tag value.
 
 </details>
 
@@ -2729,7 +2729,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-287-IAMPermissionsThroughGroups</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 287 - Ensure IAM Users Receive Permissions Only Through Groups
 - **Folder:** `SLZ/General/ID287`
 - **Affected Azure resource types:** `Microsoft.Authorization/roleAssignments`
@@ -2737,11 +2737,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure role assignments and makes sure user access is granted through groups rather than unmanaged direct user assignments. In audit mode it shows which direct user assignments need review or migration to group-based access.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Authorization/roleAssignments` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** This would require a group creation per each assignment of Azure Role.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** This might be problematic due to our Entra pipeline which assigns permissions to individual Workload Identities, based on requirements - to be checked after audit mode is enabled.
 
 </details>
 
@@ -2750,7 +2750,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-617-OnlyAllowedGeoLocations</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 617 - Only allowed geo locations
 - **Folder:** `SLZ/General/ID617`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
@@ -2762,7 +2762,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** `listOfAllowedLocations` (default `14 values`; The list of locations that can be specified when deploying resources.).
 
-**Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
+**Operational impact:** Requires deployment pipelines to constrain locations.
 
 </details>
 
@@ -2779,19 +2779,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>385f5831-96d4-41db-9a3c-cd3af78aaae6</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Likely No
 - **Display name:** SLZ - 01 Guest Configuration - Guest Configuration assignments on Windows
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks virtual machines, virtual machine extensions, Guest Configuration assignments, and related resources and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which virtual machines, virtual machine extensions, Guest Configuration assignments, and related resources still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** The policy is a prerequisite for all the Guest Configuration policies. It installs the Guest Configuration VM extension when in DeployIfNotExist effect mode.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration` in the resource deployment module.
+**How to align the environment:** Don't
 
 **Parameters or variables to specify or consider:** None declared.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Policy-installed VM extensions - adds potential risk and dependency e.g. IaC pipelines would not be able to destroy the VM due to mismatch of tfstate vs reality.
 
 </details>
 
@@ -2800,19 +2800,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>331e8ea8-378a-410f-a2e5-ae22f38bb0da</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Likely no
 - **Display name:** SLZ - 02 Guest Configuration - Guest Configuration assignments on Linux
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks virtual machines, virtual machine extensions, Guest Configuration assignments, and related resources and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which virtual machines, virtual machine extensions, Guest Configuration assignments, and related resources still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** The policy is a prerequisite for all the Guest Configuration policies. It installs the Guest Configuration VM extension when in DeployIfNotExist effect mode.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachines/extensions`, `Microsoft.GuestConfiguration` in the resource deployment module.
+**How to align the environment:** Don't
 
 **Parameters or variables to specify or consider:** None declared.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Policy-installed VM extensions - adds potential risk and dependency e.g. IaC pipelines would not be able to destroy the VM due to mismatch of tfstate vs reality.
 
 </details>
 
@@ -2821,19 +2821,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>3cf2ab00-13f1-4d0c-8971-2ac904541a7e</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Likely no
 - **Display name:** SLZ - 03 Guest Configuration - Add system-assigned on VMs with no identities
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks virtual machines and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which virtual machines still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Deploys System-assigned identities to VMs with only user-assigned identity.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Compute/virtualMachines` in the resource deployment module.
+**How to align the environment:** Don't 
 
 **Parameters or variables to specify or consider:** None declared.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Policy-installed VM identities - adds potential risk and dependency.
 
 </details>
 
@@ -2842,19 +2842,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>497dff13-db2a-4c0f-8603-28fa3b331ab6</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Likely no
 - **Display name:** SLZ - 04 Guest Configuration - Add system-assigned on VMs with User-Assigned identities
 - **Folder:** `SLZ/Guest-Configuration/ID00-Guest-Config`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks virtual machines and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which virtual machines still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** The policy deploys system-assigned identities to VMs with no identity
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Compute/virtualMachines` in the resource deployment module.
+**How to align the environment:** Assign system-assigned identities to each deployed VM, using Terraform modules
 
 **Parameters or variables to specify or consider:** None declared.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Terraform module changes
 
 </details>
 
@@ -2891,7 +2891,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-226-logsCreatePolicy</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 226 - Ensure that Activity Log Alert exists for Create Policy Assignment
 - **Folder:** `SLZ/Monitoring/ID226`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2899,11 +2899,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create Policy Assignment operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create Policy Assignment operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create Policy Assignment operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Authorization/policyAssignments/write`; Policy Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -2912,7 +2912,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-227-logsDeletePolicy</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 227 - Ensure that Activity Log Alert exists for Delete Policy Assignment
 - **Folder:** `SLZ/Monitoring/ID227`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -2920,11 +2920,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Policy Assignment operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Policy Assignment operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Policy Assignment operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Authorization/policyAssignments/delete`; Policy Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -2941,11 +2941,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update Network Security Group operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update Network Security Group operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update Network Security Group operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/networkSecurityGroups/write`; Administrative Operation name for which activity log alert should be configured).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -2962,11 +2962,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Network Security Group operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Network Security Group operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Network Security Group operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/networkSecurityGroups/delete`; Administrative Operation name for which activity log alert should be configured).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -2983,11 +2983,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update Security Solution operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update Security Solution operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update Security Solution operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Security/securitySolutions/write`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3004,11 +3004,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Security Solution operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Security Solution operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Security Solution operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Security/securitySolutions/delete`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3025,11 +3025,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update SQL Server Firewall Rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update SQL Server Firewall Rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update SQL Server Firewall Rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Sql/servers/firewallRules/write`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3046,11 +3046,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete SQL Server Firewall Rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete SQL Server Firewall Rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete SQL Server Firewall Rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Sql/servers/firewallRules/delete`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process. 
 
 </details>
 
@@ -3059,7 +3059,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-234-logsCreateOrUpdatePublicIpRule</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 234 - Ensure that Activity Log Alert exists for Create or Update Public IP Address rule
 - **Folder:** `SLZ/Monitoring/ID234`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3067,11 +3067,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Create or Update Public IP Address rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update Public IP Address rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Create or Update Public IP Address rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/publicIPAddresses/write`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process. This will raise alerts every time the pipeline for proxies runs.
 
 </details>
 
@@ -3080,7 +3080,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-235-logsDeletePublicIpRule</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 235 - Ensure that Activity Log Alert exists for Delete Public IP Address rule
 - **Folder:** `SLZ/Monitoring/ID235`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3088,11 +3088,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for the Delete Public IP Address rule operation. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Public IP Address rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the Delete Public IP Address rule operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/publicIPAddresses/delete`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process. This will raise alerts every time the pipeline for proxies runs.
 
 </details>
 
@@ -3110,13 +3110,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
-**Breakdown of what the policy does:** The policy checks App Service apps and makes sure web Apps without Application Insights. In audit mode it shows which App Service apps are not compliant with that requirement.
+**Breakdown of what the policy does:** Audit Web Apps that are not linked to an Application Insights resource
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription.
+**How to align the environment:** Make sure they are linked with Application Insights resource.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires a known Log Analytics workspace.
+**Operational impact:** Requires Application Insights.
 
 </details>
 
@@ -3131,13 +3131,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
-**Breakdown of what the policy does:** The policy checks App Service apps and makes sure function Apps without Application Insights. In audit mode it shows which App Service apps are not compliant with that requirement.
+**Breakdown of what the policy does:** Audit Function Apps that are not linked to an Application Insights resource
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Web/sites` resource in the subscription.
+**How to align the environment:** Make sure they are linked with Application Insights resource.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires a known Log Analytics workspace.
+**Operational impact:** Requires Application Insights.
 
 </details>
 
@@ -3146,19 +3146,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-236.3-logicAppsNoInsights</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Unknown
 - **Display name:** SLZ - 236.3 - Audit Logic Apps without Application Insights
 - **Folder:** `SLZ/Monitoring/ID236`
 - **Affected Azure resource types:** `Microsoft.Logic/workflows`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
-**Breakdown of what the policy does:** The policy checks Logic Apps workflows and makes sure logic Apps without Application Insights. In audit mode it shows which Logic Apps workflows are not compliant with that requirement.
+**Breakdown of what the policy does:** Audit Logic Apps that are not linked to an Application Insights resource
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Logic/workflows` resource in the subscription.
+**How to align the environment:** Make sure they are linked with Application Insights resource.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires a known Log Analytics workspace.
+**Operational impact:** Requires Application Insights.
 
 </details>
 
@@ -3172,7 +3172,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-324-logsCreateSecurityGroups</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 324 - Ensure a log metric filter and alarm exist for Create security group changes
 - **Folder:** `SLZ/Monitoring/ID324`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3180,11 +3180,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/networkSecurityGroups/securityRules/write`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3193,7 +3193,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-324-logsDeleteSecurityGroup</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 324 - Ensure a log metric filter and alarm exist for Delete security group changes
 - **Folder:** `SLZ/Monitoring/ID324`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3201,11 +3201,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/networkSecurityGroups/securityRules/delete`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3219,7 +3219,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-326-logsCreateNetworkGateway</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 326 - Ensure a log metric filter and alarm exist for Create Network Gateway
 - **Folder:** `SLZ/Monitoring/ID326`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3227,11 +3227,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/virtualNetworkGateways/write`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3240,7 +3240,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-326-logsDeleteNetworkGateway</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 326 - Ensure a log metric filter and alarm exist for Delete Network Gateway
 - **Folder:** `SLZ/Monitoring/ID326`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3248,11 +3248,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/virtualNetworkGateways/delete`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3266,7 +3266,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-327-logsCreateRouteTables</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Create Route Tables
 - **Folder:** `SLZ/Monitoring/ID327`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3274,11 +3274,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/routeTables/write`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3287,7 +3287,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-327-logsCreateRouteTablesRoute</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Create Route Tables Route
 - **Folder:** `SLZ/Monitoring/ID327`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3295,11 +3295,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/routeTables/routes/write`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3308,7 +3308,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-327-logsDeleteSecurityGroup</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Delete Route Tables
 - **Folder:** `SLZ/Monitoring/ID327`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3316,11 +3316,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/routeTables/delete`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3329,7 +3329,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-327-logsDeleteSecurityGroupRoute</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 327 - Ensure a log metric filter and alarm exist for Delete Route Tables Route
 - **Folder:** `SLZ/Monitoring/ID327`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3337,11 +3337,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/routeTables/routes/delete`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3355,7 +3355,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-328-logsCreateVirtualNetwork</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 328 - Ensure a log metric filter and alarm exist for Create Virtual Networks
 - **Folder:** `SLZ/Monitoring/ID328`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3363,11 +3363,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/virtualNetworks/write`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3376,7 +3376,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-328-logsDeleteVirtualNetworks</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 328 - Ensure a log metric filter and alarm exist for Delete Virtual Networks
 - **Folder:** `SLZ/Monitoring/ID328`
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`, `Microsoft.Insights/ActivityLogAlerts`
@@ -3384,11 +3384,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks each subscription and makes sure an Azure Monitor activity log alert exists for important Azure Policy operations. In audit mode it shows which subscriptions do not have the expected alert rule configured.
 
-**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group or incident process.
+**How to align the environment:** Create an Azure Monitor activity log alert in each in-scope subscription for the the configured operation. The alert can be created manually or managed with Terraform; make sure it is enabled, filters the intended operation name, and routes to the correct action group.
 
 **Parameters or variables to specify or consider:** `operationName` (default: none; allowed `Microsoft.Network/virtualNetworks/delete`; Security Operation name for which activity log alert should exist).
 
-**Operational impact:** Requires ownership of the alert rule and action group routing. The practical impact is operational rather than technical: someone must receive, triage, and periodically test the alert.
+**Operational impact:** Requires alert rule creation & alert review process.
 
 </details>
 
@@ -3416,7 +3416,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3425,11 +3425,11 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-1325-WAFonAPGT</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 1325 - Web Application Firewall (WAF) Must Be Enabled on Application Gateways
 - **Folder:** `SLZ/Network/ID1325`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`
-- **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
+- **Cost impact:** Yes - WAF-capable Application Gateway or Front Door SKU.
 
 **Breakdown of what the policy does:** The policy checks Application Gateways and makes sure Web Application Firewall protection is enabled with an approved WAF-capable configuration. In audit mode it shows which Application Gateways do not have the required WAF protection.
 
@@ -3437,7 +3437,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
+**Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration. Terraform module defaults, if applicable.
 
 </details>
 
@@ -3446,11 +3446,11 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-1326-WAFSkuV2</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 1326 - Application Gateway Must Use WAF_v2 SKU
 - **Folder:** `SLZ/Network/ID1326`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`
-- **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
+- **Cost impact:** Yes - WAF-capable Application Gateway or Front Door SKU.
 
 **Breakdown of what the policy does:** The policy checks Application Gateways and makes sure Web Application Firewall protection is enabled with an approved WAF-capable configuration. In audit mode it shows which Application Gateways do not have the required WAF protection.
 
@@ -3467,11 +3467,11 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-1327-WAFonFrontDoor</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Probably not
 - **Display name:** SLZ - 1327 - Azure CDN profiles of type Front Door should have a Web Application Firewall configured
 - **Folder:** `SLZ/Network/ID1327`
 - **Affected Azure resource types:** `Microsoft.Cdn/profiles`, `Microsoft.Cdn/profiles/securityPolicies`
-- **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
+- **Cost impact:** Yes - WAF-capable Application Gateway or Front Door SKU.
 
 **Breakdown of what the policy does:** The policy checks profiles and security policies and makes sure Web Application Firewall protection is enabled with an approved WAF-capable configuration. In audit mode it shows which profiles and security policies do not have the required WAF protection.
 
@@ -3479,7 +3479,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
+**Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration. Probably not applicable for us.
 
 </details>
 
@@ -3492,7 +3492,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 1328 - Web Application Firewall (WAF) should use the specified mode for Azure Front Door Service
 - **Folder:** `SLZ/Network/ID1328`
 - **Affected Azure resource types:** `Microsoft.Network/frontdoorwebapplicationfirewallpolicies`
-- **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
+- **Cost impact:** Yes - WAF-capable Application Gateway or Front Door SKU.
 
 **Breakdown of what the policy does:** The policy checks frontdoorwebapplicationfirewallpolicies and makes sure Web Application Firewall protection is enabled with an approved WAF-capable configuration. In audit mode it shows which frontdoorwebapplicationfirewallpolicies do not have the required WAF protection.
 
@@ -3500,7 +3500,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** `modeRequirement` (default `Detection`; allowed `Prevention`, `Detection`; Mode required for all WAF policies).
 
-**Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration.
+**Operational impact:** Requires application gateway or Front Door architecture to include WAF-capable SKU and policy configuration. 
 
 </details>
 
@@ -3521,7 +3521,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires to remove public or Internet-sourced access rules.
 
 </details>
 
@@ -3560,13 +3560,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks API Management services and makes sure public network access or public IP exposure is disabled or limited to the approved access pattern. In audit mode it shows which API Management services still allow public access and need review.
+**Breakdown of what the policy does:** The policy checks API Management services and makes sure public network access is disabled or limited to the approved access pattern. In audit mode it shows which API Management services still allow public access and need review.
 
 **How to align the environment:** Remove broad public access from `Microsoft.ApiManagement/service`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3602,7 +3602,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 1332 - Enforce Allowed SKUs for Azure API Management Service
 - **Folder:** `SLZ/Network/ID1332`
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** The policy checks API Management services and makes sure production or in-scope deployments do not use disallowed low, free, basic, trial, developer, or otherwise unsuitable SKUs. In audit mode it shows which API Management services are using a SKU or tier that does not meet the policy.
 
@@ -3610,7 +3610,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** `listOfAllowedSKUs` (default `["Developer", "Premium", "Isolated", "Standard", "Basic"]`; allowed `Developer`, `Basic`, `BasicV2`, `Standard`, `StandardV2`, `Premium`, `Isolated`, `Consumption`; The list of SKUs permitted for Azure API Management service.).
 
-**Operational impact:** Requires teams to select approved production SKUs in Terraform-managed deployments and budget for higher service tiers where needed.
+**Operational impact:** Requires to select approved production SKUs in Terraform-managed deployments and budget for higher service tiers where needed.
 
 </details>
 
@@ -3619,7 +3619,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-1333-NoPublicIpOnNics</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 1333 - Network Interfaces Should Not Have Public IPs
 - **Folder:** `SLZ/Network/ID1333`
 - **Affected Azure resource types:** `Microsoft.Network/networkInterfaces`
@@ -3631,7 +3631,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** This will conflict with the proxies pipeline. Perhaps not applicable to the connectivity-tools subscription. Also might be applicable to other subscriptions, depending on other possible business use cases.
 
 </details>
 
@@ -3640,7 +3640,7 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-1334-KubernetesInternalLB</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 1334 - Kubernetes Clusters Should Use Internal Load Balancers
 - **Folder:** `SLZ/Network/ID1334`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
@@ -3648,11 +3648,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Kubernetes Service clusters and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Kubernetes Service clusters still allow the older or less secure protocol setting.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.ContainerService/managedClusters` in the resource deployment module.
+**How to align the environment:** Enforce in the Kubernetes Cluster Terraform module.
 
 **Parameters or variables to specify or consider:** `source` (default `Original`; allowed `All`, `Generated`, `Original`; The source k8s object for constraint evaluation. 'Original' means evaluate only the GroupVersionKind specified. 'Generated' means evaluate only Gatekeeper ExpansionTemplates. 'A...); `warn` (default `False`; Whether or not to return warnings back to the user in the kubectl CLI.); `excludedNamespaces` (default `["kube-system", "gatekeeper-system", "azure-arc", "azure-extensions-usage-system"]`; List of namespaces to exclude from policy evaluation. System namespaces 'kube-system', 'gatekeeper-system', and 'azure-arc' are always excluded by design.); `namespaces` (default `[]`; List of namespaces to include in the policy evaluation. An empty list means all namespaces are included.); `labelSelector` (default `object value`; Label query to select Kubernetes resources for policy evaluation. An empty selector matches all resources.).
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires Terraform module default config.
 
 </details>
 
@@ -3669,11 +3669,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Kubernetes Service clusters and makes sure public network access or public IP exposure is disabled or limited to the approved access pattern. In audit mode it shows which Azure Kubernetes Service clusters still allow public access and need review.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.ContainerService/managedClusters` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.ContainerService/managedClusters` in Terraform where the resource is managed by Terraform and remediate existing drift.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Requires the Platform team to encode the checked property in Terraform where the resource is Terraform-managed.
 
 </details>
 
@@ -3694,7 +3694,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires Platform team to align the Terraform module, depending on requirements.
 
 </details>
 
@@ -3728,9 +3728,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 1338 - Web Application Firewall (WAF) should use the specified mode for Application Gateway
 - **Folder:** `SLZ/Network/ID1338`
 - **Affected Azure resource types:** `Microsoft.Network/applicationGatewayWebApplicationFirewallPolicies`
-- **Cost impact:** Yes [High impact] - WAF-capable Application Gateway or Front Door SKU.
+- **Cost impact:** Yes - WAF-capable Application Gateway or Front Door SKU.
 
-**Breakdown of what the policy does:** The policy checks application gateway web application firewall policies and makes sure Web Application Firewall protection is enabled with an approved WAF-capable configuration. In audit mode it shows which application gateway web application firewall policies do not have the required WAF protection.
+**Breakdown of what the policy does:** Mandates the use of 'Detection' or 'Prevention' mode to be active on all Web Application Firewall policies for Application Gateway.
 
 **How to align the environment:** Deploy the affected ingress service with a WAF-capable SKU and attach an approved WAF policy in the workload or platform networking module.
 
@@ -3753,11 +3753,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose RDP access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
-**How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
+**How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints / approved source ranges.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns in NSG.
 
 </details>
 
@@ -3774,11 +3774,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose SSH access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
 
-**How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
+**How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, etc.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3793,13 +3793,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose the restricted service or administration port access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for UDP ports.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3814,13 +3814,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose HTTP access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for port 80 and 443.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3835,13 +3835,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworks`, `Microsoft.Network/networkWatchers`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks virtual networks and Network Watcher resources and makes sure network Watcher is 'Enabled'. In audit mode it shows which virtual networks and Network Watcher resources are not compliant with that requirement.
+**Breakdown of what the policy does:** This policy creates a network watcher resource in regions with virtual networks. You need to ensure existence of a resource group named networkWatcherRG, which will be used to deploy network watcher instances.
 
-**How to align the environment:** Constrain deployment locations in Terraform and subscription vending processes to the approved region list, with documented exceptions for unavailable services.
+**How to align the environment:** This is already in place.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires deployment pipelines to constrain locations and handle service-specific regional availability exceptions.
+**Operational impact:** Already in place.
 
 </details>
 
@@ -3856,13 +3856,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose RDP access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy audits it there are rules that allows ingress from 0.0.0.0/0 to 22 or 3389 ports
 
-**How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
+**How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints / approved source ranges
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3877,13 +3877,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and makes sure no security groups allow ingress from ::/0 to remote server administration ports. In audit mode it shows which Network Security Group rules are not compliant with that requirement.
+**Breakdown of what the policy does:** Policy audits it there are rules that allows ingress from ::/0 to 22 or 3389 ports
 
 **How to align the environment:** Encode the checked setting for `Microsoft.Network/networkSecurityGroups/securityRules` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3892,19 +3892,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-629-VirtualNetworksDDOSProtection</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Probably not
 - **Display name:** SLZ - 629 - Enforce DDoS Protection
 - **Folder:** `SLZ/Network/ID629`
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworks`, `Microsoft.Resources/deployments`
-- **Cost impact:** Yes [High impact] - Azure DDoS Protection plan.
+- **Cost impact:** Yes - Azure DDoS Protection plan.
 
-**Breakdown of what the policy does:** The policy checks virtual networks and makes sure they are protected by the expected Azure DDoS Protection plan. In audit mode it shows which virtual networks are not associated with the required DDoS plan.
+**Breakdown of what the policy does:** Protect your virtual networks against volumetric and protocol attacks with Azure DDoS Protection. For more information, visit https://aka.ms/ddosprotectiondocs.
 
 **How to align the environment:** Create or reference the approved DDoS Protection plan and associate in-scope virtual networks through the network landing-zone module.
 
 **Parameters or variables to specify or consider:** `planId` (default: none; DDoS Protection Plan resource to be associated to the virtual networks).
 
-**Operational impact:** Requires a DDoS Protection plan and consistent virtual network association model.
+**Operational impact:** Requires a DDoS Protection plan and consistent virtual network association model. This is expensive and probably not needed.
 
 </details>
 
@@ -3919,13 +3919,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose the restricted service or administration port access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for FTP ports.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `ports` (default `["20", "21"]`; FTP ports to be blocked).
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3940,13 +3940,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose MongoDB access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for MongoDB ports.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `ports` (default `["27017", "27018"]`; MongoDB ports to be blocked).
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3961,13 +3961,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Cassandra access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for Cassandra ports.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `ports` (default `["7199", "9160", "8888"]`; Cassandra ports to be blocked).
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -3982,13 +3982,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Elasticsearch/Kibana access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for Elasticsearch/Kibana ports.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `ports` (default `["9200", "9300", "5601"]`; Elasticsearch/Kibana ports to be blocked).
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -4003,13 +4003,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Kafka access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for port 9092.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -4024,13 +4024,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Memcached access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for port 11211.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -4045,13 +4045,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose MySQL access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for port 3306.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -4066,13 +4066,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose the restricted service or administration port access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for Oracle ports.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `ports` (default `["1521", "2483"]`; Oracle ports to be blocked).
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -4087,13 +4087,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose PostgreSQL access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for port 5432.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -4108,13 +4108,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Redis access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for port 6379.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -4129,13 +4129,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose SQL Server access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for Windows SQL Server ports.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`, `Microsoft.Network/networkSecurityGroups`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** `ports` (default `["1433", "1434"]`; Windows SQL Server ports to be blocked).
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -4150,13 +4150,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/networkSecurityGroups/securityRules`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Network Security Group rules and looks for rules that expose Telnet access from the Internet or an unrestricted source range. In audit mode it shows which NSG rules create that public exposure.
+**Breakdown of what the policy does:** Policy ensures that network security rule exists for INTERNET address prefix for port 23.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Network/networkSecurityGroups/securityRules`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -4176,9 +4176,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service apps and App Service configuration still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Periodically, newer versions are released for tls either due to security flaws, include additional functionality, and enhance speed. Upgrade to the latest tls version for App Service apps to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4197,9 +4197,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service deployment slots and App Service slot configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service deployment slots and App Service slot configuration still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Upgrade to the latest TLS version for App Service app slots to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4218,9 +4218,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service apps and App Service configuration still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Upgrade to the latest TLS version for Function apps to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4239,9 +4239,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service deployment slots and App Service slot configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service deployment slots and App Service slot configuration still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Upgrade to the latest TLS version for Function app slots to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4260,9 +4260,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service apps and App Service configuration still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Upgrade to the latest TLS version for Logic Apps to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4281,9 +4281,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Cache/redis`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks redis and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which redis still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Audit enabling of only connections via SSL to Azure Cache for Redis. Validate both the minimum TLS version and that enableNonSslPort is disabled. Using secure connections ensures authentication between the server and the service and protects data in transit from network layer attacks such as man-in-the-middle, eavesdropping, and session hijacking.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Cache/redis` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Cache/redis` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** `minimumtlsVersion` (default `1.2`; allowed `1.2`; Specify the minimum TLS version required for secure connections.).
 
@@ -4300,11 +4300,11 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 1346 - Azure Front Door Standard and Premium should be running minimum TLS version of 1.2
 - **Folder:** `SLZ/Security/ID1346`
 - **Affected Azure resource types:** `Microsoft.Cdn/profiles/customDomains`
-- **Cost impact:** Yes [High impact] - higher approved Azure service SKU/tier.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks custom domains and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which custom domains still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Setting minimal TLS version to 1.2 improves security by ensuring your custom domains are accessed from clients using TLS 1.2 or newer. Using versions of TLS less than 1.2 is not recommended since they are weak and do not support modern cryptographic algorithms.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Cdn/profiles/customDomains` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Cdn/profiles/customDomains` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4323,9 +4323,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Event Hubs namespaces and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Event Hubs namespaces still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Configure a minimum TLS version for secure communication between the client application and the Event Hub Namespace. To minimize security risk, the recommended minimum TLS version is the latest released version, which is currently TLS 1.2.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.EventHub/namespaces` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.EventHub/namespaces` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** `minimumtlsVersion` (default `1.2`; allowed `1.0`, `1.1`, `1.2`; Minimum version of TLS required to access data in the Event Hub Namespace).
 
@@ -4344,9 +4344,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Storage accounts and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Storage accounts still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** This Azure Policy creates an audit event when the 'Minimum TLS version' setting is not set to 'Version 1.2'.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Storage/storageAccounts` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Storage/storageAccounts` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** `tlsVersionRequired` (default `tls1_2`; The TLS version that should be configured on the Storage Account).
 
@@ -4365,9 +4365,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.AAD/domainServices`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks domain services and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which domain services still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Use tls 1.2 only mode for your managed domains. By default, Azure AD Domain Services enables the use of ciphers such as NTLM v1 and tls v1. These ciphers may be required for some legacy applications, but are considered weak and can be disabled if you don't need them. When tls 1.2 only mode is enabled, any client making a request that is not using tls 1.2 will fail. Learn more at https://docs.microsoft.com/azure/active-directory-domain-services/secure-your-domain.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.AAD/domainServices` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.AAD/domainServices` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4386,9 +4386,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Azure Cosmos DB accounts and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Cosmos DB accounts still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Setting tls version to 1.2 or newer improves security by ensuring your Azure SQL Database can only be accessed from clients using tls 1.2 or newer. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DocumentDB/databaseAccounts` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.DocumentDB/databaseAccounts` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4407,9 +4407,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Sql/managedInstances`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Azure SQL Managed Instances and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure SQL Managed Instances still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Setting minimal tls version to 1.2 improves security by ensuring your SQL Managed Instance can only be accessed from clients using tls 1.2. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Sql/managedInstances` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Sql/managedInstances` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4428,9 +4428,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.AzureArcData/sqlmanagedinstances`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks sqlmanagedinstances and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which sqlmanagedinstances still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** As a part of network settings, Microsoft recommends allowing only tls 1.2 for tls protocols in SQL Servers. Learn more on network settings for SQL Server at https://aka.ms/tlsSettingsSQLServer.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.AzureArcData/sqlmanagedinstances` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.AzureArcData/sqlmanagedinstances` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4449,9 +4449,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Sql/servers`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Azure SQL servers and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure SQL servers still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Setting tls version to 1.2 or newer improves security by ensuring your Azure SQL Database can only be accessed from clients using tls 1.2 or newer. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Sql/servers` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Sql/servers` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4470,9 +4470,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/flexibleServers/configurations`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL flexible servers and PostgreSQL flexible server configuration settings and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Database for PostgreSQL flexible servers and PostgreSQL flexible server configuration settings still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** This policy helps audit any PostgreSQL flexible servers in your environment which is running with tls version less than 1.2.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/flexibleServers/configurations` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/flexibleServers/configurations` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4491,9 +4491,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DBForMariaDB/servers`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks servers and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which servers still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Setting tls version to 1.2 or newer improves security by ensuring your Azure SQL Database can only be accessed from clients using tls 1.2 or newer. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBForMariaDB/servers` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.DBForMariaDB/servers` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4512,9 +4512,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Synapse/workspaces/dedicatedSQLminimaltlsSettings`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks dedicated s q lminimaltls settings and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which dedicated s q lminimaltls settings still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Setting tls version to 1.2 or newer improves security by ensuring your Azure Synapse workspace SQL server can only be accessed from clients using tls 1.2 or newer. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Synapse/workspaces/dedicatedSQLminimaltlsSettings` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Synapse/workspaces/dedicatedSQLminimaltlsSettings` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4527,13 +4527,13 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-1357-AzureKubernetesClustersKMS</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 1357 - Azure Kubernetes Clusters should enable Key Management Service (KMS)
 - **Folder:** `SLZ/Security/ID1357`
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Azure Kubernetes Service clusters and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Kubernetes Service clusters still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Use Key Management Service (KMS) to encrypt secret data at rest in etcd for Kubernetes cluster security. Learn more at: https://aka.ms/aks/kmsetcdencryption.
 
 **How to align the environment:** Configure `Microsoft.ContainerService/managedClusters` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4554,7 +4554,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.CognitiveServices/accounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Azure AI services accounts and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure AI services accounts are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Using customer-managed keys to encrypt data at rest provides more control over the key lifecycle, including rotation and management. This is particularly relevant for organizations with related compliance requirements. This is not assessed by default and should only be applied when required by compliance or restrictive policy requirements. If not enabled, the data will be encrypted using platform-managed keys. To implement this, update the 'Effect' parameter in the Security Policy for the applicable scope.
 
 **How to align the environment:** Configure `Microsoft.CognitiveServices/accounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4575,13 +4575,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Automation/automationAccounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Automation Accounts and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Automation Accounts are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Use customer-managed keys to manage the encryption at rest of Azure Automation Accounts. By default, customer data is encrypted with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://aka.ms/automation-cmk.
 
 **How to align the environment:** Configure `Microsoft.Automation/automationAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources. Not sure if we need it in our use case.
 
 </details>
 
@@ -4596,7 +4596,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DataProtection/backupvaults`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks backupvaults and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which backupvaults are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** This policy follows the 'effect' if Encryption Settings are enabled for Backup vaults in the scope. Additionally, option to check if Backup Vault also has Infrastructure Encryption enabled. Learn more at https://aka.ms/az-backup-vault-encryption-at-rest-with-cmk. Please note that when 'Deny' effect is used, it would need you to enable Encryption Settings on the existing Backup Vaults in order to allow other update operations on the vault go through.
 
 **How to align the environment:** Configure `Microsoft.DataProtection/backupvaults` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4617,7 +4617,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Batch/batchAccounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Azure Batch accounts and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure Batch accounts are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Use customer-managed keys to manage the encryption at rest of Batch account's data. By default, customer data is encrypted with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://aka.ms/Batch-CMK.
 
 **How to align the environment:** Configure `Microsoft.Batch/batchAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4638,7 +4638,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.LoadTestService/loadtests`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks loadtests and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which loadtests are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Use customer-managed keys(CMK) to manage the encryption at rest for your Azure Load Testing resource. By default the encryption is done using Service managed keys, customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://docs.microsoft.com/azure/load-testing/how-to-configure-customer-managed-keys?tabs=portal.
 
 **How to align the environment:** Configure `Microsoft.LoadTestService/loadtests` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4659,7 +4659,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Cache/redisEnterprise`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks redis enterprise and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which redis enterprise are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Use customer-managed keys (CMK) to manage the encryption at rest of on-disk data. By default, customer data is encrypted with platform-managed keys (PMK), but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://aka.ms/RedisCMK.
 
 **How to align the environment:** Configure `Microsoft.Cache/redisEnterprise` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4680,7 +4680,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Search/searchServices`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Azure AI Search services and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure AI Search services are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Enabling encryption at rest using a customer-managed key on your Azure Cognitive Search services provides additional control over the key used to encrypt data at rest. This feature is often applicable to customers with special compliance requirements to manage data encryption keys using a key vault.
 
 **How to align the environment:** Configure `Microsoft.Search/searchServices` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4701,7 +4701,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.ContainerInstance/containerGroups`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks container groups and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which container groups are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if the containers are secured using customer-managed keys. 
 
 **How to align the environment:** Configure `Microsoft.ContainerInstance/containerGroups` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4722,7 +4722,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.ContainerRegistry/registries`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Container Registries and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Container Registries are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if container registries are secured using customer-managed keys to manage the encryption at rest of the contents of registries. By default, the data is encrypted at rest with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://aka.ms/acr/CMK.
 
 **How to align the environment:** Configure `Microsoft.ContainerRegistry/registries` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4743,7 +4743,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DocumentDB/databaseAccounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Azure Cosmos DB accounts and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure Cosmos DB accounts are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used to manage the encryption at rest of Azure Cosmos DB. By default, the data is encrypted at rest with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://aka.ms/cosmosdb-cmk.
 
 **How to align the environment:** Configure `Microsoft.DocumentDB/databaseAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4764,7 +4764,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Kusto/Clusters`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks clusters and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which clusters are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used for encryption at rest on Azure Data Explorer cluster provides additional control over the key being used by the encryption at rest. This feature is oftentimes applicable to customers with special compliance requirements and requires a Key Vault to managing the keys.
 
 **How to align the environment:** Configure `Microsoft.Kusto/Clusters` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4785,7 +4785,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DataFactory/factories`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks factories and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which factories are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used to manage the encryption at rest of Azure Data Factory. By default, customer data is encrypted with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://aka.ms/adf-cmk.
 
 **How to align the environment:** Configure `Microsoft.DataFactory/factories` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4806,7 +4806,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.ElasticSan/elasticSans/volumeGroups`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks volume groups and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which volume groups are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used to manage the encryption at rest of VolumeGroup. By default, customer data is encrypted with platform-managed keys, but CMKs are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you, with full control and responsibility, including rotation and management.
 
 **How to align the environment:** Configure `Microsoft.ElasticSan/elasticSans/volumeGroups` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4827,7 +4827,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`, `Microsoft.Keyvault`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Event Hubs namespaces and microsoft. keyvault and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Event Hubs namespaces and microsoft. keyvault are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if Azure Event Hubs are using customer-managed keys for data at rest encryption. Choosing to encrypt data using customer-managed keys enables you to assign, rotate, disable, and revoke access to the keys that Event Hub will use to encrypt data in the namespace. Note that Event Hub only supports encryption with customer-managed keys for namespaces in dedicated clusters.
 
 **How to align the environment:** Configure `Microsoft.EventHub/namespaces`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4848,7 +4848,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.FluidRelay/fluidRelayServers`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks fluid relay servers and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which fluid relay servers are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used to manage the encryption at rest of Fluid Relay server. By default, customer data is encrypted with service-managed keys, but CMKs are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by the customer, with full control and responsibility, including rotation and management. Learn more at https://docs.microsoft.com/azure/azure-fluid-relay/concepts/customer-managed-keys.
 
 **How to align the environment:** Configure `Microsoft.FluidRelay/fluidRelayServers` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4869,13 +4869,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.HDInsight/clusters`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
-**Breakdown of what the policy does:** The policy checks clusters and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which clusters are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used to manage the encryption at rest of Azure HDInsight clusters. By default, customer data is encrypted with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://aka.ms/hdi.cmk.
 
 **How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.HDInsight/clusters` resource in the subscription.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Operational impact:** Requires a known Log Analytics workspace.
+**Operational impact:** Key management etc.
 
 </details>
 
@@ -4890,13 +4890,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.HealthBot/healthBots`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks health bots and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which health bots are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys (CMK) are used to manage the encryption at rest of the data of healthbots. By default, the data is encrypted at rest with service-managed keys, but CMK are commonly required to meet regulatory compliance standards. CMK enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://docs.microsoft.com/azure/health-bot/cmk
 
 **How to align the environment:** Configure `Microsoft.HealthBot/healthBots` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Key management etc.
 
 </details>
 
@@ -4911,7 +4911,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.StorageCache/caches`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks caches and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which caches are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if encryption at rest of Azure HPC Cache is done with customer-managed keys. By default, customer data is encrypted with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management.
 
 **How to align the environment:** Configure `Microsoft.StorageCache/caches` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4932,7 +4932,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Devices/IotHubs`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks IoT Hubs and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which IoT Hubs are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if encryption of data at rest in IoT Hub is done with customer-managed key adds a second layer of encryption on top of the default service-managed keys, enables customer control of keys, custom rotation policies, and ability to manage access to data through key access control. Customer-managed keys must be configured during creation of IoT Hub. For more information on how to configure customer-managed keys, see https://aka.ms/iotcmk.
 
 **How to align the environment:** Configure `Microsoft.Devices/IotHubs` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4953,7 +4953,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Logic/integrationServiceEnvironments`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks integration service environments and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which integration service environments are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if Integration Service Environment encryption at rest of Logic Apps data is done using customer-managed keys. By default, customer data is encrypted with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management.
 
 **How to align the environment:** Configure `Microsoft.Logic/integrationServiceEnvironments` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4974,7 +4974,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.MachineLearningServices/workspaces`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks workspaces and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which workspaces are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if encryption at rest of Azure Machine Learning workspace data is done with customer-managed keys. By default, customer data is encrypted with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://aka.ms/azureml-workspaces-cmk.
 
 **How to align the environment:** Configure `Microsoft.MachineLearningServices/workspaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -4995,7 +4995,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Synapse/workspaces`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks workspaces and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which workspaces are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used to control the encryption at rest of the data stored in Azure Synapse workspaces. Customer-managed keys deliver double encryption by adding a second layer of encryption on top of the default encryption with service-managed keys.
 
 **How to align the environment:** Configure `Microsoft.Synapse/workspaces` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5010,13 +5010,13 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-1381-OSAndDataDisksSNCEncryptionCMK</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 1381 - OS and data disks should be encrypted with a customer-managed key (only SNC resources)
 - **Folder:** `SLZ/Security/ID1381`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, `Microsoft.Compute/images`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks virtual machines, virtual machine scale sets, managed disks, and related resources and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which virtual machines, virtual machine scale sets, managed disks, and related resources are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if OS and data disks are encrypted using a customer-managed key (CMK) for regulatory compliance. CMKs provide full control over key lifecycle management. Learn more: https://aka.ms/disks-cmk.
 
 **How to align the environment:** Configure `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, and related child resources to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5037,7 +5037,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL flexible servers and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure Database for PostgreSQL flexible servers are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used to manage the encryption at rest of PostgreSQL flexible servers. By default, the data is encrypted at rest with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management.
 
 **How to align the environment:** Configure `Microsoft.DBforPostgreSQL/flexibleServers` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5058,7 +5058,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.ServiceBus/namespaces`, `Microsoft.Keyvault`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Service Bus namespaces and microsoft. keyvault and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Service Bus namespaces and microsoft. keyvault are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if Azure Service Bus is encrypted at rest with customer-managed keys. Choosing to encrypt data using customer-managed keys enables you to assign, rotate, disable, and revoke access to the keys that Service Bus will use to encrypt data in your namespace. Note that Service Bus only supports encryption with customer-managed keys for premium namespaces.
 
 **How to align the environment:** Configure `Microsoft.ServiceBus/namespaces`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5073,13 +5073,13 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-1385-StorageAccountEncryptionScopesCMK</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 1385 - Storage account encryption scopes should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1385`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/encryptionScopes`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks encryption scopes and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which encryption scopes are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used to manage the encryption at rest of storage account encryption scopes. Customer-managed keys enable the data to be encrypted with an Azure key-vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more about storage account encryption scopes at https://aka.ms/encryption-scopes-overview.
 
 **How to align the environment:** Configure `Microsoft.Storage/storageAccounts/encryptionScopes` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5100,13 +5100,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DBforMySQL/servers`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Azure Database for MySQL servers and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Database for MySQL servers still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Checks if 'TLS Version' is set to 'TLSV1.2' for MySQL flexible Database
 
 **How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforMySQL/servers` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** `minimaltlsVersion` (default `tls1_2`; allowed `tls1_2`, `tls1_3`; Select version minimum tls version Azure Database for MySQL server to enforce).
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and deployment modules to support the required TLS version setting.
 
 </details>
 
@@ -5115,19 +5115,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-254-KeyVaultKeysExpirationDateSet</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 254 - Ensure that the Expiration Date is set for all Keys in Key Vaults (RBAC and Non-RBAC)
 - **Folder:** `SLZ/Security/ID254`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults/keys`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Key Vaults, keys, or secrets and makes sure the Expiration Date is set for all Keys in Key Vaults (RBAC and Non-RBAC). In audit mode it shows which vaults, keys, or secrets do not meet the required lifecycle, recovery, RBAC, expiry, private access, or rotation setting.
+**Breakdown of what the policy does:** This policy ensures that all keys in Key Vaults have an expiration date set.
 
 **How to align the environment:** Configure Key Vaults, keys, or secrets with the required RBAC, recovery, expiry, rotation, private endpoint, or encryption settings in the Key Vault module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
+**Operational impact:** Update operational documentation to align with the policy - no keys with infinite lifespan.
 
 </details>
 
@@ -5136,19 +5136,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-256-KeyVaultSecretsExpirationDateSet</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 256 - Ensure that the Expiration Date is set for all Secrets in Key Vaults (RBAC and Non-RBAC)
 - **Folder:** `SLZ/Security/ID256`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults/secrets`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Key Vaults, keys, or secrets and makes sure the Expiration Date is set for all Secrets in Key Vaults (RBAC and Non-RBAC). In audit mode it shows which vaults, keys, or secrets do not meet the required lifecycle, recovery, RBAC, expiry, private access, or rotation setting.
+**Breakdown of what the policy does:** This policy ensures that all secrets in Key Vaults have an expiration date set.
 
 **How to align the environment:** Configure Key Vaults, keys, or secrets with the required RBAC, recovery, expiry, rotation, private endpoint, or encryption settings in the Key Vault module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
+**Operational impact:** Update operational documentation to align with the policy - no secrets with infinite lifespan.
 
 </details>
 
@@ -5157,19 +5157,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-257-KeyVaultRecoverable</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 257 - Ensure the Key Vault is Recoverable
 - **Folder:** `SLZ/Security/ID257`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
 
-**Breakdown of what the policy does:** The policy checks Key Vaults, keys, or secrets and makes sure the Key Vault is Recoverable. In audit mode it shows which vaults, keys, or secrets do not meet the required lifecycle, recovery, RBAC, expiry, private access, or rotation setting.
+**Breakdown of what the policy does:** Checks if Purge Protection is enabled. Malicious deletion of a key vault can lead to permanent data loss. You can prevent permanent data loss by enabling purge protection and soft delete. Purge protection protects you from insider attacks by enforcing a mandatory retention period for soft deleted key vaults. No one inside your organization or Microsoft will be able to purge your key vaults during the soft delete retention period. Keep in mind that key vaults created after September 1st 2019 have soft-delete enabled by default.
 
 **How to align the environment:** Configure Key Vaults, keys, or secrets with the required RBAC, recovery, expiry, rotation, private endpoint, or encryption settings in the Key Vault module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform.
 
 </details>
 
@@ -5184,13 +5184,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Key Vaults, keys, or secrets and makes sure enable Role Based Access Control for Azure Key Vault. In audit mode it shows which vaults, keys, or secrets do not meet the required lifecycle, recovery, RBAC, expiry, private access, or rotation setting.
+**Breakdown of what the policy does:** Checks if RBAC permission model is enabled across Key Vaults.
 
 **How to align the environment:** Configure Key Vaults, keys, or secrets with the required RBAC, recovery, expiry, rotation, private endpoint, or encryption settings in the Key Vault module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform.
 
 </details>
 
@@ -5199,19 +5199,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-259-KeyVaultPrivateEndpoint</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 259 - Ensure that Private Endpoints are Used for Azure Key Vault
 - **Folder:** `SLZ/Security/ID259`
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
 
-**Breakdown of what the policy does:** The policy checks Key Vaults and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which Key Vaults are missing the required private connectivity.
+**Breakdown of what the policy does:** This policy checks if at least one Private Endpoint for KeyVault exists
 
 **How to align the environment:** Change deployment modules for `Microsoft.KeyVault/vaults` to use private endpoints/private link and disable or avoid unsupported public access paths.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
+**Operational impact:** Requires private endpoint for Key Vault
 
 </details>
 
@@ -5226,13 +5226,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults/keys`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Key Vaults, keys, or secrets and makes sure automatic Key Rotation is Enabled Within Azure Key Vault for the Supported Services. In audit mode it shows which vaults, keys, or secrets do not meet the required lifecycle, recovery, RBAC, expiry, private access, or rotation setting.
+**Breakdown of what the policy does:** Ensure Key Rotation is Enabled Within Azure Key Vault for keys
 
-**How to align the environment:** Configure Key Vaults, keys, or secrets with the required RBAC, recovery, expiry, rotation, private endpoint, or encryption settings in the Key Vault module.
+**How to align the environment:** Configure Key Vault keys with the required rotation in the Key Vault module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform.
 
 </details>
 
@@ -5250,13 +5250,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/servers/configurations`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL flexible servers and PostgreSQL server configuration settings and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Database for PostgreSQL flexible servers and PostgreSQL server configuration settings still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** This policy checks if PostgreSQL flexible servers are running with tls version less than 1.2.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/servers/configurations` in the resource deployment module.
+**How to align the environment:** Set the required TLS version for `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/servers/configurations` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Terraform module with the setting defaults
 
 </details>
 
@@ -5271,13 +5271,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/applicationGateways`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Application Gateways and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Application Gateways still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Checks if Application Gateways are deployed using latest tls version (1.3)
 
 **How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Network/applicationGateways` in the resource deployment module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and deployment modules to support the required TLS version setting.; Terraform module with settings defaults
 
 </details>
 
@@ -5297,7 +5297,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.AzureArcData/sqlmanagedinstances`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks sqlmanagedinstances and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which sqlmanagedinstances are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if transparent data encryption (TDE) at-rest is enabled on an Azure Arc-enabled SQL Managed Instance. Learn more at https://aka.ms/EnableTDEArcSQLMI.
 
 **How to align the environment:** Configure `Microsoft.AzureArcData/sqlmanagedinstances` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5318,7 +5318,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks transparent data encryption and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which transparent data encryption are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if transparent data encryption is enabled for Azure Synapse Analytics dedicated SQL pools to protect data-at-rest and meet compliance requirements. Please note that enabling transparent data encryption for the pool may impact query performance. More details can refer to https://go.microsoft.com/fwlink/?linkid=2147714
 
 **How to align the environment:** Configure `Microsoft.Synapse/workspaces/sqlPools/transparentDataEncryption` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5338,13 +5338,13 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-872.13-DICOMServiceSNCEncryptionCMK</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** No
 - **Display name:** SLZ - 872.13 - DICOM Service should use a customer-managed key to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID872`
 - **Affected Azure resource types:** `Microsoft.HealthcareApis/workspaces/dicomservices`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks dicomservices and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which dicomservices are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed key is used to control the encryption at rest of the data stored in Azure Health Data Services DICOM Service. 
 
 **How to align the environment:** Configure `Microsoft.HealthcareApis/workspaces/dicomservices` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5365,7 +5365,7 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/keys`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL single servers and keys and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Azure Database for PostgreSQL single servers and keys are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Checks if customer-managed keys are used to manage the encryption at rest of PostgreSQL servers. By default, the data is encrypted at rest with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management.
 
 **How to align the environment:** Configure `Microsoft.DBforPostgreSQL/servers`, `Microsoft.DBforPostgreSQL/servers/keys` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5393,13 +5393,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Storage accounts and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Storage accounts still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Audit requirement of Secure transfer in your storage account. Secure transfer is an option that forces your storage account to accept requests only from secure connections (HTTPS). Use of HTTPS ensures authentication between the server and the service and protects data in transit from network layer attacks such as man-in-the-middle, eavesdropping, and session-hijacking
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Storage/storageAccounts` in the resource deployment module.
+**How to align the environment:** Set the required property for `Microsoft.Storage/storageAccounts` in the module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Terraform module default setting for Storage accounts.
 
 </details>
 
@@ -5408,13 +5408,13 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-178-StorageAccountsInfrastructureEncryption</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 178 - Storage accounts should have infrastructure encryption
 - **Folder:** `SLZ/Storage/ID178`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Storage accounts and makes sure storage accounts should have infrastructure encryption. In audit mode it shows which Storage accounts are not compliant with that requirement.
+**Breakdown of what the policy does:** Enable infrastructure encryption for higher level of assurance that the data is secure. When infrastructure encryption is enabled, data in a storage account is encrypted twice.
 
 **How to align the environment:** Configure `Microsoft.Storage/storageAccounts` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5435,13 +5435,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Key Vaults, keys, or secrets and makes sure 'Enable key rotation reminders' is enabled for each Storage Account. In audit mode it shows which vaults, keys, or secrets do not meet the required lifecycle, recovery, RBAC, expiry, private access, or rotation setting.
+**Breakdown of what the policy does:** Ensures that storage accounts have a key expiration reminder
 
-**How to align the environment:** Configure Key Vaults, keys, or secrets with the required RBAC, recovery, expiry, rotation, private endpoint, or encryption settings in the Key Vault module.
+**How to align the environment:** Configure the reminder
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform where Key Vault is Terraform-managed and operational key or secret lifecycle processes.
+**Operational impact:** Requires Key Vault configuration standards to be embedded in Terraform.
 
 </details>
 
@@ -5450,19 +5450,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-183-StorageAccountsPublicAccess</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 183 - Storage account public access should be disallowed
 - **Folder:** `SLZ/Storage/ID183`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Storage accounts and makes sure public network access or public IP exposure is disabled or limited to the approved access pattern. In audit mode it shows which Storage accounts still allow public access and need review.
+**Breakdown of what the policy does:** Anonymous public read access to containers and blobs in Azure Storage is a convenient way to share data but might present security risks. To prevent data breaches caused by undesired anonymous access, Microsoft recommends preventing public access to a storage account unless your scenario requires it.
 
 **How to align the environment:** Remove broad public access from `Microsoft.Storage/storageAccounts`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Requires removal of public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
 
 </details>
 
@@ -5471,19 +5471,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-184-StorageAccountsDefaultNetworkAccessRule</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 184 - Ensure Default Network Access Rule for Storage Accounts is Set to Deny
 - **Folder:** `SLZ/Storage/ID184`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Storage accounts and makes sure public network access or public IP exposure is disabled or limited to the approved access pattern. In audit mode it shows which Storage accounts still allow public access and need review.
+**Breakdown of what the policy does:** Restricting default network access for storage accounts enhances security by denying all traffic and selectively allowing access only from specified Azure Virtual networks or designated public internet IP address ranges.
 
-**How to align the environment:** Remove broad public access from `Microsoft.Storage/storageAccounts`; replace it with private endpoints, approved source ranges, Azure Firewall, VPN/ExpressRoute, or controlled public edge services.
+**How to align the environment:** Set the default in Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires workload teams to remove public or Internet-sourced access rules and use approved private access, bastion, VPN, or controlled ingress patterns.
+**Operational impact:** Terraform module config changes (if not already in place).
 
 </details>
 
@@ -5492,19 +5492,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-185-StorageAccountsAllowAzureServices</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 185 - Ensure 'Allow Azure services on the trusted services list to access this storage account' is Enabled
 - **Folder:** `SLZ/Storage/ID185`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks Storage accounts and makes sure 'Allow Azure services on the trusted services list to access this storage account' is Enabled. In audit mode it shows which Storage accounts are not compliant with that requirement.
+**Breakdown of what the policy does:** Some Microsoft services that interact with storage accounts operate from networks that can't be granted access through network rules. To help this type of service work as intended, allow the set of trusted Microsoft services to bypass the network rules. These services will then use strong authentication to access the storage account.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Storage/storageAccounts` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Storage/storageAccounts` in Terraform 
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Terraform module code changes (if not already in place).
 
 </details>
 
@@ -5513,19 +5513,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-186-StorageAccountsPrivateEndpoints</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 186 - Ensure Private Endpoints are used to access Storage Accounts
 - **Folder:** `SLZ/Storage/ID186`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Storage/storageAccounts/privateEndpointConnections`, `Microsoft.Resources/deployments`, `Microsoft.Network/privateEndpoints`
 - **Cost impact:** Yes - Private Endpoint and Private DNS charges.
 
-**Breakdown of what the policy does:** The policy checks Storage accounts, private endpoint connections, private endpoints, and related resources and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which Storage accounts, private endpoint connections, private endpoints, and related resources are missing the required private connectivity.
+**Breakdown of what the policy does:** Checks if Storage Accounts have private endpoints configured. Use Azure Private Link which lets you connect your virtual network to Azure services without a public IP address at the source or destination.
 
 **How to align the environment:** Change deployment modules for `Microsoft.Storage/storageAccounts`, `Microsoft.Storage/storageAccounts/privateEndpointConnections`, `Microsoft.Resources/deployments`, and related child resources to use private endpoints/private link and disable or avoid unsupported public access paths.
 
 **Parameters or variables to specify or consider:** `privateEndpointSubnetId` (default: none; A subnet with private endpoint network policies disabled.).
 
-**Operational impact:** Requires private endpoint, private DNS, routing, firewall, and deployment pipeline patterns to be in place for affected services.
+**Operational impact:** Requires private endpoints for each storage account, required to make changes to the code/tfvars for the storage account which are missing the PE.
 
 </details>
 
@@ -5534,19 +5534,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-187-StorageBlobsAndContainerSoftDelete</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 187 - Azure Storage Blobs and Containers should have Soft Delete enabled (Minimum 30 days)
 - **Folder:** `SLZ/Storage/ID187`
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts/blobServices`
 - **Cost impact:** Yes - retained logs or deleted data consume billable storage.
 
-**Breakdown of what the policy does:** The policy checks Storage blob services and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Storage blob services are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Protect your Storage Blobs or Containers from accidental or malicious deletions by enabling Soft Delete (Minimum 30 days)
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Storage/storageAccounts/blobServices` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Storage/storageAccounts/blobServices` in Terraform
 
 **Parameters or variables to specify or consider:** `retentionInDays` (default: none; How long should deleted resources be retained for (minimum 30 days).).
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Terraform module changes.
 
 </details>
 
@@ -5555,13 +5555,13 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-248-OSandDataDisksCMKEncryption</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 248 - Ensure that 'OS and Data' disks are encrypted with Customer Managed Key (CMK) for SNC data
 - **Folder:** `SLZ/Storage/ID248`
 - **Affected Azure resource types:** `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, `Microsoft.Compute/galleries/images/versions`, `Microsoft.Compute/images`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks virtual machines, virtual machine scale sets, managed disks, and related resources and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which virtual machines, virtual machine scale sets, managed disks, and related resources are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Use customer-managed keys to manage the encryption at rest of the contents of managed disks if the resources is marked with SNC data classification tag. By default, the data is encrypted at rest with platform-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you.
 
 **How to align the environment:** Configure `Microsoft.Compute/virtualMachines`, `Microsoft.Compute/virtualMachineScaleSets`, `Microsoft.Compute/disks`, and related child resources to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
@@ -5576,19 +5576,19 @@ Administrative Operation name for which activity log alert should be configured)
 <summary><h6>SLZ-249-UnattachedDisksCMKEncryption</h6></summary>
 
 
-- **Applicable:** unknown
+- **Applicable:** Yes
 - **Display name:** SLZ - 249 - Ensure that 'Unattached disks' are encrypted with 'Customer Managed Key' (CMK) for SNC data
 - **Folder:** `SLZ/Storage/ID249`
 - **Affected Azure resource types:** Not detected directly in the policy rule.
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks in-scope Azure resources and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which in-scope Azure resources are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** Policy checks each UNATTACHED disk does it is related to diskEncryptionSet, if its not, it acts that disk as Not-Compliant for resources with the SNC tag
 
 **How to align the environment:** Configure the affected resources to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Name parameter.).
 
-**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
+**Operational impact:** Not sure if we use Unattached disks, or are going to use them.
 
 </details>
 
@@ -5611,13 +5611,14 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** Not detected directly in the policy rule.
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** Tag inheritance from subscription for all types of resources (including Resource Groups).
+Checks untagged resources.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName1` (default `ec.EnvironmentType`; Environment tag); `tag-TagName2` (default `ec.DataSensitivityLevel`; DataSensitivity tag); `tag-TagName3` (default `ec.GovIS2SeqNum`; Project tag); `tag-TagName4` (default `ec.SystemOwner`; Organization tag).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and tfvars for the policy.
 
 </details>
 
@@ -5632,13 +5633,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** Ensure the ec.DataSensitivityLevel tag exists on the subscription and is within allowed values.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName2` (default `ec.DataSensitivityLevel`; ec.DataSensitivityLevel tag).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and tfvars for the policy.
 
 </details>
 
@@ -5653,13 +5654,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** Ensure the Environment tag exists on the subscription and is within allowed values.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName1` (default `ec.EnvironmentType`; Environment tag).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and tfvars for the policy.
 
 </details>
 
@@ -5674,13 +5675,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** Ensure the Organization tag exists on the subscription.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName4` (default `ec.SystemOwner`; Organization tag).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and tfvars for the policy.
 
 </details>
 
@@ -5695,13 +5696,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Resources/subscriptions`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** Ensure the Project tag exists on the subscription.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName3` (default `ec.GovIS2SeqNum`; Project tag).
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and tfvars for the policy.
 
 </details>
 
@@ -5723,13 +5724,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure app Service Authentication is set up for apps in Azure App Service. In audit mode it shows which App Service apps and App Service configuration are not compliant with that requirement.
+**Breakdown of what the policy does:** This policy ensures that App Service Authentication is enabled on all App Services.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform 
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Terraform module defaults
 
 </details>
 
@@ -5747,13 +5748,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service deployment slots and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service deployment slots still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Policy will audit if HTTP is redirected to HTTPs for App Service Slots
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Web/sites/slots` in the resource deployment module.
+**How to align the environment:** Set the defaults in Terraform module
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Terraform code changes if applicable
 
 </details>
 
@@ -5768,13 +5769,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service apps and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service apps still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Policy will audit if HTTP is redirected to HTTPs for App Service
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Web/sites` in the resource deployment module.
+**How to align the environment:** Terraform module defaults
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Terraform code changes if applicable
 
 </details>
 
@@ -5791,13 +5792,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks virtual machines and Guest Configuration readiness or guest operating-system settings required by the baseline. In audit mode it shows which machines are missing the expected identity, extension, assignment, or guest setting result.
+**Breakdown of what the policy does:** This policy checks does Web App have system or user assigned identity
 
-**How to align the environment:** Ensure VM identities, Guest Configuration extensions, package reachability, and update-assessment settings are present through VM baseline modules.
+**How to align the environment:** Ensure Web Apps have identity
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires VM identity, extension, outbound connectivity, and guest configuration package readiness, even when the policy is only reporting.
+**Operational impact:** Terraform module defaults
 
 </details>
 
@@ -5815,13 +5816,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service deployment slots and App Service slot configuration and makes sure 'Python version' is the Latest Stable Version, if Used to Run the Web App Slots. In audit mode it shows which App Service deployment slots and App Service slot configuration are not compliant with that requirement.
+**Breakdown of what the policy does:** Ensure that 'Python version' is in expected, if Used to Run the Web App Slots
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in Terraform if applicable
 
 **Parameters or variables to specify or consider:** `pythonVersion` (default ``; Specify a supported Python version for App Service); `pythonVersion2` (default ``; Specify a supported Python version for App Service); `pythonPrefix` (default `PYTHON|`; Specify a supported Python prefix for App Service).
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Terraform module + tfvars for the policy
 
 </details>
 
@@ -5836,13 +5837,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure 'Python version' is the Latest Stable Version, if Used to Run the Web App. In audit mode it shows which App Service apps and App Service configuration are not compliant with that requirement.
+**Breakdown of what the policy does:** Ensure that 'Python version' is in expected, if Used to Run the Web App
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform if applicable
 
 **Parameters or variables to specify or consider:** `pythonVersion` (default ``; Specify a supported Python version for App Service); `pythonVersion2` (default ``; Specify a supported Python version for App Service); `pythonPrefix` (default `PYTHON|`; Specify a supported Python prefix for App Service).
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Terraform module + tfvars for the policy
 
 </details>
 
@@ -5862,13 +5863,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service deployment slots and App Service slot configuration and makes sure 'Java version' is the latest, if used to run the Web App for Slots. In audit mode it shows which App Service deployment slots and App Service slot configuration are not compliant with that requirement.
+**Breakdown of what the policy does:** Ensure that expepted 'Java version' is used by the Web App Slots based Linux deployment.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in Terraform if applicable
 
 **Parameters or variables to specify or consider:** `javaVersion` (default ``; Specify a supported Java version for App Service).
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Terraform module + tfvars for the policy.
 
 </details>
 
@@ -5883,13 +5884,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure 'Java version' is the latest, if used to run the Web App. In audit mode it shows which App Service apps and App Service configuration are not compliant with that requirement.
+**Breakdown of what the policy does:** Ensure that expepted 'Java version' is used by the Web App Slots based Linux deployment.
 
-**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
+**How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform if applicable
 
 **Parameters or variables to specify or consider:** `javaVersion` (default ``; Specify a supported Java version for App Service).
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Terraform module + tfvars for the policy
 
 </details>
 
@@ -5909,13 +5910,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** Checks the HTTP version for Web Apps for Slots
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Use the required http version
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Likely Terraform module required if applicable
 
 </details>
 
@@ -5930,13 +5931,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** Checks the HTTP version for `Microsoft.Web/sites` Periodically, newer versions are released for HTTP either due to security flaws or to include additional functionality. Using the latest HTTP version for web apps to take advantage of security fixes, if any, and/or new functionalities of the newer version.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Terraform module & periodic updates/upgrades if applicable
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Likely automation needed if applicable
 
 </details>
 
@@ -5951,13 +5952,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** Checks the HTTP version for Function App. Periodically, newer versions are released for HTTP either due to security flaws or to include additional functionality. Using the latest HTTP version for web apps to take advantage of security fixes, if any, and/or new functionalities of the newer version.
 
-**How to align the environment:** Set the required subscription or resource tags in the subscription vending and resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires subscription/resource creation workflows to provide required tags and keep tag values aligned with governance standards.
+**Operational impact:** Requires proper tagging and SKU alignment.
 
 </details>
 
@@ -5977,13 +5978,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service apps and App Service configuration still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Policy will audit if FTP is disabled for App Service and Azure Functions.
 
 **How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `allowFTPS` (default `False`; true value will force using FTPSOnly).
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Defaults in Terraform module if applicable.
 
 </details>
 
@@ -5998,13 +5999,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service deployment slots and App Service slot configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service deployment slots and App Service slot configuration still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Policy will audit if FTP is disabled for App Service slots.
 
 **How to align the environment:** Encode the checked setting for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `allowFTPS` (default `False`; true value will force using FTPSOnly).
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Defaults in Terraform module if applicable.
 
 </details>
 
@@ -6019,13 +6020,13 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/sites`, `Microsoft.Web/sites/config`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks App Service apps and App Service configuration and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which App Service apps and App Service configuration still allow the older or less secure protocol setting.
+**Breakdown of what the policy does:** Policy will audit if FTP is disabled, if not, it allows to deploy FTPS only for App Service and Azure Functions.
 
 **How to align the environment:** Encode the checked setting for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in Terraform where the resource is managed by Terraform and remediate existing drift before using compliance as an operational signal.
 
 **Parameters or variables to specify or consider:** `allowFTPS` (default `False`; true value will force using FTPSOnly).
 
-**Operational impact:** Requires the owning platform or workload team to encode the checked property in Terraform where the resource is Terraform-managed and monitor compliance drift.
+**Operational impact:** Defaults in Terraform module if applicable.
 
 </details>
 
