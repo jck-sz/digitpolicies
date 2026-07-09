@@ -533,7 +533,7 @@ Auditing writes database events to an audit log in your Azure Storage account (a
 **Parameters or variables to specify or consider:** `operationNameAdministrative` (default: none; allowed `Microsoft.Sql/servers/firewallRules/write`, `Microsoft.Sql/servers/firewallRules/delete`, `Microsoft.Network/networkSecurityGroups/write`, `Microsoft.Network/networkSecurityGroups/delete`, `Microsoft.ClassicNetwork/networkSecurityGroups/write`, `Microsoft.ClassicNetwork/networkSecurityGroups/delete`, `Microsoft.Network/networkSecurityGroups/securityRules/write`, `Microsoft.Network/networkSecurityGroups/securityRules/delete`, `Microsoft.ClassicNetwork/networkSecurityGroups/securityRules/write`,`Microsoft.ClassicNetwork/networkSecurityGroups/securityRules/delete`; 
 Administrative Operation name for which activity log alert should be configured).
 
-**Operational impact:** Someone needs to read the alerts or ServiceNow integration should be set up, otherwise it's pointless.
+**Operational impact:** Someone needs to read the alerts.
 
 </details>
 
