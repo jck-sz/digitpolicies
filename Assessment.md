@@ -1,6 +1,8 @@
 # Azure Policy Tenant Impact Assessment
 
-This assessment covers every local Azure Policy definition under `Definitions/policyDefinitions`. It assumes the policies are used only for audit, reporting, and compliance checks. No assignment should create, update, delete, deny, or remediate resources in the tenant or subscriptions.
+This assessment covers every local Azure Policy definition under `Definitions/policyDefinitions`. It assumes the policies are used only for audit, reporting, and compliance checks. No assignment should create, update, delete, deny, or remediate resources in the tenant or subscriptions.*
+
+(*) Deny - to be determined whether we should set the Deny effect for some policies.
 
 Total policy definitions assessed: **255**.
 
@@ -1476,9 +1478,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.OperationalInsights/workspaces`
 - **Cost impact:** Yes - Log Analytics ingestion and retention.
 
-**Breakdown of what the policy does:** The policy checks Storage accounts and workspaces and makes sure diagnostic logs and, where applicable, metrics are configured to be sent to the approved Log Analytics workspace. In audit mode it shows if the configured LAW and Storage account which holds the logs, has public access enabled.
+**Breakdown of what the policy does:** The policy checks the configured activity log storage account and Log Analytics workspace and makes sure public access is disabled. In audit mode it shows if the configured LAW or storage account that holds the logs has public access enabled.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Storage/storageAccounts` resource in the subscription.
+**How to align the environment:** Configure Terraform so the target storage account disables public blob access and the target Log Analytics workspace disables public network access for ingestion and query.
 
 **Parameters or variables to specify or consider:** `targetStorageAccountName` (default: none; Name of the storage account that should not allow public access); `targetLogAnalyticsWorkspaceName` (default: none; Name of the Log Analytics workspace that should not allow public network access for ingestion and query).
 
@@ -1494,12 +1496,12 @@ Administrative Operation name for which activity log alert should be configured)
 - **Applicable:** unknown
 - **Display name:** C1-SLZ - 222 - Ensure the storage account containing the container with activity logs is encrypted with Customer Managed Key
 - **Folder:** `C1/Storage/ID222`
-- **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`, `Microsoft.Keyvault`
-- **Cost impact:** Yes - Log Analytics ingestion and retention.
+- **Affected Azure resource types:** `Microsoft.Storage/storageAccounts`
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks Storage accounts and microsoft. keyvault and makes sure encryption is enabled using the required customer-managed key or data-encryption configuration. In audit mode it shows which Storage accounts and microsoft. keyvault are still using an unsupported encryption setup or are missing the expected encryption setting.
+**Breakdown of what the policy does:** The policy checks the named storage account and audits it when the encryption key source is not `Microsoft.Keyvault`. In audit mode it shows if the storage account that contains activity logs is not using customer-managed key encryption.
 
-**How to align the environment:** Configure `Microsoft.Storage/storageAccounts`, `Microsoft.Keyvault` to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
+**How to align the environment:** Configure the target storage account in Terraform to use customer-managed key encryption.
 
 **Parameters or variables to specify or consider:** `storageAccount` (default: none; Name Storage account).
 
@@ -1666,7 +1668,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure SQL Server firewall rules and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which Azure SQL server firewall rules are missing the required private connectivity.
 
-**How to align the environment:** Change deployment modules for `Microsoft.Sql/servers/firewallRules` to use private endpoints/private link and disable or avoid public access paths.
+**How to align the environment:** Change Terraform modules for `Microsoft.Sql/servers/firewallRules` to use private endpoints/private link and disable or avoid public access paths.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -1774,7 +1776,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for PostgreSQL single servers and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Database for PostgreSQL single servers still allow the older or less secure protocol setting.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforPostgreSQL/servers` in the resource deployment module.
+**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforPostgreSQL/servers` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -1980,7 +1982,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Database for MySQL servers and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Database for MySQL servers still allow the older or less secure protocol setting.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforMySQL/servers` in the resource deployment module.
+**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforMySQL/servers` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -2064,7 +2066,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Cosmos DB accounts and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which Azure Cosmos DB accounts are missing the required private connectivity.
 
-**How to align the environment:** Change deployment modules for `Microsoft.DocumentDB/databaseAccounts` to use private endpoints/private link and disable or avoid unsupported public access paths.
+**How to align the environment:** Change Terraform modules for `Microsoft.DocumentDB/databaseAccounts` to use private endpoints/private link and disable or avoid unsupported public access paths.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -2085,7 +2087,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks Azure Cosmos DB accounts and makes sure insecure protocols are disabled and the required TLS, SSL, HTTPS, HTTP, FTP, or secure-transfer setting is used. In audit mode it shows which Azure Cosmos DB accounts still allow the older or less secure protocol setting.
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DocumentDB/databaseAccounts` in the resource deployment module.
+**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DocumentDB/databaseAccounts` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -2418,9 +2420,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.ApiManagement/service`
 - **Cost impact:** Yes  - higher Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks API Management services tagged as production and audits resources using Basic or Consumption SKU. In audit mode it shows which production API Management services use a disallowed SKU.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2439,9 +2441,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.ContainerService/managedClusters`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks AKS clusters tagged as production and audits resources using Free tier. In audit mode it shows which production AKS clusters use a disallowed tier.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2458,11 +2460,11 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 238.11 - Ensure Load Balancer in PROD does not use Basic SKU
 - **Folder:** `SLZ/General/ID238`
 - **Affected Azure resource types:** `Microsoft.Network/loadBalancers`
-- **Cost impact:** Yes - Log Analytics ingestion and retention.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks Load Balancers tagged as production and audits resources using Basic SKU. In audit mode it shows which production Load Balancers use a disallowed SKU.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.Network/loadBalancers` resource in the subscription.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2481,9 +2483,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Network/virtualNetworkGateways`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks VPN Gateways tagged as production and audits resources using Basic tier. In audit mode it shows which production VPN Gateways use a disallowed tier.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2502,9 +2504,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Search/searchServices`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks Azure Cognitive Search services tagged as production and audits resources using Free or Basic SKU. In audit mode it shows which production Azure Cognitive Search services use a disallowed SKU.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2523,9 +2525,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.SignalRService/SignalR`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks Azure SignalR resources tagged as production and audits resources using Free tier. In audit mode it shows which production Azure SignalR resources use a disallowed tier.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2544,9 +2546,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.AppConfiguration/configurationStores`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks App Configuration stores tagged as production and audits resources using Free SKU. In audit mode it shows which production App Configuration stores use a disallowed SKU.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2565,9 +2567,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Web/serverfarms`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks App Service Plans tagged as production and audits resources using Free, Shared, or Basic SKUs. In audit mode it shows which production App Service Plans use a disallowed SKU.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2586,9 +2588,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Kusto/clusters`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks Azure Data Explorer clusters tagged as production and audits resources using Developer tier. In audit mode it shows which production Azure Data Explorer clusters use a disallowed tier.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2607,9 +2609,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Databricks/workspaces`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks Azure Databricks workspaces tagged as production and audits resources using Standard or Trial SKU. In audit mode it shows which production Azure Databricks workspaces use a disallowed SKU.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2628,9 +2630,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.Compute/disks`
 - **Cost impact:** No
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks managed disks tagged as production and audits resources using Standard HDD (Standard_LRS) SKU. In audit mode it shows which production disks use a disallowed SKU.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2649,9 +2651,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.ContainerRegistry/registries`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks Azure Container Registry resources tagged as production and audits resources using Basic SKU. In audit mode it shows which production Azure Container Registry resources use a disallowed SKU.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2670,9 +2672,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.EventHub/namespaces`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks Event Hubs namespaces tagged as production and audits resources using Basic SKU. In audit mode it shows which production Event Hubs namespaces use a disallowed SKU.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2691,9 +2693,9 @@ Administrative Operation name for which activity log alert should be configured)
 - **Affected Azure resource types:** `Microsoft.KeyVault/vaults`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
+**Breakdown of what the policy does:** The policy checks Key Vaults tagged as production and audits resources using Standard SKU. In audit mode it shows which production Key Vaults use a disallowed SKU.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required production tag correctly and use an approved SKU/tier in Terraform.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.EnvironmentType`; The tag name that marks production resources.); `tagValue` (default `PROD`; The tag value that represents production.).
 
@@ -2716,7 +2718,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks subscription or resource tags and makes sure the required governance tag is present with an accepted value. In audit mode it shows which subscriptions or resources are missing the required tag or have an unexpected tag value.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Set the required subscription or resource tags in Terraform; define valid values centrally.
 
 **Parameters or variables to specify or consider:** `tagName` (default: none; The Tag name to audit against (i.e. Environment, CostCenter, etc.)); `tagValue` (default: none; Value of the tag to audit against (i.e. Prod/UAT/TEST, 12345, etc.)).
 
@@ -3538,7 +3540,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks API Management services and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which API Management services are missing the required private connectivity.
 
-**How to align the environment:** Change deployment modules for `Microsoft.ApiManagement/service` to use private endpoints/private link and disable or avoid unsupported public access paths.
+**How to align the environment:** Change Terraform modules for `Microsoft.ApiManagement/service` to use private endpoints/private link and disable or avoid unsupported public access paths.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -3583,7 +3585,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** The policy checks API Management services and makes sure access is routed through private endpoints or Private Link instead of public access. In audit mode it shows which API Management services are missing the required private connectivity.
 
-**How to align the environment:** Change deployment modules for `Microsoft.ApiManagement/service` to use private endpoints/private link and disable or avoid unsupported public access paths.
+**How to align the environment:** Change Terraform modules for `Microsoft.ApiManagement/service` to use private endpoints/private link and disable or avoid unsupported public access paths.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -4178,11 +4180,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Periodically, newer versions are released for tls either due to security flaws, include additional functionality, and enhance speed. Upgrade to the latest tls version for App Service apps to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4199,11 +4201,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Upgrade to the latest TLS version for App Service app slots to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4220,11 +4222,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Upgrade to the latest TLS version for Function apps to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4241,11 +4243,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Upgrade to the latest TLS version for Function app slots to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites/slots`, `Microsoft.Web/sites/slots/config` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4262,11 +4264,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Upgrade to the latest TLS version for Logic Apps to take advantage of security fixes, if any, and/or new functionalities of the latest version.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Web/sites`, `Microsoft.Web/sites/config` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4283,11 +4285,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Audit enabling of only connections via SSL to Azure Cache for Redis. Validate both the minimum TLS version and that enableNonSslPort is disabled. Using secure connections ensures authentication between the server and the service and protects data in transit from network layer attacks such as man-in-the-middle, eavesdropping, and session hijacking.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Cache/redis` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Cache/redis` in the Terraform module.
 
 **Parameters or variables to specify or consider:** `minimumtlsVersion` (default `1.2`; allowed `1.2`; Specify the minimum TLS version required for secure connections.).
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4304,11 +4306,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Setting minimal TLS version to 1.2 improves security by ensuring your custom domains are accessed from clients using TLS 1.2 or newer. Using versions of TLS less than 1.2 is not recommended since they are weak and do not support modern cryptographic algorithms.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Cdn/profiles/customDomains` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Cdn/profiles/customDomains` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4325,11 +4327,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Configure a minimum TLS version for secure communication between the client application and the Event Hub Namespace. To minimize security risk, the recommended minimum TLS version is the latest released version, which is currently TLS 1.2.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.EventHub/namespaces` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.EventHub/namespaces` in the Terraform module.
 
 **Parameters or variables to specify or consider:** `minimumtlsVersion` (default `1.2`; allowed `1.0`, `1.1`, `1.2`; Minimum version of TLS required to access data in the Event Hub Namespace).
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4346,11 +4348,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** This Azure Policy creates an audit event when the 'Minimum TLS version' setting is not set to 'Version 1.2'.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Storage/storageAccounts` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Storage/storageAccounts` in the Terraform module.
 
 **Parameters or variables to specify or consider:** `tlsVersionRequired` (default `tls1_2`; The TLS version that should be configured on the Storage Account).
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4367,11 +4369,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Use tls 1.2 only mode for your managed domains. By default, Azure AD Domain Services enables the use of ciphers such as NTLM v1 and tls v1. These ciphers may be required for some legacy applications, but are considered weak and can be disabled if you don't need them. When tls 1.2 only mode is enabled, any client making a request that is not using tls 1.2 will fail. Learn more at https://docs.microsoft.com/azure/active-directory-domain-services/secure-your-domain.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.AAD/domainServices` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.AAD/domainServices` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4388,11 +4390,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Setting tls version to 1.2 or newer improves security by ensuring your Azure SQL Database can only be accessed from clients using tls 1.2 or newer. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.DocumentDB/databaseAccounts` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.DocumentDB/databaseAccounts` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4409,11 +4411,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Setting minimal tls version to 1.2 improves security by ensuring your SQL Managed Instance can only be accessed from clients using tls 1.2. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Sql/managedInstances` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Sql/managedInstances` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4430,11 +4432,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** As a part of network settings, Microsoft recommends allowing only tls 1.2 for tls protocols in SQL Servers. Learn more on network settings for SQL Server at https://aka.ms/tlsSettingsSQLServer.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.AzureArcData/sqlmanagedinstances` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.AzureArcData/sqlmanagedinstances` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4451,11 +4453,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Setting tls version to 1.2 or newer improves security by ensuring your Azure SQL Database can only be accessed from clients using tls 1.2 or newer. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Sql/servers` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Sql/servers` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4472,11 +4474,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** This policy helps audit any PostgreSQL flexible servers in your environment which is running with tls version less than 1.2.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/flexibleServers/configurations` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/flexibleServers/configurations` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4493,11 +4495,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Setting tls version to 1.2 or newer improves security by ensuring your Azure SQL Database can only be accessed from clients using tls 1.2 or newer. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.DBForMariaDB/servers` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.DBForMariaDB/servers` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4514,11 +4516,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Setting tls version to 1.2 or newer improves security by ensuring your Azure Synapse workspace SQL server can only be accessed from clients using tls 1.2 or newer. Using versions of tls less than 1.2 is not recommended since they have well documented security vulnerabilities.
 
-**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Synapse/workspaces/dedicatedSQLminimaltlsSettings` in the resource deployment module.
+**How to align the environment:** Set the required TLS version (1.2+) for `Microsoft.Synapse/workspaces/dedicatedSQLminimaltlsSettings` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS, SSL, HTTPS, or secure-transfer setting.
 
 </details>
 
@@ -4867,15 +4869,15 @@ Administrative Operation name for which activity log alert should be configured)
 - **Display name:** SLZ - 1373 - Azure HDInsight clusters should use customer-managed keys to encrypt data at rest (only SNC resources)
 - **Folder:** `SLZ/Security/ID1373`
 - **Affected Azure resource types:** `Microsoft.HDInsight/clusters`
-- **Cost impact:** Yes - Log Analytics ingestion and retention.
+- **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
 **Breakdown of what the policy does:** Checks if customer-managed keys are used to manage the encryption at rest of Azure HDInsight clusters. By default, customer data is encrypted with service-managed keys, but customer-managed keys are commonly required to meet regulatory compliance standards. Customer-managed keys enable the data to be encrypted with an Azure Key Vault key created and owned by you. You have full control and responsibility for the key lifecycle, including rotation and management. Learn more at https://aka.ms/hdi.cmk.
 
-**How to align the environment:** Make sure diagnostic settings are enabled for each `Microsoft.HDInsight/clusters` resource in the subscription.
+**How to align the environment:** Configure `Microsoft.HDInsight/clusters` in Terraform to use the required customer-managed key or encryption setting, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Exclusion Tag Name parameter.).
 
-**Operational impact:** Key management etc.
+**Operational impact:** Requires key management, managed identity permissions, key rotation ownership, and service-specific encryption settings in Terraform-managed resources.
 
 </details>
 
@@ -5102,11 +5104,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Checks if 'TLS Version' is set to 'TLSV1.2' for MySQL flexible Database
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforMySQL/servers` in the resource deployment module.
+**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.DBforMySQL/servers` in the Terraform module.
 
 **Parameters or variables to specify or consider:** `minimaltlsVersion` (default `tls1_2`; allowed `tls1_2`, `tls1_3`; Select version minimum tls version Azure Database for MySQL server to enforce).
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS version setting.
+**Operational impact:** Requires clients and Terraform modules to support the required TLS version setting.
 
 </details>
 
@@ -5207,7 +5209,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** This policy checks if at least one Private Endpoint for KeyVault exists
 
-**How to align the environment:** Change deployment modules for `Microsoft.KeyVault/vaults` to use private endpoints/private link and disable or avoid unsupported public access paths.
+**How to align the environment:** Change Terraform modules for `Microsoft.KeyVault/vaults` to use private endpoints/private link and disable or avoid unsupported public access paths.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -5252,7 +5254,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** This policy checks if PostgreSQL flexible servers are running with tls version less than 1.2.
 
-**How to align the environment:** Set the required TLS version for `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/servers/configurations` in the resource deployment module.
+**How to align the environment:** Set the required TLS version for `Microsoft.DBforPostgreSQL/flexibleServers`, `Microsoft.DBforPostgreSQL/servers/configurations` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
@@ -5273,11 +5275,11 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Checks if Application Gateways are deployed using latest tls version (1.3)
 
-**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Network/applicationGateways` in the resource deployment module.
+**How to align the environment:** Set the required TLS, SSL, HTTPS, HTTP version, FTP, or secure-transfer property for `Microsoft.Network/applicationGateways` in the Terraform module.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires clients and deployment modules to support the required TLS version setting.; Terraform module with settings defaults
+**Operational impact:** Requires clients and Terraform modules to support the required TLS version setting.; Terraform module with settings defaults
 
 </details>
 
@@ -5521,7 +5523,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 **Breakdown of what the policy does:** Checks if Storage Accounts have private endpoints configured. Use Azure Private Link which lets you connect your virtual network to Azure services without a public IP address at the source or destination.
 
-**How to align the environment:** Change deployment modules for `Microsoft.Storage/storageAccounts`, `Microsoft.Storage/storageAccounts/privateEndpointConnections`, `Microsoft.Resources/deployments`, and related child resources to use private endpoints/private link and disable or avoid unsupported public access paths.
+**How to align the environment:** Change Terraform modules for `Microsoft.Storage/storageAccounts`, `Microsoft.Storage/storageAccounts/privateEndpointConnections`, `Microsoft.Resources/deployments`, and related child resources to use private endpoints/private link and disable or avoid unsupported public access paths.
 
 **Parameters or variables to specify or consider:** `privateEndpointSubnetId` (default: none; A subnet with private endpoint network policies disabled.).
 
@@ -5579,12 +5581,12 @@ Administrative Operation name for which activity log alert should be configured)
 - **Applicable:** Yes
 - **Display name:** SLZ - 249 - Ensure that 'Unattached disks' are encrypted with 'Customer Managed Key' (CMK) for SNC data
 - **Folder:** `SLZ/Storage/ID249`
-- **Affected Azure resource types:** Not detected directly in the policy rule.
+- **Affected Azure resource types:** `Microsoft.Compute/disks`
 - **Cost impact:** Yes - higher approved Azure service SKU/tier.
 
-**Breakdown of what the policy does:** Policy checks each UNATTACHED disk does it is related to diskEncryptionSet, if its not, it acts that disk as Not-Compliant for resources with the SNC tag
+**Breakdown of what the policy does:** The policy checks unattached disks tagged as SNC and audits disks that do not have a disk encryption set.
 
-**How to align the environment:** Configure the affected resources to use the required encryption setting, customer-managed key, or service-managed encryption control in Terraform where the resource is managed by Terraform, including Key Vault access where required.
+**How to align the environment:** Configure `Microsoft.Compute/disks` to use the required encryption setting or customer-managed key in Terraform where the resource is managed by Terraform, including Key Vault access where required.
 
 **Parameters or variables to specify or consider:** `tagName` (default `ec.DataSensitivityLevel`; Name of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Value parameter.); `tagValue` (default `SNC`; Value of the tag to use for include resources from this policy. This should be used along with the Inclusion Tag Name parameter.).
 
@@ -5614,7 +5616,7 @@ Administrative Operation name for which activity log alert should be configured)
 **Breakdown of what the policy does:** Tag inheritance from subscription for all types of resources (including Resource Groups).
 Checks untagged resources.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
+**How to align the environment:** Set the required subscription or resource tags in Terraform; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName1` (default `ec.EnvironmentType`; Environment tag); `tag-TagName2` (default `ec.DataSensitivityLevel`; DataSensitivity tag); `tag-TagName3` (default `ec.GovIS2SeqNum`; Project tag); `tag-TagName4` (default `ec.SystemOwner`; Organization tag).
 
@@ -5635,7 +5637,7 @@ Checks untagged resources.
 
 **Breakdown of what the policy does:** Ensure the ec.DataSensitivityLevel tag exists on the subscription and is within allowed values.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
+**How to align the environment:** Set the required subscription or resource tags in Terraform; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName2` (default `ec.DataSensitivityLevel`; ec.DataSensitivityLevel tag).
 
@@ -5656,7 +5658,7 @@ Checks untagged resources.
 
 **Breakdown of what the policy does:** Ensure the Environment tag exists on the subscription and is within allowed values.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
+**How to align the environment:** Set the required subscription or resource tags in Terraform; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName1` (default `ec.EnvironmentType`; Environment tag).
 
@@ -5677,7 +5679,7 @@ Checks untagged resources.
 
 **Breakdown of what the policy does:** Ensure the Organization tag exists on the subscription.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
+**How to align the environment:** Set the required subscription or resource tags in Terraform; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName4` (default `ec.SystemOwner`; Organization tag).
 
@@ -5698,7 +5700,7 @@ Checks untagged resources.
 
 **Breakdown of what the policy does:** Ensure the Project tag exists on the subscription.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values in tfvars.
+**How to align the environment:** Set the required subscription or resource tags in Terraform; define valid values in tfvars.
 
 **Parameters or variables to specify or consider:** `tag-TagName3` (default `ec.GovIS2SeqNum`; Project tag).
 
@@ -5954,11 +5956,11 @@ Checks untagged resources.
 
 **Breakdown of what the policy does:** Checks the HTTP version for Function App. Periodically, newer versions are released for HTTP either due to security flaws or to include additional functionality. Using the latest HTTP version for web apps to take advantage of security fixes, if any, and/or new functionalities of the newer version.
 
-**How to align the environment:** Set the required subscription or resource tags in the resource deployment workflow; define valid values centrally.
+**How to align the environment:** Configure Function Apps in Terraform so `Microsoft.Web/sites/config/web.http20Enabled` is enabled where applicable.
 
 **Parameters or variables to specify or consider:** None.
 
-**Operational impact:** Requires proper tagging and SKU alignment.
+**Operational impact:** Likely Terraform module required if applicable.
 
 </details>
 
