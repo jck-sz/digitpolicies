@@ -7,7 +7,7 @@ This assessment covers every local Azure Policy definition under `Definitions/po
 Total policy definitions assessed: **255**.
 
 <details open>
-<summary><h2>Index</h2></summary>
+<summary><strong>Index</strong></summary>
 
 
 - `C1`
@@ -460,18 +460,18 @@ Total policy definitions assessed: **255**.
 </details>
 
 <details open>
-<summary><h2>Assessment</h2></summary>
+<summary><strong>Assessment</strong></summary>
 
 
 <details open>
-<summary><h3>C1</h3></summary>
+<summary><strong>C1</strong></summary>
 
 <details open>
-<summary><h4>General</h4></summary>
+<summary><strong>General</strong></summary>
 
 <a id="policy-c1-slz-149-nocustomadministratorroles"></a>
 <details open>
-<summary><h6>C1-SLZ-149-NoCustomAdministratorRoles</h6></summary>
+<summary>C1-SLZ-149-NoCustomAdministratorRoles</summary>
 
 
 - **Applicable:** Yes
@@ -492,7 +492,7 @@ Total policy definitions assessed: **255**.
 
 <a id="policy-c1-slz-198-auditingretentiongreater90days"></a>
 <details open>
-<summary><h6>C1-SLZ-198-AuditingRetentionGreater90days</h6></summary>
+<summary>C1-SLZ-198-AuditingRetentionGreater90days</summary>
 
 
 - **Applicable:** unknown
@@ -513,11 +513,11 @@ Auditing writes database events to an audit log in your Azure Storage account (a
 </details>
 
 <details open>
-<summary><h5>ID220</h5></summary>
+<summary><strong>ID220</strong></summary>
 
 <a id="policy-c1-slz-220-administrativeactivitylogalert"></a>
 <details open>
-<summary><h6>C1-SLZ-220-AdministrativeActivityLogAlert</h6></summary>
+<summary>C1-SLZ-220-AdministrativeActivityLogAlert</summary>
 
 
 - **Applicable:** Potentially Yes
@@ -539,7 +539,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-220-policyactivitylogalert"></a>
 <details open>
-<summary><h6>C1-SLZ-220-PolicyActivityLogAlert</h6></summary>
+<summary>C1-SLZ-220-PolicyActivityLogAlert</summary>
 
 
 - **Applicable:** Potentially yes
@@ -560,7 +560,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-220-securityactivitylogalert"></a>
 <details open>
-<summary><h6>C1-SLZ-220-SecurityActivityLogAlert</h6></summary>
+<summary>C1-SLZ-220-SecurityActivityLogAlert</summary>
 
 
 - **Applicable:** Potentially yes
@@ -584,14 +584,14 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Monitoring</h4></summary>
+<summary><strong>Monitoring</strong></summary>
 
 <details open>
-<summary><h5>ID051-SLZ-Monitor</h5></summary>
+<summary><strong>ID051-SLZ-Monitor</strong></summary>
 
 <a id="policy-c1-slz-51-azuredirectorydomainservicesdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureDirectoryDomainServicesDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureDirectoryDomainServicesDiagSettingsToWS</summary>
 
 
 - **Applicable:** Yes
@@ -612,7 +612,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-automationaccountdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AutomationAccountDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AutomationAccountDiagSettingsToWS</summary>
 
 
 - **Applicable:** Unknown
@@ -633,7 +633,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azureactivitylogsdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureActivityLogsDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureActivityLogsDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -654,7 +654,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azureanalysisservicediagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureAnalysisServiceDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureAnalysisServiceDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -675,7 +675,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azureapimanagementservicediagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureAPIManagementServiceDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureAPIManagementServiceDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -696,7 +696,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-appservicediagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AppServiceDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AppServiceDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -717,7 +717,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-appgatewaydiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AppGatewayDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AppGatewayDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -738,7 +738,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurebastiondiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureBastionDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureBastionDiagSettingsToWS</summary>
 
 
 - **Applicable:** Yes
@@ -759,7 +759,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurebatchdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureBatchDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureBatchDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -780,7 +780,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurecongitivesearchdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureCongitiveSearchDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureCongitiveSearchDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -801,7 +801,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurecongitiveservicesdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureCongitiveServicesDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureCongitiveServicesDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -822,7 +822,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azuredatalakeanalyticsdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureDatalakeAnalyticsDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureDatalakeAnalyticsDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -843,7 +843,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azuredatalakestorediagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureDatalakeStoreDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureDatalakeStoreDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -864,7 +864,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azureeventhubdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureEventHubDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureEventHubDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -885,7 +885,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurefirewalldiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureFirewallDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureFirewallDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -906,7 +906,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurefunctiondiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureFunctionDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureFunctionDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -927,7 +927,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azureintegrationservicesiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureIntegrationServicesiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureIntegrationServicesiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -948,7 +948,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurekeyvaultdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureKeyVaultDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureKeyVaultDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -969,7 +969,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azureloadbalancerdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureLoadBalancerDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureLoadBalancerDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -990,7 +990,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurerecoveryservicediagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureRecoveryServiceDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureRecoveryServiceDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1011,7 +1011,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azuresqlmanagedinstancedbdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureSQLManagedInstanceDBDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureSQLManagedInstanceDBDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1032,7 +1032,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azuresqlmanagedinstancediagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureSQLManagedInstanceDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureSQLManagedInstanceDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1053,7 +1053,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azuresqlserverdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureSQLServerDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureSQLServerDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1074,7 +1074,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurestreamanalyticsdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureStreamAnalyticsDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureStreamAnalyticsDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1095,7 +1095,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-azurevirtualnetworkdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-AzureVirtualNetworkDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-AzureVirtualNetworkDiagSettingsToWS</summary>
 
 
 - **Applicable:** Yes
@@ -1116,7 +1116,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-cdnandfrontdoordiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-CdnAndFrontdoorDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-CdnAndFrontdoorDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1137,7 +1137,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-iotdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-IoTDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-IoTDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1158,7 +1158,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-logicappworkflowsdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-LogicAppWorkflowsDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-LogicAppWorkflowsDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1179,7 +1179,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-networkfrontdoordiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-NetworkFrontdoorDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-NetworkFrontdoorDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1200,7 +1200,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-networkinterfacediagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-NetworkInterfaceDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-NetworkInterfaceDiagSettingsToWS</summary>
 
 
 - **Applicable:** Yes
@@ -1221,7 +1221,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-networksecuritygroupsdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-NetworkSecurityGroupsDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-NetworkSecurityGroupsDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1242,7 +1242,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-powerbidedicatedcapacitydiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-PowerBIDedicatedCapacityDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-PowerBIDedicatedCapacityDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1263,7 +1263,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-publicipdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-PublicIPDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-PublicIPDiagSettingsToWS</summary>
 
 
 - **Applicable:** Yes
@@ -1284,7 +1284,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-servicebusnamespacediagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-ServiceBusNamespaceDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-ServiceBusNamespaceDiagSettingsToWS</summary>
 
 
 - **Applicable:** unknown
@@ -1305,7 +1305,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-51-storageaccountsdiagsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-51-StorageAccountsDiagSettingsToWS</h6></summary>
+<summary>C1-SLZ-51-StorageAccountsDiagSettingsToWS</summary>
 
 
 - **Applicable:** Yes
@@ -1329,11 +1329,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Security</h4></summary>
+<summary><strong>Security</strong></summary>
 
 <a id="policy-c1-slz-171-securitycontactemailadditionaladdress"></a>
 <details open>
-<summary><h6>C1-SLZ-171-SecurityContactEmailAdditionalAddress</h6></summary>
+<summary>C1-SLZ-171-SecurityContactEmailAdditionalAddress</summary>
 
 
 - **Applicable:** Yes?
@@ -1354,7 +1354,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-172-alertsnotifysettohigh"></a>
 <details open>
-<summary><h6>C1-SLZ-172-AlertsNotifySetToHigh</h6></summary>
+<summary>C1-SLZ-172-AlertsNotifySetToHigh</summary>
 
 
 - **Applicable:** Yes?
@@ -1376,14 +1376,14 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Storage</h4></summary>
+<summary><strong>Storage</strong></summary>
 
 <details open>
-<summary><h5>ID027</h5></summary>
+<summary><strong>ID027</strong></summary>
 
 <a id="policy-c1-slz-27-storageaccountdiagnosticsettingstows"></a>
 <details open>
-<summary><h6>C1-SLZ-27-StorageAccountDiagnosticSettingsToWS</h6></summary>
+<summary>C1-SLZ-27-StorageAccountDiagnosticSettingsToWS</summary>
 
 
 - **Applicable:** Yes
@@ -1404,7 +1404,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-deprecated"></a>
 <details open>
-<summary><h6>DEPRECATED</h6></summary>
+<summary>DEPRECATED</summary>
 
 
 - **Applicable:** unknown
@@ -1427,7 +1427,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-189-blobservicestoragelogging"></a>
 <details open>
-<summary><h6>C1-SLZ-189-BlobServiceStorageLogging</h6></summary>
+<summary>C1-SLZ-189-BlobServiceStorageLogging</summary>
 
 
 - **Applicable:** unknown
@@ -1448,7 +1448,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-190-tableservicestoragelogging"></a>
 <details open>
-<summary><h6>C1-SLZ-190-TableServiceStorageLogging</h6></summary>
+<summary>C1-SLZ-190-TableServiceStorageLogging</summary>
 
 
 - **Applicable:** unknown
@@ -1469,7 +1469,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-221-activitylogresourcesnotpubliclyaccessible"></a>
 <details open>
-<summary><h6>C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible</h6></summary>
+<summary>C1-SLZ-221-ActivityLogResourcesNotPubliclyAccessible</summary>
 
 
 - **Applicable:** Yes
@@ -1490,7 +1490,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-c1-slz-222-storageaccountlogscmk"></a>
 <details open>
-<summary><h6>C1-SLZ-222-StorageAccountLogsCMK</h6></summary>
+<summary>C1-SLZ-222-StorageAccountLogsCMK</summary>
 
 
 - **Applicable:** unknown
@@ -1514,11 +1514,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h3>SLZ</h3></summary>
+<summary><strong>SLZ</strong></summary>
 
 <a id="policy-slz-denypurviewaccounts"></a>
 <details open>
-<summary><h6>SLZ-DenyPurviewAccounts</h6></summary>
+<summary>SLZ-DenyPurviewAccounts</summary>
 
 
 - **Applicable:** unknown
@@ -1538,14 +1538,14 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Compute</h4></summary>
+<summary><strong>Compute</strong></summary>
 
 <details open>
-<summary><h5>ID165</h5></summary>
+<summary><strong>ID165</strong></summary>
 
 <a id="policy-slz-165-machinesauditperiodsystemupdatescheck"></a>
 <details open>
-<summary><h6>SLZ-165-MachinesAuditPeriodSystemUpdatesCheck</h6></summary>
+<summary>SLZ-165-MachinesAuditPeriodSystemUpdatesCheck</summary>
 
 
 - **Applicable:** Yes [Requires further analysis]
@@ -1566,7 +1566,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-165-2-1-machinesconfigureperiodsystemupdatescheck"></a>
 <details open>
-<summary><h6>SLZ-165.2.1-MachinesConfigurePeriodSystemUpdatesCheck</h6></summary>
+<summary>SLZ-165.2.1-MachinesConfigurePeriodSystemUpdatesCheck</summary>
 
 
 - **Applicable:** Yes [requires further analysis]
@@ -1587,7 +1587,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-165-2-machinesconfigureperiodsystemupdatescheck"></a>
 <details open>
-<summary><h6>SLZ-165.2-MachinesConfigurePeriodSystemUpdatesCheck</h6></summary>
+<summary>SLZ-165.2-MachinesConfigurePeriodSystemUpdatesCheck</summary>
 
 
 - **Applicable:** unknown
@@ -1610,7 +1610,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-250-onlyapprovedextensions"></a>
 <details open>
-<summary><h6>SLZ-250-OnlyApprovedExtensions</h6></summary>
+<summary>SLZ-250-OnlyApprovedExtensions</summary>
 
 
 - **Applicable:** Yes
@@ -1632,11 +1632,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Database</h4></summary>
+<summary><strong>Database</strong></summary>
 
 <a id="policy-slz-193-sqlserverauditing"></a>
 <details open>
-<summary><h6>SLZ-193-SQLServerAuditing</h6></summary>
+<summary>SLZ-193-SQLServerAuditing</summary>
 
 
 - **Applicable:** unknown
@@ -1657,7 +1657,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-194-azuresqldbingressfrom0000"></a>
 <details open>
-<summary><h6>SLZ-194-AzureSQLDBIngressFrom0000</h6></summary>
+<summary>SLZ-194-AzureSQLDBIngressFrom0000</summary>
 
 
 - **Applicable:** Yes
@@ -1678,7 +1678,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-195-sqlservertdeencryptionwithcmk"></a>
 <details open>
-<summary><h6>SLZ-195-SQLServerTDEEncryptionWithCMK</h6></summary>
+<summary>SLZ-195-SQLServerTDEEncryptionWithCMK</summary>
 
 
 - **Applicable:** unknown
@@ -1699,7 +1699,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-196-sqlserveraadadminconfiguration"></a>
 <details open>
-<summary><h6>SLZ-196-SQLServerAADAdminConfiguration</h6></summary>
+<summary>SLZ-196-SQLServerAADAdminConfiguration</summary>
 
 
 - **Applicable:** unknown
@@ -1720,7 +1720,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-197-sqldatabasedataencryption"></a>
 <details open>
-<summary><h6>SLZ-197-SQLDatabaseDataEncryption</h6></summary>
+<summary>SLZ-197-SQLDatabaseDataEncryption</summary>
 
 
 - **Applicable:** unknown
@@ -1740,11 +1740,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID204</h5></summary>
+<summary><strong>ID204</strong></summary>
 
 <a id="policy-slz-204-postgressqlflexibleserversslconnection"></a>
 <details open>
-<summary><h6>SLZ-204-PostgresSQLFlexibleServerSSLConnection</h6></summary>
+<summary>SLZ-204-PostgresSQLFlexibleServerSSLConnection</summary>
 
 
 - **Applicable:** unknown
@@ -1765,7 +1765,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-204-postgressqlserversslconnection"></a>
 <details open>
-<summary><h6>SLZ-204-PostgresSQLServerSSLConnection</h6></summary>
+<summary>SLZ-204-PostgresSQLServerSSLConnection</summary>
 
 
 - **Applicable:** unknown
@@ -1787,11 +1787,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID205</h5></summary>
+<summary><strong>ID205</strong></summary>
 
 <a id="policy-slz-205-postgressqlflexibleserver-log-checkpoints"></a>
 <details open>
-<summary><h6>SLZ-205-PostgresSQLFlexibleServer_log_checkpoints</h6></summary>
+<summary>SLZ-205-PostgresSQLFlexibleServer_log_checkpoints</summary>
 
 
 - **Applicable:** unknown
@@ -1812,7 +1812,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-205-postgressqlserver-log-checkpoints"></a>
 <details open>
-<summary><h6>SLZ-205-PostgresSQLServer_log_checkpoints</h6></summary>
+<summary>SLZ-205-PostgresSQLServer_log_checkpoints</summary>
 
 
 - **Applicable:** unknown
@@ -1835,7 +1835,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-206-postgressqlserverlogconnections"></a>
 <details open>
-<summary><h6>SLZ-206-PostgresSQLServerLogConnections</h6></summary>
+<summary>SLZ-206-PostgresSQLServerLogConnections</summary>
 
 
 - **Applicable:** unknown
@@ -1856,7 +1856,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-207-postgressqlserverdisconnectionslogging"></a>
 <details open>
-<summary><h6>SLZ-207-PostgresSQLServerDisconnectionsLogging</h6></summary>
+<summary>SLZ-207-PostgresSQLServerDisconnectionsLogging</summary>
 
 
 - **Applicable:** unknown
@@ -1876,11 +1876,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID208</h5></summary>
+<summary><strong>ID208</strong></summary>
 
 <a id="policy-slz-208-postgressqlflexibleserverconnectionthrottling"></a>
 <details open>
-<summary><h6>SLZ-208-PostgresSQLFlexibleServerConnectionThrottling</h6></summary>
+<summary>SLZ-208-PostgresSQLFlexibleServerConnectionThrottling</summary>
 
 
 - **Applicable:** unknown
@@ -1901,7 +1901,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-208-postgressqlserverconnectionthrottling"></a>
 <details open>
-<summary><h6>SLZ-208-PostgresSQLServerConnectionThrottling</h6></summary>
+<summary>SLZ-208-PostgresSQLServerConnectionThrottling</summary>
 
 
 - **Applicable:** unknown
@@ -1923,11 +1923,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID210</h5></summary>
+<summary><strong>ID210</strong></summary>
 
 <a id="policy-slz-210-postgressqlflexibleserverpublicnetworkaccess"></a>
 <details open>
-<summary><h6>SLZ-210-PostgresSQLFlexibleServerPublicNetworkAccess</h6></summary>
+<summary>SLZ-210-PostgresSQLFlexibleServerPublicNetworkAccess</summary>
 
 
 - **Applicable:** unknown
@@ -1948,7 +1948,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-210-postgressqlserverpublicnetworkaccess"></a>
 <details open>
-<summary><h6>SLZ-210-PostgresSQLServerPublicNetworkAccess</h6></summary>
+<summary>SLZ-210-PostgresSQLServerPublicNetworkAccess</summary>
 
 
 - **Applicable:** unknown
@@ -1971,7 +1971,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-212-mysqlsqlserverenforcesslconnection"></a>
 <details open>
-<summary><h6>SLZ-212-MySQLSQLServerEnforceSSLConnection</h6></summary>
+<summary>SLZ-212-MySQLSQLServerEnforceSSLConnection</summary>
 
 
 - **Applicable:** unknown
@@ -1992,7 +1992,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-214-mysqlsqlserver-audit-log-enabled"></a>
 <details open>
-<summary><h6>SLZ-214-MySQLSQLServer_audit_log_enabled</h6></summary>
+<summary>SLZ-214-MySQLSQLServer_audit_log_enabled</summary>
 
 
 - **Applicable:** unknown
@@ -2013,7 +2013,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-215-mysqlsqlserver-audit-log-events"></a>
 <details open>
-<summary><h6>SLZ-215-MySQLSQLServer_audit_log_events</h6></summary>
+<summary>SLZ-215-MySQLSQLServer_audit_log_events</summary>
 
 
 - **Applicable:** unknown
@@ -2034,7 +2034,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-216-azurecosmosdbfwlimitsforselectednetwork"></a>
 <details open>
-<summary><h6>SLZ-216-AzureCosmosDBFWLimitsForSelectedNetwork</h6></summary>
+<summary>SLZ-216-AzureCosmosDBFWLimitsForSelectedNetwork</summary>
 
 
 - **Applicable:** unknown
@@ -2055,7 +2055,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-217-azurecosmosdbprivatelink"></a>
 <details open>
-<summary><h6>SLZ-217-AzureCosmosDBPrivateLink</h6></summary>
+<summary>SLZ-217-AzureCosmosDBPrivateLink</summary>
 
 
 - **Applicable:** unknown
@@ -2076,7 +2076,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-218-azurecosmosdblocalauthenticationdisabled"></a>
 <details open>
-<summary><h6>SLZ-218-AzureCosmosDBLocalAuthenticationDisabled</h6></summary>
+<summary>SLZ-218-AzureCosmosDBLocalAuthenticationDisabled</summary>
 
 
 - **Applicable:** unknown
@@ -2098,11 +2098,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Defender</h4></summary>
+<summary><strong>Defender</strong></summary>
 
 <a id="policy-slz-1397-microsoftdefenderforcspm"></a>
 <details open>
-<summary><h6>SLZ-1397-MicrosoftDefenderForCSPM</h6></summary>
+<summary>SLZ-1397-MicrosoftDefenderForCSPM</summary>
 
 
 - **Applicable:** Yes
@@ -2127,7 +2127,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-153-defenderforendpoint"></a>
 <details open>
-<summary><h6>SLZ-153-DefenderForEndpoint</h6></summary>
+<summary>SLZ-153-DefenderForEndpoint</summary>
 
 
 - **Applicable:** Yes
@@ -2148,7 +2148,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-153-defendercloudpricingforserver"></a>
 <details open>
-<summary><h6>SLZ-153-DefenderCloudPricingForServer</h6></summary>
+<summary>SLZ-153-DefenderCloudPricingForServer</summary>
 
 
 - **Applicable:** Yes
@@ -2172,7 +2172,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-154-defendercloudpricingforapplicationservices"></a>
 <details open>
-<summary><h6>SLZ-154-DefenderCloudPricingForApplicationServices</h6></summary>
+<summary>SLZ-154-DefenderCloudPricingForApplicationServices</summary>
 
 
 - **Applicable:** unknown
@@ -2193,7 +2193,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-156-defendercloudpricingforazuresqldb"></a>
 <details open>
-<summary><h6>SLZ-156-DefenderCloudPricingForAzureSQLDB</h6></summary>
+<summary>SLZ-156-DefenderCloudPricingForAzureSQLDB</summary>
 
 
 - **Applicable:** unknown
@@ -2214,7 +2214,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-157-defendercloudpricingfordbonservers"></a>
 <details open>
-<summary><h6>SLZ-157-DefenderCloudPricingForDBOnServers</h6></summary>
+<summary>SLZ-157-DefenderCloudPricingForDBOnServers</summary>
 
 
 - **Applicable:** unknown
@@ -2235,7 +2235,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-158-defendercloudpricingforopendb"></a>
 <details open>
-<summary><h6>SLZ-158-DefenderCloudPricingForOpenDB</h6></summary>
+<summary>SLZ-158-DefenderCloudPricingForOpenDB</summary>
 
 
 - **Applicable:** unknown
@@ -2256,7 +2256,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-159-defendercloudpricingforstorage"></a>
 <details open>
-<summary><h6>SLZ-159-DefenderCloudPricingForStorage</h6></summary>
+<summary>SLZ-159-DefenderCloudPricingForStorage</summary>
 
 
 - **Applicable:** Yes
@@ -2277,7 +2277,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-161-defendercloudpricingforazurecosmosdb"></a>
 <details open>
-<summary><h6>SLZ-161-DefenderCloudPricingForAzureCosmosDB</h6></summary>
+<summary>SLZ-161-DefenderCloudPricingForAzureCosmosDB</summary>
 
 
 - **Applicable:** unknown
@@ -2298,7 +2298,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-162-defendercloudpricingforkeyvault"></a>
 <details open>
-<summary><h6>SLZ-162-DefenderCloudPricingForKeyVault</h6></summary>
+<summary>SLZ-162-DefenderCloudPricingForKeyVault</summary>
 
 
 - **Applicable:** unknown
@@ -2319,7 +2319,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-164-defendercloudpricingforresourcemanager"></a>
 <details open>
-<summary><h6>SLZ-164-DefenderCloudPricingForResourceManager</h6></summary>
+<summary>SLZ-164-DefenderCloudPricingForResourceManager</summary>
 
 
 - **Applicable:** unknown
@@ -2340,7 +2340,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-168-microsoftdefenderconfigurevmforvulnerability"></a>
 <details open>
-<summary><h6>SLZ-168-MicrosoftDefenderConfigureVMForVulnerability</h6></summary>
+<summary>SLZ-168-MicrosoftDefenderConfigureVMForVulnerability</summary>
 
 
 - **Applicable:** Yes
@@ -2361,7 +2361,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-00-microsoftdefenderforcontainer"></a>
 <details open>
-<summary><h6>SLZ-00-MicrosoftDefenderForContainer</h6></summary>
+<summary>SLZ-00-MicrosoftDefenderForContainer</summary>
 
 
 - **Applicable:** Yes
@@ -2383,11 +2383,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>General</h4></summary>
+<summary><strong>General</strong></summary>
 
 <a id="policy-slz-78-alloweddeploymentregions"></a>
 <details open>
-<summary><h6>SLZ-78-AllowedDeploymentRegions</h6></summary>
+<summary>SLZ-78-AllowedDeploymentRegions</summary>
 
 
 - **Applicable:** Yes
@@ -2407,11 +2407,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID238</h5></summary>
+<summary><strong>ID238</strong></summary>
 
 <a id="policy-slz-238-1-apimprodnobasicsku"></a>
 <details open>
-<summary><h6>SLZ-238.1-ApimProdNoBasicSku</h6></summary>
+<summary>SLZ-238.1-ApimProdNoBasicSku</summary>
 
 
 - **Applicable:** Yes
@@ -2432,7 +2432,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-10-aksprodnofreetier"></a>
 <details open>
-<summary><h6>SLZ-238.10-AKSProdNoFreeTier</h6></summary>
+<summary>SLZ-238.10-AKSProdNoFreeTier</summary>
 
 
 - **Applicable:** Yes
@@ -2453,7 +2453,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-11-lbprodnobasicsku"></a>
 <details open>
-<summary><h6>SLZ-238.11-LBProdNoBasicSku</h6></summary>
+<summary>SLZ-238.11-LBProdNoBasicSku</summary>
 
 
 - **Applicable:** unknown
@@ -2474,7 +2474,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-12-vpngwprodnobasictier"></a>
 <details open>
-<summary><h6>SLZ-238.12-VpnGwProdNoBasicTier</h6></summary>
+<summary>SLZ-238.12-VpnGwProdNoBasicTier</summary>
 
 
 - **Applicable:** unknown
@@ -2495,7 +2495,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-13-azuresearchprodnofreeorbasicsku"></a>
 <details open>
-<summary><h6>SLZ-238.13-AzureSearchProdNoFreeOrBasicSku</h6></summary>
+<summary>SLZ-238.13-AzureSearchProdNoFreeOrBasicSku</summary>
 
 
 - **Applicable:** unknown
@@ -2516,7 +2516,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-14-signalrprodnofreetier"></a>
 <details open>
-<summary><h6>SLZ-238.14-SignalRProdNoFreeTier</h6></summary>
+<summary>SLZ-238.14-SignalRProdNoFreeTier</summary>
 
 
 - **Applicable:** unknown
@@ -2537,7 +2537,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-2-appconfigprodnofreesku"></a>
 <details open>
-<summary><h6>SLZ-238.2-AppConfigProdNoFreeSku</h6></summary>
+<summary>SLZ-238.2-AppConfigProdNoFreeSku</summary>
 
 
 - **Applicable:** unknown
@@ -2558,7 +2558,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-3-appserviceprodnolowtiersku"></a>
 <details open>
-<summary><h6>SLZ-238.3-AppServiceProdNoLowTierSku</h6></summary>
+<summary>SLZ-238.3-AppServiceProdNoLowTierSku</summary>
 
 
 - **Applicable:** unknown
@@ -2579,7 +2579,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-4-adxprodnodevelopertier"></a>
 <details open>
-<summary><h6>SLZ-238.4-ADXProdNoDeveloperTier</h6></summary>
+<summary>SLZ-238.4-ADXProdNoDeveloperTier</summary>
 
 
 - **Applicable:** unknown
@@ -2600,7 +2600,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-5-databricksprodnostandardortrialsku"></a>
 <details open>
-<summary><h6>SLZ-238.5-DatabricksProdNoStandardOrTrialSku</h6></summary>
+<summary>SLZ-238.5-DatabricksProdNoStandardOrTrialSku</summary>
 
 
 - **Applicable:** unknown
@@ -2621,7 +2621,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-6-disksprodnostandardhdd"></a>
 <details open>
-<summary><h6>SLZ-238.6-DisksProdNoStandardHDD</h6></summary>
+<summary>SLZ-238.6-DisksProdNoStandardHDD</summary>
 
 
 - **Applicable:** Yes
@@ -2642,7 +2642,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-7-acrprodnobasicsku"></a>
 <details open>
-<summary><h6>SLZ-238.7-ACRProdNoBasicSku</h6></summary>
+<summary>SLZ-238.7-ACRProdNoBasicSku</summary>
 
 
 - **Applicable:** unknown
@@ -2663,7 +2663,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-8-eventhubprodnobasicsku"></a>
 <details open>
-<summary><h6>SLZ-238.8-EventHubProdNoBasicSku</h6></summary>
+<summary>SLZ-238.8-EventHubProdNoBasicSku</summary>
 
 
 - **Applicable:** unknown
@@ -2684,7 +2684,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-238-9-keyvaultprodnostandardsku"></a>
 <details open>
-<summary><h6>SLZ-238.9-KeyVaultProdNoStandardSku</h6></summary>
+<summary>SLZ-238.9-KeyVaultProdNoStandardSku</summary>
 
 
 - **Applicable:** Yes
@@ -2707,7 +2707,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-272-resourcelockformissioncriticalresources"></a>
 <details open>
-<summary><h6>SLZ-272-ResourceLockForMissionCriticalResources</h6></summary>
+<summary>SLZ-272-ResourceLockForMissionCriticalResources</summary>
 
 
 - **Applicable:** Potentially Yes
@@ -2728,7 +2728,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-287-iampermissionsthroughgroups"></a>
 <details open>
-<summary><h6>SLZ-287-IAMPermissionsThroughGroups</h6></summary>
+<summary>SLZ-287-IAMPermissionsThroughGroups</summary>
 
 
 - **Applicable:** Yes
@@ -2749,7 +2749,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-617-onlyallowedgeolocations"></a>
 <details open>
-<summary><h6>SLZ-617-OnlyAllowedGeoLocations</h6></summary>
+<summary>SLZ-617-OnlyAllowedGeoLocations</summary>
 
 
 - **Applicable:** Yes
@@ -2771,14 +2771,14 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Guest-Configuration</h4></summary>
+<summary><strong>Guest-Configuration</strong></summary>
 
 <details open>
-<summary><h5>ID00-Guest-Config</h5></summary>
+<summary><strong>ID00-Guest-Config</strong></summary>
 
 <a id="policy-385f5831-96d4-41db-9a3c-cd3af78aaae6"></a>
 <details open>
-<summary><h6>385f5831-96d4-41db-9a3c-cd3af78aaae6</h6></summary>
+<summary>385f5831-96d4-41db-9a3c-cd3af78aaae6</summary>
 
 
 - **Applicable:** Likely No
@@ -2799,7 +2799,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-331e8ea8-378a-410f-a2e5-ae22f38bb0da"></a>
 <details open>
-<summary><h6>331e8ea8-378a-410f-a2e5-ae22f38bb0da</h6></summary>
+<summary>331e8ea8-378a-410f-a2e5-ae22f38bb0da</summary>
 
 
 - **Applicable:** Likely no
@@ -2820,7 +2820,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-3cf2ab00-13f1-4d0c-8971-2ac904541a7e"></a>
 <details open>
-<summary><h6>3cf2ab00-13f1-4d0c-8971-2ac904541a7e</h6></summary>
+<summary>3cf2ab00-13f1-4d0c-8971-2ac904541a7e</summary>
 
 
 - **Applicable:** Likely no
@@ -2841,7 +2841,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-497dff13-db2a-4c0f-8603-28fa3b331ab6"></a>
 <details open>
-<summary><h6>497dff13-db2a-4c0f-8603-28fa3b331ab6</h6></summary>
+<summary>497dff13-db2a-4c0f-8603-28fa3b331ab6</summary>
 
 
 - **Applicable:** Likely no
@@ -2865,11 +2865,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Monitoring</h4></summary>
+<summary><strong>Monitoring</strong></summary>
 
 <a id="policy-slz-223-logskeyvault"></a>
 <details open>
-<summary><h6>SLZ-223-logsKeyVault</h6></summary>
+<summary>SLZ-223-logsKeyVault</summary>
 
 
 - **Applicable:** unknown
@@ -2890,7 +2890,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-226-logscreatepolicy"></a>
 <details open>
-<summary><h6>SLZ-226-logsCreatePolicy</h6></summary>
+<summary>SLZ-226-logsCreatePolicy</summary>
 
 
 - **Applicable:** Yes
@@ -2911,7 +2911,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-227-logsdeletepolicy"></a>
 <details open>
-<summary><h6>SLZ-227-logsDeletePolicy</h6></summary>
+<summary>SLZ-227-logsDeletePolicy</summary>
 
 
 - **Applicable:** Yes
@@ -2932,7 +2932,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-228-logscreateupdatensg"></a>
 <details open>
-<summary><h6>SLZ-228-logsCreateUpdateNsg</h6></summary>
+<summary>SLZ-228-logsCreateUpdateNsg</summary>
 
 
 - **Applicable:** unknown
@@ -2953,7 +2953,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-229-logsdeletensg"></a>
 <details open>
-<summary><h6>SLZ-229-logsDeleteNsg</h6></summary>
+<summary>SLZ-229-logsDeleteNsg</summary>
 
 
 - **Applicable:** unknown
@@ -2974,7 +2974,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-230-logscreateupdatesecuritysolutions"></a>
 <details open>
-<summary><h6>SLZ-230-logsCreateUpdateSecuritySolutions</h6></summary>
+<summary>SLZ-230-logsCreateUpdateSecuritySolutions</summary>
 
 
 - **Applicable:** unknown
@@ -2995,7 +2995,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-231-logsdeletesecuritysolutions"></a>
 <details open>
-<summary><h6>SLZ-231-logsDeleteSecuritySolutions</h6></summary>
+<summary>SLZ-231-logsDeleteSecuritySolutions</summary>
 
 
 - **Applicable:** unknown
@@ -3016,7 +3016,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-232-logscreateupdatesqlserverfirewallrule"></a>
 <details open>
-<summary><h6>SLZ-232-logsCreateUpdateSqlServerFirewallRule</h6></summary>
+<summary>SLZ-232-logsCreateUpdateSqlServerFirewallRule</summary>
 
 
 - **Applicable:** unknown
@@ -3037,7 +3037,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-233-logsdeletesqlserverfirewallrule"></a>
 <details open>
-<summary><h6>SLZ-233-logsDeleteSqlServerFirewallRule</h6></summary>
+<summary>SLZ-233-logsDeleteSqlServerFirewallRule</summary>
 
 
 - **Applicable:** unknown
@@ -3058,7 +3058,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-234-logscreateorupdatepubliciprule"></a>
 <details open>
-<summary><h6>SLZ-234-logsCreateOrUpdatePublicIpRule</h6></summary>
+<summary>SLZ-234-logsCreateOrUpdatePublicIpRule</summary>
 
 
 - **Applicable:** Yes
@@ -3079,7 +3079,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-235-logsdeletepubliciprule"></a>
 <details open>
-<summary><h6>SLZ-235-logsDeletePublicIpRule</h6></summary>
+<summary>SLZ-235-logsDeletePublicIpRule</summary>
 
 
 - **Applicable:** Yes
@@ -3099,11 +3099,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID236</h5></summary>
+<summary><strong>ID236</strong></summary>
 
 <a id="policy-slz-236-1-webappsnoinsights"></a>
 <details open>
-<summary><h6>SLZ-236.1-webAppsNoInsights</h6></summary>
+<summary>SLZ-236.1-webAppsNoInsights</summary>
 
 
 - **Applicable:** unknown
@@ -3124,7 +3124,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-236-2-functionappsnoinsights"></a>
 <details open>
-<summary><h6>SLZ-236.2-functionAppsNoInsights</h6></summary>
+<summary>SLZ-236.2-functionAppsNoInsights</summary>
 
 
 - **Applicable:** unknown
@@ -3145,7 +3145,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-236-3-logicappsnoinsights"></a>
 <details open>
-<summary><h6>SLZ-236.3-logicAppsNoInsights</h6></summary>
+<summary>SLZ-236.3-logicAppsNoInsights</summary>
 
 
 - **Applicable:** Unknown
@@ -3167,11 +3167,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID324</h5></summary>
+<summary><strong>ID324</strong></summary>
 
 <a id="policy-slz-324-logscreatesecuritygroups"></a>
 <details open>
-<summary><h6>SLZ-324-logsCreateSecurityGroups</h6></summary>
+<summary>SLZ-324-logsCreateSecurityGroups</summary>
 
 
 - **Applicable:** Yes
@@ -3192,7 +3192,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-324-logsdeletesecuritygroup"></a>
 <details open>
-<summary><h6>SLZ-324-logsDeleteSecurityGroup</h6></summary>
+<summary>SLZ-324-logsDeleteSecurityGroup</summary>
 
 
 - **Applicable:** Yes
@@ -3214,11 +3214,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID326</h5></summary>
+<summary><strong>ID326</strong></summary>
 
 <a id="policy-slz-326-logscreatenetworkgateway"></a>
 <details open>
-<summary><h6>SLZ-326-logsCreateNetworkGateway</h6></summary>
+<summary>SLZ-326-logsCreateNetworkGateway</summary>
 
 
 - **Applicable:** Yes
@@ -3239,7 +3239,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-326-logsdeletenetworkgateway"></a>
 <details open>
-<summary><h6>SLZ-326-logsDeleteNetworkGateway</h6></summary>
+<summary>SLZ-326-logsDeleteNetworkGateway</summary>
 
 
 - **Applicable:** Yes
@@ -3261,11 +3261,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID327</h5></summary>
+<summary><strong>ID327</strong></summary>
 
 <a id="policy-slz-327-logscreateroutetables"></a>
 <details open>
-<summary><h6>SLZ-327-logsCreateRouteTables</h6></summary>
+<summary>SLZ-327-logsCreateRouteTables</summary>
 
 
 - **Applicable:** Yes
@@ -3286,7 +3286,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-327-logscreateroutetablesroute"></a>
 <details open>
-<summary><h6>SLZ-327-logsCreateRouteTablesRoute</h6></summary>
+<summary>SLZ-327-logsCreateRouteTablesRoute</summary>
 
 
 - **Applicable:** Yes
@@ -3307,7 +3307,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-327-logsdeletesecuritygroup"></a>
 <details open>
-<summary><h6>SLZ-327-logsDeleteSecurityGroup</h6></summary>
+<summary>SLZ-327-logsDeleteSecurityGroup</summary>
 
 
 - **Applicable:** Yes
@@ -3328,7 +3328,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-327-logsdeletesecuritygrouproute"></a>
 <details open>
-<summary><h6>SLZ-327-logsDeleteSecurityGroupRoute</h6></summary>
+<summary>SLZ-327-logsDeleteSecurityGroupRoute</summary>
 
 
 - **Applicable:** Yes
@@ -3350,11 +3350,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID328</h5></summary>
+<summary><strong>ID328</strong></summary>
 
 <a id="policy-slz-328-logscreatevirtualnetwork"></a>
 <details open>
-<summary><h6>SLZ-328-logsCreateVirtualNetwork</h6></summary>
+<summary>SLZ-328-logsCreateVirtualNetwork</summary>
 
 
 - **Applicable:** Yes
@@ -3375,7 +3375,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-328-logsdeletevirtualnetworks"></a>
 <details open>
-<summary><h6>SLZ-328-logsDeleteVirtualNetworks</h6></summary>
+<summary>SLZ-328-logsDeleteVirtualNetworks</summary>
 
 
 - **Applicable:** Yes
@@ -3399,11 +3399,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Network</h4></summary>
+<summary><strong>Network</strong></summary>
 
 <a id="policy-slz-10-6-disablepublicnetworkwebapps"></a>
 <details open>
-<summary><h6>SLZ-10.6-DisablePublicNetworkWebApps</h6></summary>
+<summary>SLZ-10.6-DisablePublicNetworkWebApps</summary>
 
 
 - **Applicable:** unknown
@@ -3424,7 +3424,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1325-wafonapgt"></a>
 <details open>
-<summary><h6>SLZ-1325-WAFonAPGT</h6></summary>
+<summary>SLZ-1325-WAFonAPGT</summary>
 
 
 - **Applicable:** Yes
@@ -3445,7 +3445,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1326-wafskuv2"></a>
 <details open>
-<summary><h6>SLZ-1326-WAFSkuV2</h6></summary>
+<summary>SLZ-1326-WAFSkuV2</summary>
 
 
 - **Applicable:** Yes
@@ -3466,7 +3466,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1327-wafonfrontdoor"></a>
 <details open>
-<summary><h6>SLZ-1327-WAFonFrontDoor</h6></summary>
+<summary>SLZ-1327-WAFonFrontDoor</summary>
 
 
 - **Applicable:** Probably not
@@ -3487,7 +3487,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1328-wafonfrontdoor-detection"></a>
 <details open>
-<summary><h6>SLZ-1328-WAFonFrontDoor-Detection</h6></summary>
+<summary>SLZ-1328-WAFonFrontDoor-Detection</summary>
 
 
 - **Applicable:** unknown
@@ -3508,7 +3508,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1329-disablepublicnetworkfunctionapps"></a>
 <details open>
-<summary><h6>SLZ-1329-DisablePublicNetworkFunctionApps</h6></summary>
+<summary>SLZ-1329-DisablePublicNetworkFunctionApps</summary>
 
 
 - **Applicable:** unknown
@@ -3529,7 +3529,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1330-privateendpointapi"></a>
 <details open>
-<summary><h6>SLZ-1330-PrivateEndpointAPI</h6></summary>
+<summary>SLZ-1330-PrivateEndpointAPI</summary>
 
 
 - **Applicable:** unknown
@@ -3549,11 +3549,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID1331</h5></summary>
+<summary><strong>ID1331</strong></summary>
 
 <a id="policy-slz-1331-disablepublicaccessapi"></a>
 <details open>
-<summary><h6>SLZ-1331-DisablePublicAccessAPI</h6></summary>
+<summary>SLZ-1331-DisablePublicAccessAPI</summary>
 
 
 - **Applicable:** unknown
@@ -3574,7 +3574,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1331-2-disablepublicaccessapipe"></a>
 <details open>
-<summary><h6>SLZ-1331.2-DisablePublicAccessAPIPE</h6></summary>
+<summary>SLZ-1331.2-DisablePublicAccessAPIPE</summary>
 
 
 - **Applicable:** unknown
@@ -3597,7 +3597,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1332-apiallowedsku"></a>
 <details open>
-<summary><h6>SLZ-1332-APIAllowedSku</h6></summary>
+<summary>SLZ-1332-APIAllowedSku</summary>
 
 
 - **Applicable:** unknown
@@ -3618,7 +3618,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1333-nopubliciponnics"></a>
 <details open>
-<summary><h6>SLZ-1333-NoPublicIpOnNics</h6></summary>
+<summary>SLZ-1333-NoPublicIpOnNics</summary>
 
 
 - **Applicable:** Yes
@@ -3639,7 +3639,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1334-kubernetesinternallb"></a>
 <details open>
-<summary><h6>SLZ-1334-KubernetesInternalLB</h6></summary>
+<summary>SLZ-1334-KubernetesInternalLB</summary>
 
 
 - **Applicable:** Yes
@@ -3660,7 +3660,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1335-nopubliciponaksnodepools"></a>
 <details open>
-<summary><h6>SLZ-1335-NoPublicIpOnAKSNodePools</h6></summary>
+<summary>SLZ-1335-NoPublicIpOnAKSNodePools</summary>
 
 
 - **Applicable:** unknown
@@ -3681,7 +3681,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1336-containerappsnopublicna"></a>
 <details open>
-<summary><h6>SLZ-1336-ContainerAppsNoPublicNA</h6></summary>
+<summary>SLZ-1336-ContainerAppsNoPublicNA</summary>
 
 
 - **Applicable:** unknown
@@ -3702,7 +3702,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1337-containerappdisableexternalnetworkaccess"></a>
 <details open>
-<summary><h6>SLZ-1337-ContainerAppDisableExternalNetworkAccess</h6></summary>
+<summary>SLZ-1337-ContainerAppDisableExternalNetworkAccess</summary>
 
 
 - **Applicable:** unknown
@@ -3723,7 +3723,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1338-wafonapgt-detection"></a>
 <details open>
-<summary><h6>SLZ-1338-WAFonAPGT-Detection</h6></summary>
+<summary>SLZ-1338-WAFonAPGT-Detection</summary>
 
 
 - **Applicable:** unknown
@@ -3744,7 +3744,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-239-rpdaccessdisabledforinternet"></a>
 <details open>
-<summary><h6>SLZ-239-RPDAccessDisabledForInternet</h6></summary>
+<summary>SLZ-239-RPDAccessDisabledForInternet</summary>
 
 
 - **Applicable:** unknown
@@ -3765,7 +3765,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-240-sshaccessdisabledforinternet"></a>
 <details open>
-<summary><h6>SLZ-240-SSHAccessDisabledForInternet</h6></summary>
+<summary>SLZ-240-SSHAccessDisabledForInternet</summary>
 
 
 - **Applicable:** unknown
@@ -3786,7 +3786,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-241-udpaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-241-UDPAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-241-UDPAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -3807,7 +3807,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-242-httpsaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-242-HTTPsAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-242-HTTPsAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -3828,7 +3828,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-244-networkwatcherenabled"></a>
 <details open>
-<summary><h6>SLZ-244-NetworkWatcherEnabled</h6></summary>
+<summary>SLZ-244-NetworkWatcherEnabled</summary>
 
 
 - **Applicable:** unknown
@@ -3849,7 +3849,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-332-nsgnoingressfrom0000for22or3389"></a>
 <details open>
-<summary><h6>SLZ-332-NSGNoIngressFrom0000For22or3389</h6></summary>
+<summary>SLZ-332-NSGNoIngressFrom0000For22or3389</summary>
 
 
 - **Applicable:** unknown
@@ -3870,7 +3870,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-333-nsgnoingressfrom0for22or3389"></a>
 <details open>
-<summary><h6>SLZ-333-NSGNoIngressFrom0For22or3389</h6></summary>
+<summary>SLZ-333-NSGNoIngressFrom0For22or3389</summary>
 
 
 - **Applicable:** unknown
@@ -3891,7 +3891,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-629-virtualnetworksddosprotection"></a>
 <details open>
-<summary><h6>SLZ-629-VirtualNetworksDDOSProtection</h6></summary>
+<summary>SLZ-629-VirtualNetworksDDOSProtection</summary>
 
 
 - **Applicable:** Probably not
@@ -3912,7 +3912,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-983-ftpaccessfrominternetevaluatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-983-FTPAccessFromInternetEvaluatedAndRestricted</h6></summary>
+<summary>SLZ-983-FTPAccessFromInternetEvaluatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -3933,7 +3933,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-984-mongodbaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-984-MongoDBAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-984-MongoDBAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -3954,7 +3954,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-985-cassandraaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-985-CassandraAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-985-CassandraAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -3975,7 +3975,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-986-elasticsearchaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-986-ElasticsearchAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-986-ElasticsearchAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -3996,7 +3996,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-987-kafkaaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-987-KafkaAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-987-KafkaAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -4017,7 +4017,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-988-memcachedaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-988-MemcachedAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-988-MemcachedAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -4038,7 +4038,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-989-mysqlaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-989-MySQLAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-989-MySQLAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -4059,7 +4059,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-990-oracleaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-990-OracleAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-990-OracleAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -4080,7 +4080,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-991-postgresaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-991-PostgresAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-991-PostgresAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -4101,7 +4101,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-992-redisaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-992-RedisAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-992-RedisAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -4122,7 +4122,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-993-winsqlserveraccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-993-WinSQLServerAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-993-WinSQLServerAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -4143,7 +4143,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-994-telnetaccessfrominternetevalutatedandrestricted"></a>
 <details open>
-<summary><h6>SLZ-994-TelnetAccessFromInternetEvalutatedAndRestricted</h6></summary>
+<summary>SLZ-994-TelnetAccessFromInternetEvalutatedAndRestricted</summary>
 
 
 - **Applicable:** unknown
@@ -4165,11 +4165,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Security</h4></summary>
+<summary><strong>Security</strong></summary>
 
 <a id="policy-slz-1340-appservicelatesttls"></a>
 <details open>
-<summary><h6>SLZ-1340-AppServiceLatestTLS</h6></summary>
+<summary>SLZ-1340-AppServiceLatestTLS</summary>
 
 
 - **Applicable:** unknown
@@ -4190,7 +4190,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1341-appserviceslotslatesttls"></a>
 <details open>
-<summary><h6>SLZ-1341-AppServiceSlotsLatestTLS</h6></summary>
+<summary>SLZ-1341-AppServiceSlotsLatestTLS</summary>
 
 
 - **Applicable:** unknown
@@ -4211,7 +4211,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1342-functionappslatesttls"></a>
 <details open>
-<summary><h6>SLZ-1342-FunctionAppsLatestTLS</h6></summary>
+<summary>SLZ-1342-FunctionAppsLatestTLS</summary>
 
 
 - **Applicable:** unknown
@@ -4232,7 +4232,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1343-functionappslotslatesttls"></a>
 <details open>
-<summary><h6>SLZ-1343-FunctionAppSlotsLatestTLS</h6></summary>
+<summary>SLZ-1343-FunctionAppSlotsLatestTLS</summary>
 
 
 - **Applicable:** unknown
@@ -4253,7 +4253,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1344-logicappslatesttls"></a>
 <details open>
-<summary><h6>SLZ-1344-LogicAppsLatestTLS</h6></summary>
+<summary>SLZ-1344-LogicAppsLatestTLS</summary>
 
 
 - **Applicable:** unknown
@@ -4274,7 +4274,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1345-redissecureconnections"></a>
 <details open>
-<summary><h6>SLZ-1345-RedisSecureConnections</h6></summary>
+<summary>SLZ-1345-RedisSecureConnections</summary>
 
 
 - **Applicable:** unknown
@@ -4295,7 +4295,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1346-frontdoortls"></a>
 <details open>
-<summary><h6>SLZ-1346-FrontDoorTLS</h6></summary>
+<summary>SLZ-1346-FrontDoorTLS</summary>
 
 
 - **Applicable:** unknown
@@ -4316,7 +4316,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1347-eventhubtls"></a>
 <details open>
-<summary><h6>SLZ-1347-EventHubTLS</h6></summary>
+<summary>SLZ-1347-EventHubTLS</summary>
 
 
 - **Applicable:** unknown
@@ -4337,7 +4337,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1348-storagetls"></a>
 <details open>
-<summary><h6>SLZ-1348-StorageTLS</h6></summary>
+<summary>SLZ-1348-StorageTLS</summary>
 
 
 - **Applicable:** unknown
@@ -4358,7 +4358,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1349-addomainservicestls"></a>
 <details open>
-<summary><h6>SLZ-1349-ADDomainServicesTLS</h6></summary>
+<summary>SLZ-1349-ADDomainServicesTLS</summary>
 
 
 - **Applicable:** unknown
@@ -4379,7 +4379,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1350-azurecosmostls12"></a>
 <details open>
-<summary><h6>SLZ-1350-AzureCosmosTLS12</h6></summary>
+<summary>SLZ-1350-AzureCosmosTLS12</summary>
 
 
 - **Applicable:** unknown
@@ -4400,7 +4400,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1351-sqlmanagedinstancetls12"></a>
 <details open>
-<summary><h6>SLZ-1351-SQLManagedInstanceTLS12</h6></summary>
+<summary>SLZ-1351-SQLManagedInstanceTLS12</summary>
 
 
 - **Applicable:** unknown
@@ -4421,7 +4421,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1352-arcsqlmanagedinstancetls12"></a>
 <details open>
-<summary><h6>SLZ-1352-ArcSQLManagedInstanceTLS12</h6></summary>
+<summary>SLZ-1352-ArcSQLManagedInstanceTLS12</summary>
 
 
 - **Applicable:** unknown
@@ -4442,7 +4442,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1353-sqldatabasetls12"></a>
 <details open>
-<summary><h6>SLZ-1353-SQLDatabaseTLS12</h6></summary>
+<summary>SLZ-1353-SQLDatabaseTLS12</summary>
 
 
 - **Applicable:** unknown
@@ -4463,7 +4463,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1354-postgresqlflexsslversion"></a>
 <details open>
-<summary><h6>SLZ-1354-PostgreSQLFLEXSSLVersion</h6></summary>
+<summary>SLZ-1354-PostgreSQLFLEXSSLVersion</summary>
 
 
 - **Applicable:** unknown
@@ -4484,7 +4484,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1355-mariadbtlsversion"></a>
 <details open>
-<summary><h6>SLZ-1355-MariaDBTLSVersion</h6></summary>
+<summary>SLZ-1355-MariaDBTLSVersion</summary>
 
 
 - **Applicable:** unknown
@@ -4505,7 +4505,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1356-synapsesqltlsversion"></a>
 <details open>
-<summary><h6>SLZ-1356-SynapseSQLTLSVersion</h6></summary>
+<summary>SLZ-1356-SynapseSQLTLSVersion</summary>
 
 
 - **Applicable:** unknown
@@ -4526,7 +4526,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1357-azurekubernetesclusterskms"></a>
 <details open>
-<summary><h6>SLZ-1357-AzureKubernetesClustersKMS</h6></summary>
+<summary>SLZ-1357-AzureKubernetesClustersKMS</summary>
 
 
 - **Applicable:** Yes
@@ -4547,7 +4547,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1358-aisncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1358-AISNCEncryptionCMK</h6></summary>
+<summary>SLZ-1358-AISNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4568,7 +4568,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1359-automationsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1359-AutomationSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1359-AutomationSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4589,7 +4589,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1360-backupvaultsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1360-BackupVaultSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1360-BackupVaultSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4610,7 +4610,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1361-batchsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1361-BatchSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1361-BatchSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4631,7 +4631,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1362-loadtestingsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1362-LoadTestingSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1362-LoadTestingSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4652,7 +4652,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1363-redisenterprisesncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1363-RedisEnterpriseSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1363-RedisEnterpriseSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4673,7 +4673,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1364-cognitivesearchsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1364-CognitiveSearchSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1364-CognitiveSearchSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4694,7 +4694,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1365-containerinstancesncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1365-ContainerInstanceSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1365-ContainerInstanceSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4715,7 +4715,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1366-containerregistrysncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1366-ContainerRegistrySNCEncryptionCMK</h6></summary>
+<summary>SLZ-1366-ContainerRegistrySNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4736,7 +4736,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1367-cosmosdbsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1367-CosmosDBSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1367-CosmosDBSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4757,7 +4757,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1368-azuredataexplorersncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1368-AzureDataExplorerSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1368-AzureDataExplorerSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4778,7 +4778,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1369-azuredatafactoriessncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1369-AzureDataFactoriesSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1369-AzureDataFactoriesSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4799,7 +4799,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1370-elasticsanvolumegroupsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1370-ElasticSanVolumeGroupSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1370-ElasticSanVolumeGroupSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4820,7 +4820,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1371-eventhubnamespacesncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1371-EventHubNamespaceSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1371-EventHubNamespaceSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4841,7 +4841,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1372-fluidrelaysncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1372-FluidRelaySNCEncryptionCMK</h6></summary>
+<summary>SLZ-1372-FluidRelaySNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4862,7 +4862,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1373-hdinsightsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1373-HDInsightSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1373-HDInsightSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4883,7 +4883,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1374-healthbotssncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1374-HealthBotsSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1374-HealthBotsSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4904,7 +4904,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1375-hpccachesncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1375-HPCCacheSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1375-HPCCacheSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4925,7 +4925,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1376-iothubsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1376-IoTHubSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1376-IoTHubSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4946,7 +4946,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1378-logicappssncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1378-LogicAppsSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1378-LogicAppsSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4967,7 +4967,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1379-azuremlsncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1379-AzureMLSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1379-AzureMLSNCEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -4988,7 +4988,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1380-azuresynapseworkspacecmk"></a>
 <details open>
-<summary><h6>SLZ-1380-AzureSynapseWorkspaceCMK</h6></summary>
+<summary>SLZ-1380-AzureSynapseWorkspaceCMK</summary>
 
 
 - **Applicable:** unknown
@@ -5009,7 +5009,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1381-osanddatadiskssncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1381-OSAndDataDisksSNCEncryptionCMK</h6></summary>
+<summary>SLZ-1381-OSAndDataDisksSNCEncryptionCMK</summary>
 
 
 - **Applicable:** Yes
@@ -5030,7 +5030,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1382-postgresqlflexibleserversencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1382-PostgreSQLFlexibleServersEncryptionCMK</h6></summary>
+<summary>SLZ-1382-PostgreSQLFlexibleServersEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -5051,7 +5051,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1384-servicebuspremiumencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-1384-ServiceBusPremiumEncryptionCMK</h6></summary>
+<summary>SLZ-1384-ServiceBusPremiumEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -5072,7 +5072,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-1385-storageaccountencryptionscopescmk"></a>
 <details open>
-<summary><h6>SLZ-1385-StorageAccountEncryptionScopesCMK</h6></summary>
+<summary>SLZ-1385-StorageAccountEncryptionScopesCMK</summary>
 
 
 - **Applicable:** Yes
@@ -5093,7 +5093,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-213-mysqllatesttls"></a>
 <details open>
-<summary><h6>SLZ-213-MySQLLatestTLS</h6></summary>
+<summary>SLZ-213-MySQLLatestTLS</summary>
 
 
 - **Applicable:** unknown
@@ -5114,7 +5114,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-254-keyvaultkeysexpirationdateset"></a>
 <details open>
-<summary><h6>SLZ-254-KeyVaultKeysExpirationDateSet</h6></summary>
+<summary>SLZ-254-KeyVaultKeysExpirationDateSet</summary>
 
 
 - **Applicable:** Yes
@@ -5135,7 +5135,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-256-keyvaultsecretsexpirationdateset"></a>
 <details open>
-<summary><h6>SLZ-256-KeyVaultSecretsExpirationDateSet</h6></summary>
+<summary>SLZ-256-KeyVaultSecretsExpirationDateSet</summary>
 
 
 - **Applicable:** Yes
@@ -5156,7 +5156,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-257-keyvaultrecoverable"></a>
 <details open>
-<summary><h6>SLZ-257-KeyVaultRecoverable</h6></summary>
+<summary>SLZ-257-KeyVaultRecoverable</summary>
 
 
 - **Applicable:** Yes
@@ -5177,7 +5177,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-258-keyvaultrbac"></a>
 <details open>
-<summary><h6>SLZ-258-KeyVaultRBAC</h6></summary>
+<summary>SLZ-258-KeyVaultRBAC</summary>
 
 
 - **Applicable:** unknown
@@ -5198,7 +5198,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-259-keyvaultprivateendpoint"></a>
 <details open>
-<summary><h6>SLZ-259-KeyVaultPrivateEndpoint</h6></summary>
+<summary>SLZ-259-KeyVaultPrivateEndpoint</summary>
 
 
 - **Applicable:** Yes
@@ -5219,7 +5219,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-260-keyrotationenabled"></a>
 <details open>
-<summary><h6>SLZ-260-KeyRotationEnabled</h6></summary>
+<summary>SLZ-260-KeyRotationEnabled</summary>
 
 
 - **Applicable:** unknown
@@ -5239,11 +5239,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID31</h5></summary>
+<summary><strong>ID31</strong></summary>
 
 <a id="policy-slz-31-15-postgresqlsslversion"></a>
 <details open>
-<summary><h6>SLZ-31.15-PostgreSQLSSLVersion</h6></summary>
+<summary>SLZ-31.15-PostgreSQLSSLVersion</summary>
 
 
 - **Applicable:** unknown
@@ -5264,7 +5264,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-31-9-appgatewaytls"></a>
 <details open>
-<summary><h6>SLZ-31.9-AppGatewayTLS</h6></summary>
+<summary>SLZ-31.9-AppGatewayTLS</summary>
 
 
 - **Applicable:** unknown
@@ -5286,11 +5286,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID35</h5></summary>
+<summary><strong>ID35</strong></summary>
 
 <a id="policy-slz-35-1-arcsqltde"></a>
 <details open>
-<summary><h6>SLZ-35.1-ArcSQLTDE</h6></summary>
+<summary>SLZ-35.1-ArcSQLTDE</summary>
 
 
 - **Applicable:** unknown
@@ -5311,7 +5311,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-35-2-azuresynapsetde"></a>
 <details open>
-<summary><h6>SLZ-35.2-AzureSynapseTDE</h6></summary>
+<summary>SLZ-35.2-AzureSynapseTDE</summary>
 
 
 - **Applicable:** unknown
@@ -5333,11 +5333,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h5>ID872</h5></summary>
+<summary><strong>ID872</strong></summary>
 
 <a id="policy-slz-872-13-dicomservicesncencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-872.13-DICOMServiceSNCEncryptionCMK</h6></summary>
+<summary>SLZ-872.13-DICOMServiceSNCEncryptionCMK</summary>
 
 
 - **Applicable:** No
@@ -5358,7 +5358,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-872-27-postgresqlserversencryptioncmk"></a>
 <details open>
-<summary><h6>SLZ-872.27-PostgreSQLServersEncryptionCMK</h6></summary>
+<summary>SLZ-872.27-PostgreSQLServersEncryptionCMK</summary>
 
 
 - **Applicable:** unknown
@@ -5382,11 +5382,11 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Storage</h4></summary>
+<summary><strong>Storage</strong></summary>
 
 <a id="policy-slz-177-storageaccountssecuretransfer"></a>
 <details open>
-<summary><h6>SLZ-177-StorageAccountsSecureTransfer</h6></summary>
+<summary>SLZ-177-StorageAccountsSecureTransfer</summary>
 
 
 - **Applicable:** unknown
@@ -5407,7 +5407,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-178-storageaccountsinfrastructureencryption"></a>
 <details open>
-<summary><h6>SLZ-178-StorageAccountsInfrastructureEncryption</h6></summary>
+<summary>SLZ-178-StorageAccountsInfrastructureEncryption</summary>
 
 
 - **Applicable:** Yes
@@ -5428,7 +5428,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-179-storageaccountsexpirationreminder"></a>
 <details open>
-<summary><h6>SLZ-179-StorageAccountsExpirationReminder</h6></summary>
+<summary>SLZ-179-StorageAccountsExpirationReminder</summary>
 
 
 - **Applicable:** unknown
@@ -5449,7 +5449,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-183-storageaccountspublicaccess"></a>
 <details open>
-<summary><h6>SLZ-183-StorageAccountsPublicAccess</h6></summary>
+<summary>SLZ-183-StorageAccountsPublicAccess</summary>
 
 
 - **Applicable:** Yes
@@ -5470,7 +5470,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-184-storageaccountsdefaultnetworkaccessrule"></a>
 <details open>
-<summary><h6>SLZ-184-StorageAccountsDefaultNetworkAccessRule</h6></summary>
+<summary>SLZ-184-StorageAccountsDefaultNetworkAccessRule</summary>
 
 
 - **Applicable:** Yes
@@ -5491,7 +5491,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-185-storageaccountsallowazureservices"></a>
 <details open>
-<summary><h6>SLZ-185-StorageAccountsAllowAzureServices</h6></summary>
+<summary>SLZ-185-StorageAccountsAllowAzureServices</summary>
 
 
 - **Applicable:** Yes
@@ -5512,7 +5512,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-186-storageaccountsprivateendpoints"></a>
 <details open>
-<summary><h6>SLZ-186-StorageAccountsPrivateEndpoints</h6></summary>
+<summary>SLZ-186-StorageAccountsPrivateEndpoints</summary>
 
 
 - **Applicable:** Yes
@@ -5533,7 +5533,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-187-storageblobsandcontainersoftdelete"></a>
 <details open>
-<summary><h6>SLZ-187-StorageBlobsAndContainerSoftDelete</h6></summary>
+<summary>SLZ-187-StorageBlobsAndContainerSoftDelete</summary>
 
 
 - **Applicable:** Yes
@@ -5554,7 +5554,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-248-osanddatadiskscmkencryption"></a>
 <details open>
-<summary><h6>SLZ-248-OSandDataDisksCMKEncryption</h6></summary>
+<summary>SLZ-248-OSandDataDisksCMKEncryption</summary>
 
 
 - **Applicable:** Yes
@@ -5575,7 +5575,7 @@ Administrative Operation name for which activity log alert should be configured)
 
 <a id="policy-slz-249-unattacheddiskscmkencryption"></a>
 <details open>
-<summary><h6>SLZ-249-UnattachedDisksCMKEncryption</h6></summary>
+<summary>SLZ-249-UnattachedDisksCMKEncryption</summary>
 
 
 - **Applicable:** Yes
@@ -5597,14 +5597,14 @@ Administrative Operation name for which activity log alert should be configured)
 </details>
 
 <details open>
-<summary><h4>Tagging</h4></summary>
+<summary><strong>Tagging</strong></summary>
 
 <details open>
-<summary><h5>ID00-NonID-Tags</h5></summary>
+<summary><strong>ID00-NonID-Tags</strong></summary>
 
 <a id="policy-slz-taginheritancefromsub"></a>
 <details open>
-<summary><h6>SLZ-TagInheritanceFromSub</h6></summary>
+<summary>SLZ-TagInheritanceFromSub</summary>
 
 
 - **Applicable:** unknown
@@ -5626,7 +5626,7 @@ Checks untagged resources.
 
 <a id="policy-slz-604-checkdatasensitivitytagsonsubscriptions"></a>
 <details open>
-<summary><h6>SLZ-604-CheckDataSensitivityTagsOnSubscriptions</h6></summary>
+<summary>SLZ-604-CheckDataSensitivityTagsOnSubscriptions</summary>
 
 
 - **Applicable:** unknown
@@ -5647,7 +5647,7 @@ Checks untagged resources.
 
 <a id="policy-slz-checkenvironmenttagonsubscription"></a>
 <details open>
-<summary><h6>SLZ-CheckEnvironmentTagOnSubscription</h6></summary>
+<summary>SLZ-CheckEnvironmentTagOnSubscription</summary>
 
 
 - **Applicable:** unknown
@@ -5668,7 +5668,7 @@ Checks untagged resources.
 
 <a id="policy-slz-checkorganizationtagonsubscription"></a>
 <details open>
-<summary><h6>SLZ-CheckOrganizationTagOnSubscription</h6></summary>
+<summary>SLZ-CheckOrganizationTagOnSubscription</summary>
 
 
 - **Applicable:** unknown
@@ -5689,7 +5689,7 @@ Checks untagged resources.
 
 <a id="policy-slz-878-checkprojecttagonsubscription"></a>
 <details open>
-<summary><h6>SLZ-878-CheckProjectTagOnSubscription</h6></summary>
+<summary>SLZ-878-CheckProjectTagOnSubscription</summary>
 
 
 - **Applicable:** unknown
@@ -5713,11 +5713,11 @@ Checks untagged resources.
 </details>
 
 <details open>
-<summary><h4>Web</h4></summary>
+<summary><strong>Web</strong></summary>
 
 <a id="policy-slz-261-appserviceauthentication"></a>
 <details open>
-<summary><h6>SLZ-261-AppServiceAuthentication</h6></summary>
+<summary>SLZ-261-AppServiceAuthentication</summary>
 
 
 - **Applicable:** unknown
@@ -5737,11 +5737,11 @@ Checks untagged resources.
 </details>
 
 <details open>
-<summary><h5>ID262</h5></summary>
+<summary><strong>ID262</strong></summary>
 
 <a id="policy-slz-262-appserviceslotshttptohttpsredirection"></a>
 <details open>
-<summary><h6>SLZ-262-AppServiceSlotsHTTPtoHTTPSRedirection</h6></summary>
+<summary>SLZ-262-AppServiceSlotsHTTPtoHTTPSRedirection</summary>
 
 
 - **Applicable:** unknown
@@ -5762,7 +5762,7 @@ Checks untagged resources.
 
 <a id="policy-slz-262-appservicehttptohttpsredirection"></a>
 <details open>
-<summary><h6>SLZ-262-AppServiceHTTPtoHTTPSRedirection</h6></summary>
+<summary>SLZ-262-AppServiceHTTPtoHTTPSRedirection</summary>
 
 
 - **Applicable:** unknown
@@ -5785,7 +5785,7 @@ Checks untagged resources.
 
 <a id="policy-slz-265-appserviceaadregistration"></a>
 <details open>
-<summary><h6>SLZ-265-AppServiceAADRegistration</h6></summary>
+<summary>SLZ-265-AppServiceAADRegistration</summary>
 
 
 - **Applicable:** unknown
@@ -5805,11 +5805,11 @@ Checks untagged resources.
 </details>
 
 <details open>
-<summary><h5>ID267</h5></summary>
+<summary><strong>ID267</strong></summary>
 
 <a id="policy-slz-267-appserviceslotslatestpythonversion"></a>
 <details open>
-<summary><h6>SLZ-267-AppServiceSlotsLatestPythonVersion</h6></summary>
+<summary>SLZ-267-AppServiceSlotsLatestPythonVersion</summary>
 
 
 - **Applicable:** unknown
@@ -5830,7 +5830,7 @@ Checks untagged resources.
 
 <a id="policy-slz-267-appservicelatestpythonversion"></a>
 <details open>
-<summary><h6>SLZ-267-AppServiceLatestPythonVersion</h6></summary>
+<summary>SLZ-267-AppServiceLatestPythonVersion</summary>
 
 
 - **Applicable:** unknown
@@ -5852,11 +5852,11 @@ Checks untagged resources.
 </details>
 
 <details open>
-<summary><h5>ID268</h5></summary>
+<summary><strong>ID268</strong></summary>
 
 <a id="policy-slz-268-appserviceslotslatestjavaversion"></a>
 <details open>
-<summary><h6>SLZ-268-AppServiceSlotsLatestJavaVersion</h6></summary>
+<summary>SLZ-268-AppServiceSlotsLatestJavaVersion</summary>
 
 
 - **Applicable:** unknown
@@ -5877,7 +5877,7 @@ Checks untagged resources.
 
 <a id="policy-slz-268-appservicelatestjavaversion"></a>
 <details open>
-<summary><h6>SLZ-268-AppServiceLatestJavaVersion</h6></summary>
+<summary>SLZ-268-AppServiceLatestJavaVersion</summary>
 
 
 - **Applicable:** unknown
@@ -5899,11 +5899,11 @@ Checks untagged resources.
 </details>
 
 <details open>
-<summary><h5>ID269</h5></summary>
+<summary><strong>ID269</strong></summary>
 
 <a id="policy-slz-269-appserviceslotslatesthttpversion"></a>
 <details open>
-<summary><h6>SLZ-269-AppServiceSlotsLatestHTTPVersion</h6></summary>
+<summary>SLZ-269-AppServiceSlotsLatestHTTPVersion</summary>
 
 
 - **Applicable:** unknown
@@ -5924,7 +5924,7 @@ Checks untagged resources.
 
 <a id="policy-slz-269-appservicelatesthttpversionwebapp"></a>
 <details open>
-<summary><h6>SLZ-269-AppServiceLatestHTTPVersionWebApp</h6></summary>
+<summary>SLZ-269-AppServiceLatestHTTPVersionWebApp</summary>
 
 
 - **Applicable:** unknown
@@ -5945,7 +5945,7 @@ Checks untagged resources.
 
 <a id="policy-slz-269-appservicelatesthttpversion"></a>
 <details open>
-<summary><h6>SLZ-269-AppServiceLatestHTTPVersion</h6></summary>
+<summary>SLZ-269-AppServiceLatestHTTPVersion</summary>
 
 
 - **Applicable:** unknown
@@ -5967,11 +5967,11 @@ Checks untagged resources.
 </details>
 
 <details open>
-<summary><h5>ID270</h5></summary>
+<summary><strong>ID270</strong></summary>
 
 <a id="policy-slz-270-appserviceftpdeploymentswebapp"></a>
 <details open>
-<summary><h6>SLZ-270-AppServiceFTPDeploymentsWebApp</h6></summary>
+<summary>SLZ-270-AppServiceFTPDeploymentsWebApp</summary>
 
 
 - **Applicable:** unknown
@@ -5992,7 +5992,7 @@ Checks untagged resources.
 
 <a id="policy-slz-270-appserviceslotsftpdeployments"></a>
 <details open>
-<summary><h6>SLZ-270-AppServiceSlotsFTPDeployments</h6></summary>
+<summary>SLZ-270-AppServiceSlotsFTPDeployments</summary>
 
 
 - **Applicable:** unknown
@@ -6013,7 +6013,7 @@ Checks untagged resources.
 
 <a id="policy-slz-270-appserviceftpdeployments"></a>
 <details open>
-<summary><h6>SLZ-270-AppServiceFTPDeployments</h6></summary>
+<summary>SLZ-270-AppServiceFTPDeployments</summary>
 
 
 - **Applicable:** unknown
